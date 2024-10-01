@@ -12,6 +12,7 @@ public class ProjectService {
         this.projectRepository = projectRepository;
     }
 
+
     public List<Project> getAllProjects() {
         return projectRepository.getAllProjects();
     }
