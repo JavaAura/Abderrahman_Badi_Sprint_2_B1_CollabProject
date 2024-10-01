@@ -15,12 +15,12 @@ public class DatabaseConnection {
     private DatabaseConnection() throws SQLException {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            this.connection = DriverManager.getConnection(url, user, password);
-            System.out.println("Connection established");
+            DriverManager.getConnection(url, user, password.equals("\"\"") ? "" : password);
+            System.out.println("Connection istablished");
         } catch (ClassNotFoundException e) {
-            System.out.println("MySQL JDBC Driver not found: " + e.getMessage());
+            System.out.println("PostgreSQL JDBC Driver not found: " + e.getMessage());
         } catch (SQLException e) {
-            System.out.println("Error establishing the database connection: " + e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
 
