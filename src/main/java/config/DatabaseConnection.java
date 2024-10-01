@@ -18,7 +18,7 @@ public class DatabaseConnection {
             DriverManager.getConnection(url, user, password.equals("\"\"") ? "" : password);
             System.out.println("Connection istablished");
         } catch (ClassNotFoundException e) {
-            System.out.println("PostgreSQL JDBC Driver not found: " + e.getMessage());
+            System.out.println("MySQL JDBC Driver not found: " + e.getMessage());
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
