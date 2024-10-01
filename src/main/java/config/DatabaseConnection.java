@@ -8,8 +8,8 @@ public class DatabaseConnection {
     private static DatabaseConnection instance;
     private Connection connection;
 
-    private static String url = System.getenv("DB_URL");
-    private static String user = System.getenv("DB_USER");
+    private static String url = System.getenv("DB_URL") != null ? System.getenv("DB_URL") : "";
+    private static String user = System.getenv("DB_USER") != null ? System.getenv("DB_USER") : "";
     private static String password = System.getenv("DB_PASSWORD") != null ? System.getenv("DB_PASSWORD") : "";
 
     private DatabaseConnection() throws SQLException {
