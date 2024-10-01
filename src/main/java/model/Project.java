@@ -15,6 +15,10 @@ public class Project {
     private ProjectStatus statut;
     private List<Task> taches;
 
+    public  Project(){
+
+    }
+
     public Project(String nom, String description, LocalDate dateDebut, LocalDate dateFin, ProjectStatus statut, List<Task> taches) {
         this.nom = nom;
         this.description = description;
