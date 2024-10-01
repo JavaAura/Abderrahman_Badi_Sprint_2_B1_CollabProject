@@ -10,7 +10,7 @@ public class DatabaseConnection {
 
     private static String url = System.getenv("DB_URL");
     private static String user = System.getenv("DB_USER");
-    private static String password = System.getenv("DB_PASSWORD");
+    private static String password = System.getenv("DB_PASSWORD") != null ? System.getenv("DB_PASSWORD") : "";
 
     private DatabaseConnection() throws SQLException {
         try {
