@@ -16,10 +16,6 @@ public class ProjectServlet extends HttpServlet {
 
     private ProjectService projectService;
 
-    @Override
-    public void init() throws ServletException {
-        this.projectService = new ProjectService();
-    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
