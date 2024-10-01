@@ -7,4 +7,4 @@
     request.setAttribute("contentPage", "../content/projects.jsp"); 
 %>
 
-<jsp:include page="./views/layout/layout.jsp" />
+<jsp:include page="/views/layout/layout.jsp" />

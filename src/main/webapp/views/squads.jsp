@@ -6,4 +6,4 @@
     request.setAttribute("contentPage", "../content/squads.jsp"); 
 %>
 
-<jsp:include page="./views/layout/layout.jsp" />
+<jsp:include page="/views/layout/layout.jsp" />
