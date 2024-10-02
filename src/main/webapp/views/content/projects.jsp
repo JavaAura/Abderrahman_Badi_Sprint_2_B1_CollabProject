@@ -1,5 +1,5 @@
  <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
+<div class="container mt-5">
 <h1>${title}</h1>
     <div class="projects-list">
         <c:forEach var="project" items="${projects}">
