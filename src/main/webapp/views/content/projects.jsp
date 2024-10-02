@@ -8,7 +8,7 @@
                 <p>Date de fin: ${project.dateFin}</p>
                 <p>Statut: ${project.statut}</p>
                 <c:if test="${not empty project.taches}">
-                    <h3>Tâches:</h3>
+                    <h3>Taches:</h3>
                     <ul>
                         <c:forEach var="task" items="${project.taches}">
                             <li>${task.title}</li>

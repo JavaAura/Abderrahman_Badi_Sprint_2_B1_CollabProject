@@ -27,6 +27,6 @@ public class ProjectServlet extends HttpServlet {
         request.setAttribute("projects", projects);
 
         // Envoyer la requête à la page JSP pour afficher les projets
-        request.getRequestDispatcher("/projects.jsp").forward(request, response);
+        request.getRequestDispatcher("views/projects.jsp").forward(request, response);
     }
 }
