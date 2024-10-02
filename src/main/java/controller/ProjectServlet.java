@@ -14,7 +14,7 @@ import java.util.List;
 @WebServlet("/projects")
 public class ProjectServlet extends HttpServlet {
 
-    private ProjectService projectService;
+    private ProjectService projectService = new ProjectService();
 
 
     @Override
@@ -23,6 +23,8 @@ public class ProjectServlet extends HttpServlet {
         // Récupérer tous les projets via le service
 
         List<Project> projects = projectService.getAllProjects();
+
+        projects.forEach(project -> System.out.println(project.getNom()));
 
         // Ajouter les projets à l'attribut de la requête
 

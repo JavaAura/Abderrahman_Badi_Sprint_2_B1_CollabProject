@@ -1,3 +1,4 @@
+  <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
  <div>
      <h1>Planify</h1>
      <p>Planify project is Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum facilis cupiditate tenetur

@@ -30,10 +30,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                 project.setDescription(rs.getString("description"));
                 project.setDateDebut(rs.getDate("start_date").toLocalDate());
                 project.setDateFin(rs.getDate("end_date").toLocalDate());
-
-
-                String status = rs.getString("project_statut");
-                project.setStatut(ProjectStatus.valueOf(status));
+                project.setStatut(ProjectStatus.valueOf(rs.getString("project_statut")));
 
                 projects.add(project);
             }

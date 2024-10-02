@@ -1,6 +1,7 @@
 package service;
 
 import model.Project;
+import repository.implementation.ProjectRepositoryImpl;
 import repository.interfaces.ProjectRepository;
 
 import java.util.List;
@@ -8,8 +9,8 @@ import java.util.List;
 public class ProjectService {
     private final ProjectRepository projectRepository;
 
-    public ProjectService(ProjectRepository projectRepository) {
-        this.projectRepository = projectRepository;
+    public ProjectService() {
+        this.projectRepository = new ProjectRepositoryImpl();
     }
 
 
