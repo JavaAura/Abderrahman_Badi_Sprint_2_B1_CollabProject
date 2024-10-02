@@ -25,8 +25,8 @@ public class TaskRepositoryImpl implements TaskRepository {
     private static final String SQL_FIND_BY_ID = "SELECT * FROM task WHERE id = ?";
     private static final String SQL_LIST = "SELECT * FROM task WHERE project_id = ?";
     private static final String SQL_INSERT = "INSERT INTO task (`title`, `description`, `priority`, `task_statut`, `project_id`) VALUES (?, ?, ?, ?, ?)";
-    private static final String SQL_UPDATE = "UPDATE task SET title = ?, description = ?, priority = ?, task_statut = ?, project_id = ? WHERE id = ?";
-    private static final String SQL_DELETE = "DELETE task WHERE id = ?";
+    private static final String SQL_UPDATE = "UPDATE task SET title = ?, description = ?, priority = ?, task_statut = ? WHERE id = ?";
+    private static final String SQL_DELETE = "DELETE FROM task WHERE id = ?";
 
     @Override
     public List<Task> getAllTasks(Project project) {
@@ -112,8 +112,7 @@ public class TaskRepositoryImpl implements TaskRepository {
             ps.setString(2, updatedTask.getDescription());
             ps.setString(3, updatedTask.getTaskPriority().toString());
             ps.setString(4, updatedTask.getTaskStatus().toString());
-            ps.setLong(5, updatedTask.getProject().getId());
-            ps.setLong(6, id);
+            ps.setLong(5, id);
 
             int affectedRows = ps.executeUpdate();
             if (affectedRows > 0) {

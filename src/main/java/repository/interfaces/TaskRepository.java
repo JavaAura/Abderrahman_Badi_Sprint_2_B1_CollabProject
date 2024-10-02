@@ -12,10 +12,10 @@ public interface TaskRepository {
 
     public List<Task> getAllTasks(Project project);
 
-    void save(Task task);
+    public void save(Task task);
 
-    void update(long id, Task task);
+    public void update(long id, Task task);
 
-    void delete(Task task);
+    public void delete(Task task);
 
 }
