@@ -51,7 +51,6 @@ public class ProjectServlet extends HttpServlet {
             LocalDate dateFin = LocalDate.parse(request.getParameter("dateFin"));
             String statut = request.getParameter("statut");
 
-            // Créer un objet Project et le mettre à jour
             Project project = new Project();
             project.setId(id);
             project.setNom(nom);
@@ -60,17 +59,13 @@ public class ProjectServlet extends HttpServlet {
             project.setDateFin(dateFin);
             project.setStatut(ProjectStatus.valueOf(statut));
 
-            // Appeler le service pour mettre à jour le projet
             projectService.updateProject(project);
 
-            // Ajouter un message de succès à l'attribut de la requête
             request.setAttribute("message", "Projet mis à jour avec succès !");
 
-            // Récupérer tous les projets après la mise à jour
             List<Project> projects = projectService.getAllProjects();
             request.setAttribute("projects", projects);
 
-            // Rediriger vers la page JSP
             request.getRequestDispatcher("views/projects.jsp").forward(request, response);
         }
     }
