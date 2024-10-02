@@ -75,8 +75,10 @@ public class ProjectServlet extends HttpServlet {
             try {
                 int id = Integer.parseInt(idParam);
                 projectService.deleteProject(id);
-              
+
                 request.setAttribute("message", "Projet supprimé avec succès.");
+                List<Project> projects = projectService.getAllProjects();
+                request.setAttribute("projects", projects);
                 request.getRequestDispatcher("views/projects.jsp").forward(request, response);
             } catch (NumberFormatException e) {
                 request.setAttribute("message", "ID de projet invalide.");
