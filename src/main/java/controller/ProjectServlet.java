@@ -22,14 +22,16 @@ public class ProjectServlet extends HttpServlet {
             throws ServletException, IOException {
 
 
+
+
+
         List<Project> projects = projectService.getAllProjects();
+
 
         projects.forEach(project -> System.out.println(project.getNom()));
 
 
-
         request.setAttribute("projects", projects);
-
 
 
         request.getRequestDispatcher("views/projects.jsp").forward(request, response);
@@ -37,10 +39,13 @@ public class ProjectServlet extends HttpServlet {
 
 
 
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
+
+        String idParam = request.getParameter("id");
 
         if (action.equals("update")) {
             int id = Integer.parseInt(request.getParameter("id"));
@@ -66,6 +71,16 @@ public class ProjectServlet extends HttpServlet {
             request.setAttribute("projects", projects);
 
             request.getRequestDispatcher("views/projects.jsp").forward(request, response);
+        }else    if (action != null && action.equals("delete")) {
+            try {
+                int id = Integer.parseInt(idParam);
+                projectService.deleteProject(id);
+              
+                request.setAttribute("message", "Projet supprimé avec succès.");
+                request.getRequestDispatcher("views/projects.jsp").forward(request, response);
+            } catch (NumberFormatException e) {
+                request.setAttribute("message", "ID de projet invalide.");
+            }
         }
     }
 

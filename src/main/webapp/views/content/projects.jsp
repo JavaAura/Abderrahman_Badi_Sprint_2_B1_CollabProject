@@ -42,7 +42,12 @@
                                             data-statut="${project.statut}">
                                         Update
                                     </button>
-                                    <a href="deleteProject?id=${project.id}" class="btn btn-danger">Delete</a>
+                                    <form action="" method="POST" style="display:inline;">
+                                        <input type="hidden" name="id" value="${project.id}">
+                                        <input type="hidden" name="action" value="delete" />
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+
                                 </div>
                             </td>
                         </tr>
