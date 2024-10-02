@@ -15,6 +15,8 @@ public class SquadRepositoryImpl implements SquadRepository {
 	
 	private static final String GET_ALL_SQUADS_QUERY = "SELECT * FROM squad LIMIT ? OFFSET ? " ;
 	private static final String GET_SQUAD_BY_ID_QUERY = "SELECT * FROM squad WHERE id = ?";
+	private static final String ADD_SQUAD_QUERY = "INSERT INTO squad (name) value (?)";
+	private static final String UPDATE_SQUAD_QUERY = "UPDATE  squad SET name = ? WHERE id = ?";
 	
 	@Override
 	public List<Squad> getAllSquads(int page , int pageSize){
@@ -72,11 +74,29 @@ public class SquadRepositoryImpl implements SquadRepository {
 	
 	@Override
 	public void addSquad(Squad squad) {
-		
+		try(Connection connection = DatabaseConnection.getConnection();
+				PreparedStatement stmt = connection.prepareStatement(ADD_SQUAD_QUERY)){
+			
+			stmt.setString(1,squad.getName());
+			stmt.executeUpdate();
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
 	public void updateSquad(Squad squad) {
+		try(Connection connection = DatabaseConnection.getConnection();
+				PreparedStatement stmt = connection.prepareStatement(UPDATE_SQUAD_QUERY)){
+			
+			stmt.setString(1, squad.getName());
+			stmt.setLong(2,squad.getId());
+			
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
 		
 	}
 	
