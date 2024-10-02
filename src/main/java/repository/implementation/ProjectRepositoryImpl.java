@@ -54,7 +54,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
             ps.setDate(3, java.sql.Date.valueOf(project.getDateDebut()));
             ps.setDate(4, java.sql.Date.valueOf(project.getDateFin()));
             ps.setString(5, project.getStatut().name());
-            ps.setInt(6, project.getId());
+            ps.setLong(6, project.getId());
 
             ps.executeUpdate();
         } catch (Exception e) {

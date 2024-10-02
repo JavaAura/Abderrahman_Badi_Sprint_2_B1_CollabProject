@@ -7,7 +7,7 @@ import java.util.*;
 
 
 public class Project {
-	private int id;
+	private long id;
     private String nom;
     private String description;
     private LocalDate dateDebut;
@@ -38,7 +38,7 @@ public class Project {
         this.taches = taches;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
