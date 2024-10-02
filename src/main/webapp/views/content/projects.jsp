@@ -101,8 +101,6 @@
     </div>
 </div>
 
-
-
 <!-- Bootstrap Modal for Add Project -->
 <div class="modal fade" id="addProjectModal" tabindex="-1" aria-labelledby="addProjectModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -112,7 +110,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="addProjectForm" action="yourControllerURL" method="post">
+                <form id="addProjectForm" action="" method="post">
                     <input type="hidden" name="action" value="add" />
                     <div class="mb-3">
                         <label for="projectNom" class="form-label">Nom</label>
@@ -132,7 +130,14 @@
                     </div>
                     <div class="mb-3">
                         <label for="projectStatut" class="form-label">Statut</label>
-                        <input type="text" class="form-control" id="projectStatut" name="statut" required />
+                        <select class="form-select" id="projectStatut" name="statut" required>
+                            <option value="" disabled selected>Select a status</option>
+                            <option value="PREPARATION">Preparation</option>
+                            <option value="IN_PROGRESS">In Progress</option>
+                            <option value="PAUSED">Paused</option>
+                            <option value="COMPLETED">Completed</option>
+                            <option value="CANCELED">Canceled</option>
+                        </select>
                     </div>
                     <button type="submit" class="btn btn-primary">Add Project</button>
                 </form>
@@ -140,6 +145,10 @@
         </div>
     </div>
 </div>
+
+
+
+
 
 <script>
 
