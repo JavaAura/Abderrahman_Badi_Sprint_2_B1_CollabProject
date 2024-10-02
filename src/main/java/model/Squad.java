@@ -5,7 +5,10 @@ public class Squad {
 	private long id;
 	private String name;
 	
-	
+	  // Default constructor
+    public Squad() {
+    }
+    
 	// constructor with id to fetch sqauds from the DataBase
 	public Squad(long id, String name) {
 		this.id = id;
