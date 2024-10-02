@@ -7,6 +7,8 @@ import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import model.Project;
 import model.Task;
@@ -14,6 +16,8 @@ import model.enums.TaskPriority;
 import model.enums.TaskStatus;
 
 public class TaskServiceTest {
+
+    private static final Logger logger = LoggerFactory.getLogger(TaskServiceTest.class);
 
 	private TaskService taskService;
 	private Project project;
@@ -28,6 +32,7 @@ public class TaskServiceTest {
 
 	@Test
 	public void testGetTaskById() {
+		logger.info("test begins");
 		Task task = new Task();
 		task.setTitle("Sample Task");
 		task.setDescription("Sample Task Description");
