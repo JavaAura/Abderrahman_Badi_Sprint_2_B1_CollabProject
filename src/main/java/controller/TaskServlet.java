@@ -50,7 +50,7 @@ public class TaskServlet extends HttpServlet {
             req.setAttribute("tasks", tasks);
         }
 
-        RequestDispatcher dispatcher = req.getRequestDispatcher("views/tasks.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("../views/tasks.jsp");
         dispatcher.forward(req, resp);
     }
 
