@@ -21,14 +21,25 @@ public class ProjectServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        String searchQuery = request.getParameter("search");
+
+        if (searchQuery != null && !searchQuery.trim().isEmpty()) {
+            request.setAttribute("message", "Résultats de la recherche.");
+            List<Project> projects = projectService.searchProjects(searchQuery);
+
+
+            System.out.println("Résultats de la recherche pour : " + searchQuery);
+            projects.forEach(project -> System.out.println(project.getNom()));
+
+            request.setAttribute("projects", projects);
+            request.getRequestDispatcher("views/projects.jsp").forward(request, response);
+            return;  
+        }
+
         List<Project> projects = projectService.getAllProjects();
 
-
         projects.forEach(project -> System.out.println(project.getNom()));
-
-
         request.setAttribute("projects", projects);
-
 
         request.getRequestDispatcher("views/projects.jsp").forward(request, response);
     }

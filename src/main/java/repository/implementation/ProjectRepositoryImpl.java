@@ -98,23 +98,22 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     @Override
     public List<Project> searchProjectsByName(String name) {
         List<Project> projects = new ArrayList<>();
-        String query = "SELECT * FROM Projects WHERE LOWER(name) = LOWER(?)";
+        String query = "SELECT * FROM Projects WHERE name LIKE ?";
+
 
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(query)) {
 
-            ps.setString(1, name);
+            ps.setString(1, "%" + name + "%");
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
                 Project project = new Project();
-
                 project.setNom(rs.getString("name"));
                 project.setDescription(rs.getString("description"));
                 project.setDateDebut(rs.getDate("start_date").toLocalDate());
                 project.setDateFin(rs.getDate("end_date").toLocalDate());
                 project.setStatut(ProjectStatus.valueOf(rs.getString("project_statut")));
-
                 projects.add(project);
             }
         } catch (Exception e) {
@@ -123,7 +122,6 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
         return projects;
     }
-
 
 
 
