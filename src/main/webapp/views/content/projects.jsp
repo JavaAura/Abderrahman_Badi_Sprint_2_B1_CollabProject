@@ -10,10 +10,9 @@
             </div>
         </c:if>
 
-         <div class="d-flex justify-content-end mb-3">
-                        <a href="addProject.jsp" class="btn btn-primary">Add Project</a>
-           </div>
-
+        <div class="d-flex justify-content-end mb-3">
+         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProjectModal">Add Project</button>
+         </div>
 
             <table class="table">
                 <thead>
@@ -96,6 +95,46 @@
                         <input type="text" class="form-control" id="projectStatut" name="statut" required />
                     </div>
                     <button type="submit" class="btn btn-primary">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Bootstrap Modal for Add Project -->
+<div class="modal fade" id="addProjectModal" tabindex="-1" aria-labelledby="addProjectModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addProjectModalLabel">Add Project</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addProjectForm" action="yourControllerURL" method="post">
+                    <input type="hidden" name="action" value="add" />
+                    <div class="mb-3">
+                        <label for="projectNom" class="form-label">Nom</label>
+                        <input type="text" class="form-control" id="projectNom" name="nom" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="projectDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="projectDescription" name="description" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="projectDateDebut" class="form-label">Date de début</label>
+                        <input type="date" class="form-control" id="projectDateDebut" name="dateDebut" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="projectDateFin" class="form-label">Date de fin</label>
+                        <input type="date" class="form-control" id="projectDateFin" name="dateFin" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="projectStatut" class="form-label">Statut</label>
+                        <input type="text" class="form-control" id="projectStatut" name="statut" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Project</button>
                 </form>
             </div>
         </div>
