@@ -14,7 +14,7 @@ public interface TaskRepository {
 
     void save(Task task);
 
-    void update(Task task, String[] params);
+    void update(long id, Task task);
 
     void delete(Task task);
 

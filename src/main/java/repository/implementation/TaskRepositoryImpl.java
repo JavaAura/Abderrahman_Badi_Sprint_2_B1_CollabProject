@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import config.DatabaseConnection;
-import controller.TaskServlet;
 import model.Project;
 import model.Task;
 import model.enums.TaskPriority;
@@ -48,11 +47,10 @@ public class TaskRepositoryImpl implements TaskRepository {
 
                     tasks.add(task);
                 }
-                logger.info(SQL_DELETE);
             }
 
         } catch (Exception e) {
-            logger.warn(e.getMessage());
+            logger.error(e.getMessage());
             e.printStackTrace();
         }
 
@@ -80,30 +78,69 @@ public class TaskRepositoryImpl implements TaskRepository {
             }
 
         } catch (SQLException e) {
-            logger.warn(e.getMessage());
+            logger.error(e.getMessage());
             e.printStackTrace();
         }
 
         return task != null ? Optional.of(task) : Optional.empty();
-        
+
     }
 
     @Override
     public void save(Task task) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'save'");
+        try (Connection con = DatabaseConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(SQL_INSERT)) {
+
+            ps.setString(1, task.getTitle());
+            ps.setString(2, task.getDescription());
+            ps.setString(3, task.getTaskPriority().toString());
+            ps.setString(4, task.getTaskStatus().toString());
+            ps.setLong(5, task.getProject().getId());
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            logger.error("Error saving task: " + e.getMessage(), e);
+        }
     }
 
     @Override
-    public void update(Task task, String[] params) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+    public void update(long id, Task updatedTask) {
+        try (Connection con = DatabaseConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(SQL_UPDATE)) {
+
+            ps.setString(1, updatedTask.getTitle());
+            ps.setString(2, updatedTask.getDescription());
+            ps.setString(3, updatedTask.getTaskPriority().toString());
+            ps.setString(4, updatedTask.getTaskStatus().toString());
+            ps.setLong(5, updatedTask.getProject().getId());
+            ps.setLong(6, id);
+
+            int affectedRows = ps.executeUpdate();
+            if (affectedRows > 0) {
+                logger.info("Task with ID " + id + " was successfully updated.");
+            } else {
+                logger.warn("No task found with ID " + id);
+            }
+
+        } catch (SQLException e) {
+            logger.error("Error updating task: " + e.getMessage());
+            e.printStackTrace();
+        }
+
     }
 
     @Override
     public void delete(Task task) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+        try (Connection con = DatabaseConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(SQL_DELETE)) {
+
+            ps.setLong(1, task.getId());
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            logger.error("Error deleting task: " + e.getMessage(), e);
+        }
+
     }
 
 }
