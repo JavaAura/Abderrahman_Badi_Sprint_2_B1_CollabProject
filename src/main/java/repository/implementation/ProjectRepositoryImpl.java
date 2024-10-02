@@ -75,6 +75,26 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
 
+    @Override
+    public void addProject(Project project) {
+        String query = "INSERT INTO Project (name, description, start_date, end_date, project_statut) VALUES (?, ?, ?, ?, ?)";
+
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+
+            ps.setString(1, project.getNom());
+            ps.setString(2, project.getDescription());
+            ps.setDate(3, java.sql.Date.valueOf(project.getDateDebut()));
+            ps.setDate(4, java.sql.Date.valueOf(project.getDateFin()));
+            ps.setString(5, project.getStatut().name());
+
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 
 }

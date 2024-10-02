@@ -8,4 +8,6 @@ public interface ProjectRepository {
     public List<Project> getAllProjects();
     public void updateProject(Project project);
     void deleteProject(int id);
+    void addProject(Project project);
+
 }

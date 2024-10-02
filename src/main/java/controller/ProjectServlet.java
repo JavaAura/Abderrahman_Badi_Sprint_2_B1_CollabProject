@@ -17,15 +17,9 @@ public class ProjectServlet extends HttpServlet {
     private ProjectService projectService = new ProjectService();
 
 
-    
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-
-
-
 
         List<Project> projects = projectService.getAllProjects();
 

@@ -10,6 +10,11 @@
             </div>
         </c:if>
 
+         <div class="d-flex justify-content-end mb-3">
+                        <a href="addProject.jsp" class="btn btn-primary">Add Project</a>
+           </div>
+
+
             <table class="table">
                 <thead>
                     <tr>
