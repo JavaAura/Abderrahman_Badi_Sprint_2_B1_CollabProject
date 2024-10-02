@@ -18,4 +18,10 @@ public class ProjectService {
         return projectRepository.getAllProjects();
     }
 
+
+    public void updateProject(Project project) {
+        projectRepository.updateProject(project);
+    }
+
+
 }
