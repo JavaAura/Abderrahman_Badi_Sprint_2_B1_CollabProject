@@ -32,6 +32,11 @@ public class ProjectService {
       projectRepository.addProject(project);
     }
 
+    public List<Project> searchProjects(String name) {
+        return projectRepository.searchProjectsByName(name);
+    }
+
+
 
 
 }
