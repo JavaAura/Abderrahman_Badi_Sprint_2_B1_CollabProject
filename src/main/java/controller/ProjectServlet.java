@@ -3,7 +3,6 @@ package controller;
 import model.enums.ProjectStatus;
 import service.ProjectService;
 import model.Project;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -69,5 +68,9 @@ public class ProjectServlet extends HttpServlet {
             request.getRequestDispatcher("views/projects.jsp").forward(request, response);
         }
     }
+
+
+
+
 
 }
