@@ -42,7 +42,7 @@ public class ProjectServlet extends HttpServlet {
             throws ServletException, IOException {
         String action = request.getParameter("action");
 
-        if ("update".equals(action)) {
+        if (action.equals("update")) {
             int id = Integer.parseInt(request.getParameter("id"));
             String nom = request.getParameter("nom");
             String description = request.getParameter("description");
