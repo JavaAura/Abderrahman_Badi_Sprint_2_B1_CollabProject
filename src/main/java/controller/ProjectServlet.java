@@ -35,16 +35,14 @@ public class ProjectServlet extends HttpServlet {
 
 
 
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
-
         String idParam = request.getParameter("id");
 
-        if (action.equals("update")) {
-            int id = Integer.parseInt(request.getParameter("id"));
+        if ("update".equals(action)) {
+            int id = Integer.parseInt(idParam);
             String nom = request.getParameter("nom");
             String description = request.getParameter("description");
             LocalDate dateDebut = LocalDate.parse(request.getParameter("dateDebut"));
@@ -67,9 +65,9 @@ public class ProjectServlet extends HttpServlet {
             request.setAttribute("projects", projects);
 
             request.getRequestDispatcher("views/projects.jsp").forward(request, response);
-        }else    if (action != null && action.equals("delete")) {
-            try {
 
+        } else if (action != null && action.equals("delete")) {
+            try {
                 int id = Integer.parseInt(idParam);
                 projectService.deleteProject(id);
 
@@ -79,8 +77,31 @@ public class ProjectServlet extends HttpServlet {
                 request.getRequestDispatcher("views/projects.jsp").forward(request, response);
             } catch (NumberFormatException e) {
                 request.setAttribute("message", "ID de projet invalide.");
-
+                request.getRequestDispatcher("views/projects.jsp").forward(request, response);
             }
+
+        } else if (action != null && action.equals("add")) {
+            String nom = request.getParameter("nom");
+            String description = request.getParameter("description");
+            LocalDate dateDebut = LocalDate.parse(request.getParameter("dateDebut"));
+            LocalDate dateFin = LocalDate.parse(request.getParameter("dateFin"));
+            String statut = request.getParameter("statut");
+
+            Project newProject = new Project();
+            newProject.setNom(nom);
+            newProject.setDescription(description);
+            newProject.setDateDebut(dateDebut);
+            newProject.setDateFin(dateFin);
+            newProject.setStatut(ProjectStatus.valueOf(statut));
+
+
+            projectService.addProject(newProject);
+
+            request.setAttribute("message", "Projet ajouté avec succès !");
+            List<Project> projects = projectService.getAllProjects();
+            request.setAttribute("projects", projects);
+
+            request.getRequestDispatcher("views/projects.jsp").forward(request, response);
         }
     }
 
