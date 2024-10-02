@@ -21,12 +21,15 @@ public class ProjectServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Récupérer tous les projets via le service
+
         List<Project> projects = projectService.getAllProjects();
 
         // Ajouter les projets à l'attribut de la requête
+
         request.setAttribute("projects", projects);
 
         // Envoyer la requête à la page JSP pour afficher les projets
+
         request.getRequestDispatcher("views/projects.jsp").forward(request, response);
     }
 }
