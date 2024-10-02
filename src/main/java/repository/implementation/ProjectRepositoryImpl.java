@@ -40,4 +40,28 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
         return projects;
     }
+
+
+    @Override
+    public void updateProject(Project project) {
+        String query = "UPDATE Project SET name = ?, description = ?, start_date = ?, end_date = ?, project_statut = ? WHERE id = ?";
+
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+
+            ps.setString(1, project.getNom());
+            ps.setString(2, project.getDescription());
+            ps.setDate(3, java.sql.Date.valueOf(project.getDateDebut()));
+            ps.setDate(4, java.sql.Date.valueOf(project.getDateFin()));
+            ps.setString(5, project.getStatut().name());
+            ps.setInt(6, project.getId());
+
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
 }
