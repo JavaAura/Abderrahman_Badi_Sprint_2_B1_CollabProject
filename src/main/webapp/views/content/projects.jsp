@@ -62,7 +62,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="updateProjectForm" action="/projects" method="post">
+                <form id="updateProjectForm" action="" method="post">
                     <input type="hidden" id="projectId" name="id" />
                     <input type="hidden" name="action" value="update" />
                     <div class="mb-3">
