@@ -3,6 +3,13 @@
     <h1>${title}</h1>
     <div class="projects-list">
         <div class="container mt-5">
+
+        <c:if test="${not empty message}">
+            <div class="alert alert-success" role="alert">
+                ${message}
+            </div>
+        </c:if>
+
             <table class="table">
                 <thead>
                     <tr>
@@ -57,6 +64,7 @@
             <div class="modal-body">
                 <form id="updateProjectForm" action="updateProject" method="post">
                     <input type="hidden" id="projectId" name="id" />
+                    <input type="hidden" name="action" value="update" />
                     <div class="mb-3">
                         <label for="projectNom" class="form-label">Nom</label>
                         <input type="text" class="form-control" id="projectNom" name="nom" required />
@@ -85,7 +93,7 @@
 </div>
 
 <script>
-    // JavaScript to populate the modal with project details
+
     document.addEventListener('DOMContentLoaded', function () {
         const updateModal = document.getElementById('updateModal');
         updateModal.addEventListener('show.bs.modal', function (event) {
