@@ -24,4 +24,9 @@ public class ProjectService {
     }
 
 
+    public void deleteProject(int id) {
+        projectRepository.deleteProject(id);
+    }
+
+
 }
