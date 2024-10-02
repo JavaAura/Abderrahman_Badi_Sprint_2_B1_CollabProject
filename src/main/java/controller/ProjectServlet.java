@@ -17,6 +17,8 @@ public class ProjectServlet extends HttpServlet {
     private ProjectService projectService = new ProjectService();
 
 
+    
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -73,6 +75,7 @@ public class ProjectServlet extends HttpServlet {
             request.getRequestDispatcher("views/projects.jsp").forward(request, response);
         }else    if (action != null && action.equals("delete")) {
             try {
+
                 int id = Integer.parseInt(idParam);
                 projectService.deleteProject(id);
 
@@ -82,6 +85,7 @@ public class ProjectServlet extends HttpServlet {
                 request.getRequestDispatcher("views/projects.jsp").forward(request, response);
             } catch (NumberFormatException e) {
                 request.setAttribute("message", "ID de projet invalide.");
+
             }
         }
     }
