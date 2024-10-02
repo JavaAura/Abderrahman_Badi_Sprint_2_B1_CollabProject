@@ -28,5 +28,10 @@ public class ProjectService {
         projectRepository.deleteProject(id);
     }
 
+    public void addProject(Project project) {
+      projectRepository.addProject(project);
+    }
+
+
 
 }
