@@ -1,6 +1,7 @@
 package repository.implementation;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -46,16 +47,25 @@ public class TaskRepositoryImpl implements TaskRepository {
                     task.setDescription(rs.getString("description"));
                     task.setTaskPriority(TaskPriority.valueOf(rs.getString("priority")));
                     task.setTaskStatus(TaskStatus.valueOf(rs.getString("task_statut")));
-                    task.setAssignDate(rs.getDate("assign_date").toLocalDate());
 
-                    Member member = new Member();
-                    member.setId(rs.getLong("member_id"));
-                    member.setFirstName(rs.getString("first_name"));
-                    member.setLastName(rs.getString("last_name"));
-                    member.setEmail(rs.getString("email"));
-                    member.setRole(Role.valueOf(rs.getString("role")));
+                    // Handle possible null values for assign_date
+                    Date assignDate = rs.getDate("assign_date");
+                    if (assignDate != null) {
+                        task.setAssignDate(assignDate.toLocalDate());
+                    }
 
-                    task.setMember(member);
+                    Long memberId = rs.getLong("member_id");
+                    if (!rs.wasNull()) {
+                        Member member = new Member();
+                        member.setId(memberId);
+                        member.setFirstName(rs.getString("first_name"));
+                        member.setLastName(rs.getString("last_name"));
+                        member.setEmail(rs.getString("email"));
+                        member.setRole(Role.valueOf(rs.getString("role")));
+
+                        task.setMember(member);
+                    }
+
                     task.setProject(project);
                     tasks.add(task);
                 }
@@ -83,7 +93,7 @@ public class TaskRepositoryImpl implements TaskRepository {
                     TaskPriority taskPriority = TaskPriority.valueOf(rs.getString("priority"));
                     TaskStatus taskStatus = TaskStatus.valueOf(rs.getString("task_statut"));
 
-                    Member member = new Member();   
+                    Member member = new Member();
                     member.setFirstName(rs.getString("first_name"));
                     member.setLastName(rs.getString("last_name"));
                     member.setEmail(rs.getString("email"));
