@@ -27,6 +27,7 @@ public class TaskRepositoryImpl implements TaskRepository {
     private static final String SQL_INSERT = "INSERT INTO task (`title`, `description`, `priority`, `task_statut`, `project_id`) VALUES (?, ?, ?, ?, ?)";
     private static final String SQL_UPDATE = "UPDATE task SET title = ?, description = ?, priority = ?, task_statut = ? WHERE id = ?";
     private static final String SQL_DELETE = "DELETE FROM task WHERE id = ?";
+    private static final String SQL_UPDATE_STATUS = "UPDATE task SET task_statut = ? WHERE id = ?";
 
     @Override
     public List<Task> getAllTasks(Project project) {
@@ -125,7 +126,27 @@ public class TaskRepositoryImpl implements TaskRepository {
             logger.error("Error updating task: " + e.getMessage());
             e.printStackTrace();
         }
+    }
 
+    @Override
+    public void updateTaskStatus(long id, TaskStatus taskStatus) {
+        try (Connection con = DatabaseConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(SQL_UPDATE_STATUS)) {
+
+            ps.setString(1, taskStatus.toString());
+            ps.setLong(2, id);
+
+            int affectedRows = ps.executeUpdate();
+            if (affectedRows > 0) {
+                logger.info("Task status with ID " + id + " was successfully updated.");
+            } else {
+                logger.warn("No task found with ID " + id);
+            }
+
+        } catch (SQLException e) {
+            logger.error("Error updating task: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @Override

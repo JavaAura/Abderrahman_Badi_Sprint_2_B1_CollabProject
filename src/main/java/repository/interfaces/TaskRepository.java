@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import model.Project;
 import model.Task;
+import model.enums.TaskStatus;
 
 public interface TaskRepository {
 
@@ -15,6 +16,8 @@ public interface TaskRepository {
     public void save(Task task);
 
     public void update(long id, Task task);
+
+    public void updateTaskStatus(long id, TaskStatus taskStatus);
 
     public void delete(Task task);
 
