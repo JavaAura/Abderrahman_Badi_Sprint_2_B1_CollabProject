@@ -16,12 +16,14 @@ function dropHandler(ev) {
   ev.preventDefault();
 
   const id = ev.dataTransfer.getData("text/plain");
-  ev.target.appendChild(document.getElementById(id));
+  const draggedElement = document.getElementById(id)
 
   // Find the closest drop zone (the parent container)
   let dropZone = ev.target;
 
   if (!dropZone.classList.contains("drop-zone")) {
+    console.log("not drop zone");
+    
     const bounding = ev.target.getBoundingClientRect();
     const offset = ev.clientY - bounding.top;
 
