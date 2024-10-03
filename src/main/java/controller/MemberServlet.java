@@ -1,7 +1,10 @@
 package controller;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,14 +15,16 @@ import model.Member;
 import model.Squad;
 import model.enums.Role;
 import service.MemberService;
+import service.SquadService;
 
 public class MemberServlet extends HttpServlet {
 
-	 
 	private final MemberService memberService;
+	private SquadService squadService;
 
 	public MemberServlet() {
 		this.memberService = new MemberService();
+		this.squadService = new SquadService();
 
 	}
 
@@ -57,10 +62,24 @@ public class MemberServlet extends HttpServlet {
 			throws ServletException, IOException {
 		int page = 1;
 		int pageSize = 10;
-		List<Member> members = memberService.getAllMembers(page, pageSize);
-		request.setAttribute("members", members);
-		request.getRequestDispatcher("views/members.jsp").forward(request, response);
 
+		List<Member> members = memberService.getAllMembers(page, pageSize);
+
+		List<Squad> squads = squadService.getAllSquads(page, pageSize);
+
+		Map<Long, Squad> squadMap = new HashMap<>();
+		for (Squad squad : squads) {
+			squadMap.put(squad.getId(), squad);
+		}
+
+		for (Member member : members) {
+			member.setSquad(squadMap.get(member.getSquadId()));
+		}
+
+		request.setAttribute("members", members);
+		request.setAttribute("roles", Arrays.asList(Role.values()));
+
+		request.getRequestDispatcher("views/members.jsp").forward(request, response);
 	}
 
 	private void getMemberById(HttpServletRequest request, HttpServletResponse response)
@@ -82,7 +101,9 @@ public class MemberServlet extends HttpServlet {
 		String lastName = request.getParameter("last_name");
 		String email = request.getParameter("email");
 		String roleString = request.getParameter("role");
-		Long squadId = request.getParameter("squadId") != null ? Long.valueOf(request.getParameter("squadId")) : null;
+		Long squadId = request.getParameter("squadId") != null && !request.getParameter("squadId").isEmpty()
+				? Long.valueOf(request.getParameter("squadId"))
+				: null;
 
 		Role role = Role.valueOf(roleString.toUpperCase());
 
@@ -95,31 +116,44 @@ public class MemberServlet extends HttpServlet {
 
 		memberService.addMember(member);
 
-		response.sendRedirect("member?action=list");
+		response.sendRedirect("members?action=list");
 
 	}
 
 	private void updateMember(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		String idString = request.getParameter("id");
+		Long id = null;
+
+		if (idString != null && !idString.isEmpty()) {
+			id = Long.parseLong(idString);
+		}
+
 		String firstName = request.getParameter("first_name");
 		String lastName = request.getParameter("last_name");
 		String email = request.getParameter("email");
 		String roleString = request.getParameter("role");
-		Long sqaudId = Long.parseLong(request.getParameter("squadId"));
+		Long squadId = null;
+
+		 
+		String squadIdString = request.getParameter("squadId");
+		if (squadIdString != null && !squadIdString.isEmpty()) {
+			squadId = Long.parseLong(squadIdString);
+		}
 
 		Role role = Role.valueOf(roleString.toUpperCase());
 
 		Member member = new Member();
+		member.setId(id);
 		member.setFirstName(firstName);
 		member.setLastName(lastName);
 		member.setEmail(email);
 		member.setRole(role);
-		member.setSquadId(sqaudId);
+		member.setSquadId(squadId);
 
 		memberService.updateMember(member);
 
-		response.sendRedirect("member?action=list");
-
+		response.sendRedirect("members?action=list");
 	}
 
 	private void deleteMember(HttpServletRequest request, HttpServletResponse response)
