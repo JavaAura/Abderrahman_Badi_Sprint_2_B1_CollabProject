@@ -11,13 +11,13 @@
              </c:if>
          </div>
          <div class="d-flex w-100 gap-3">
-             <div style="width: 33%;" class="d-flex gap-1 p-1 border rounded shadow">
+             <div style="width: 33%;" class="d-flex flex-column gap-1 p-1 border rounded shadow ">
                  <p class="ps-2 fs-4 fw-medium">To Do</p>
              </div>
-             <div style="width: 33%;" class="d-flex gap-1 p-1 border rounded shadow">
+             <div style="width: 33%;" class="d-flex flex-column gap-1 p-1 border rounded shadow ">
                  <p class="ps-2 fs-4 fw-medium">Doing</p>
              </div>
-             <div style="width: 33%;" class="d-flex gap-1 p-1 border rounded shadow">
+             <div style="width: 33%;" class="d-flex flex-column gap-1 p-1 border rounded shadow ">
                  <p class="ps-2 fs-4 fw-medium">Done</p>
              </div>
          </div>
