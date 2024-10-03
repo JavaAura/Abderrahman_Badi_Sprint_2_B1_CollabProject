@@ -15,11 +15,37 @@ import repository.interfaces.MemberRepository;
 
 public class MemberRepositoryImpl implements MemberRepository {
 
+	private static final String GET_MEMBERS_BY_SQUAD_ID = "SELECT * FROM member WHERE squad_id = ?";
 	private static final String GET_ALL_MEMBERS_QUERY = "SELECT * FROM member LIMIT ? OFFSET ?";
 	private static final String GET_MEMBER_BY_ID_QUERY = "SELECT * FROM member WHERE id = ?";
 	private static final String ADD_MEMBER_QUERY = "INSERT INTO member (first_name, last_name, email, role, squad_id) VALUES (?,?,?,?,?)";
 	private static final String UPDATE_MEMBER_QUERY = "UPDATE member SET first_name = ?, last_name = ?, email = ?, role = ?, squad_id = ? WHERE id = ?";
 	private static final String DELETE_MEMBER_QUERY = "DELETE FROM member WHERE id = ?";
+
+	@Override
+	public List<Member> getMembersBySquad(long id) {
+		List<Member> members = new ArrayList<>();
+
+		try (Connection connection = DatabaseConnection.getConnection();
+				PreparedStatement stmt = connection.prepareStatement(GET_MEMBERS_BY_SQUAD_ID)) {
+			stmt.setLong(1, id);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				Member member = new Member();
+				member.setId(rs.getLong("id"));
+				member.setFirstName(rs.getString("first_name"));
+				member.setLastName(rs.getString("last_name"));
+				member.setEmail(rs.getString("email"));
+				member.setRole(Role.valueOf(rs.getString("role")));
+				member.setSquadId(rs.getLong("squad_id"));
+				members.add(member);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return members;
+	}
 
 	@Override
 	public List<Member> getAllMembers(int page, int pageSize) {
@@ -101,29 +127,27 @@ public class MemberRepositoryImpl implements MemberRepository {
 
 	@Override
 	public void updateMember(Member member) {
-	    try (Connection connection = DatabaseConnection.getConnection();
-	         PreparedStatement stmt = connection.prepareStatement(UPDATE_MEMBER_QUERY)) {
-	        
-	        stmt.setString(1, member.getFirstName());
-	        stmt.setString(2, member.getLastName());
-	        stmt.setString(3, member.getEmail());
-	        stmt.setString(4, member.getRole().name());
+		try (Connection connection = DatabaseConnection.getConnection();
+				PreparedStatement stmt = connection.prepareStatement(UPDATE_MEMBER_QUERY)) {
 
-	         
-	        if (member.getSquadId() != null) {
-	            stmt.setLong(5, member.getSquadId());
-	        } else {
-	            stmt.setNull(5, Types.BIGINT);  
-	        }
+			stmt.setString(1, member.getFirstName());
+			stmt.setString(2, member.getLastName());
+			stmt.setString(3, member.getEmail());
+			stmt.setString(4, member.getRole().name());
 
-	        stmt.setLong(6, member.getId());
-	        stmt.executeUpdate();
+			if (member.getSquadId() != null) {
+				stmt.setLong(5, member.getSquadId());
+			} else {
+				stmt.setNull(5, Types.BIGINT);
+			}
 
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
+			stmt.setLong(6, member.getId());
+			stmt.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
-
 
 	@Override
 	public void deleteMember(Long id) {
@@ -137,4 +161,5 @@ public class MemberRepositoryImpl implements MemberRepository {
 			e.printStackTrace();
 		}
 	}
+
 }

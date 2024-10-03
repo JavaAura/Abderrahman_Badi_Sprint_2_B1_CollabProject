@@ -7,9 +7,11 @@ import java.util.stream.Collectors;
 
 import org.slf4j.LoggerFactory;
 
+import model.Member;
 import model.Project;
 import model.Task;
 import model.enums.TaskStatus;
+import service.MemberService;
 import service.ProjectService;
 import service.TaskService;
 
@@ -26,6 +28,7 @@ public class TaskServlet extends HttpServlet {
 
     private TaskService taskService = new TaskService();
     private ProjectService projectService = new ProjectService();
+    private MemberService memberService = new MemberService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -43,15 +46,19 @@ public class TaskServlet extends HttpServlet {
             if (optionalProject.isPresent()) {
                 Project project = optionalProject.get();
                 List<Task> tasks = taskService.getAllTasks(project);
-                
-                if(!tasks.isEmpty()){
-                    req.setAttribute("todoTasks", tasks.stream().filter(task -> task.getTaskStatus() == TaskStatus.TODO).collect(Collectors.toList()));
-                    req.setAttribute("doingTasks", tasks.stream().filter(task -> task.getTaskStatus() == TaskStatus.DOING).collect(Collectors.toList()));
-                    req.setAttribute("doneTasks", tasks.stream().filter(task -> task.getTaskStatus() == TaskStatus.DONE).collect(Collectors.toList()));
+                List<Member> members = memberService.getMembersBySquad(project.getSquad().getId());
+
+                if (!tasks.isEmpty()) {
+                    req.setAttribute("todoTasks", tasks.stream().filter(task -> task.getTaskStatus() == TaskStatus.TODO)
+                            .collect(Collectors.toList()));
+                    req.setAttribute("doingTasks", tasks.stream()
+                            .filter(task -> task.getTaskStatus() == TaskStatus.DOING).collect(Collectors.toList()));
+                    req.setAttribute("doneTasks", tasks.stream().filter(task -> task.getTaskStatus() == TaskStatus.DONE)
+                            .collect(Collectors.toList()));
                 }
 
                 req.setAttribute("project", project);
-               
+                req.setAttribute("members", members);
 
             } else {
                 req.setAttribute("errorMessage", "Project not found.");

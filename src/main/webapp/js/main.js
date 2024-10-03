@@ -19,13 +19,12 @@ function dropHandler(ev) {
   const draggedElement = document.getElementById(id);
 
   const dropZone = ev.target.closest(".drop-zone");
-  
+
   const targetCard = ev.target.closest(".card");
 
-  console.log("target Card:" + targetCard)
+  console.log("target Card:" + targetCard);
 
   if (targetCard) {
-
     const bounding = targetCard.getBoundingClientRect();
 
     // Mouse Y position (px) - Top border to top view port distance (px)
@@ -46,7 +45,6 @@ function dropHandler(ev) {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-
   const elements = document.getElementsByClassName("card");
 
   Array.from(elements).forEach((element) => {
@@ -56,3 +54,11 @@ window.addEventListener("DOMContentLoaded", () => {
     element.addEventListener("dragstart", dragstartHandler);
   });
 });
+
+function openTaskModal(id, title, description, priority, assignDate) {
+  document.getElementById("taskId").value = id;
+  document.getElementById("taskTitle").value = title;
+  document.getElementById("taskDescription").value = description;
+  document.getElementById("taskPriority").value = priority;
+  document.getElementById("taskAssignDate").value = assignDate;
+}
