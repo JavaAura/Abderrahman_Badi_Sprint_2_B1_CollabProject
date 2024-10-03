@@ -60,24 +60,29 @@ public class MemberServlet extends HttpServlet {
 
 	private void listMembers(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		int page = 1;
+		int page = 1;  
 		int pageSize = 10;
 
 		List<Member> members = memberService.getAllMembers(page, pageSize);
 
+		 
 		List<Squad> squads = squadService.getAllSquads(page, pageSize);
 
+		 
 		Map<Long, Squad> squadMap = new HashMap<>();
 		for (Squad squad : squads) {
-			squadMap.put(squad.getId(), squad);
+			squadMap.put(squad.getId(), squad);  
 		}
 
+	 
 		for (Member member : members) {
-			member.setSquad(squadMap.get(member.getSquadId()));
+			member.setSquad(squadMap.get(member.getSquadId()));  
 		}
 
+		 
 		request.setAttribute("members", members);
-		request.setAttribute("roles", Arrays.asList(Role.values()));
+		request.setAttribute("roles", Arrays.asList(Role.values()));  
+		request.setAttribute("squads", squads);  
 
 		request.getRequestDispatcher("views/members.jsp").forward(request, response);
 	}
@@ -121,40 +126,41 @@ public class MemberServlet extends HttpServlet {
 	}
 
 	private void updateMember(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		String idString = request.getParameter("id");
-		Long id = null;
+	        throws ServletException, IOException {
+	    String idString = request.getParameter("id");  
+	    Long id = null;
 
-		if (idString != null && !idString.isEmpty()) {
-			id = Long.parseLong(idString);
-		}
+	    if (idString != null && !idString.isEmpty()) {
+	        id = Long.parseLong(idString);  
+	    }
 
-		String firstName = request.getParameter("first_name");
-		String lastName = request.getParameter("last_name");
-		String email = request.getParameter("email");
-		String roleString = request.getParameter("role");
-		Long squadId = null;
+	    String firstName = request.getParameter("first_name");
+	    String lastName = request.getParameter("last_name");
+	    String email = request.getParameter("email");
+	    String roleString = request.getParameter("role");
+	    Long squadId = null;
 
-		 
-		String squadIdString = request.getParameter("squadId");
-		if (squadIdString != null && !squadIdString.isEmpty()) {
-			squadId = Long.parseLong(squadIdString);
-		}
+	    // Handle squadId potentially being null
+	    String squadIdString = request.getParameter("squadId");
+	    if (squadIdString != null && !squadIdString.isEmpty()) {
+	        squadId = Long.parseLong(squadIdString);
+	    }
 
-		Role role = Role.valueOf(roleString.toUpperCase());
+	    Role role = Role.valueOf(roleString.toUpperCase());
 
-		Member member = new Member();
-		member.setId(id);
-		member.setFirstName(firstName);
-		member.setLastName(lastName);
-		member.setEmail(email);
-		member.setRole(role);
-		member.setSquadId(squadId);
+	    Member member = new Member();
+	    member.setId(id);  
+	    member.setFirstName(firstName);
+	    member.setLastName(lastName);
+	    member.setEmail(email);
+	    member.setRole(role);
+	    member.setSquadId(squadId);
 
-		memberService.updateMember(member);
+	    memberService.updateMember(member);
 
-		response.sendRedirect("members?action=list");
+	    response.sendRedirect("members?action=list");
 	}
+
 
 	private void deleteMember(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
