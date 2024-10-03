@@ -12,7 +12,7 @@ import java.util.List;
 
 public class SquadServlet extends HttpServlet {
 
-    private static final long serialVersion = 1;
+    private static final long serialVersionUID = 1L; 
     private final SquadService squadService;
 
     public SquadServlet() {
@@ -84,7 +84,14 @@ public class SquadServlet extends HttpServlet {
 
     private void deleteSquad(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Long id = Long.parseLong(request.getParameter("id"));
-        squadService.deleteSquad(id);
-        response.sendRedirect("squads?action=squad");
+        try {
+            squadService.deleteSquad(id);
+            request.setAttribute("message", "Squad deleted successfully!");  
+        } catch (Exception e) {
+            e.printStackTrace();  
+            request.setAttribute("errorMessage", "Failed to delete squad: " + e.getMessage());  
+        }
+        response.sendRedirect("squads?action=squad");  
     }
+
 }

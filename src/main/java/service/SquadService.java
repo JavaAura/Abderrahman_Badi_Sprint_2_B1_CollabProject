@@ -7,28 +7,28 @@ import repository.implementation.SquadRepositoryImpl;
 
 public class SquadService {
 
-	private SquadRepository squadRepository ;
-	
+	private SquadRepository squadRepository;
+
 	public SquadService() {
 		this.squadRepository = new SquadRepositoryImpl();
 	}
-	
-	public List<Squad> getAllSquads(int page , int pageSize){
+
+	public List<Squad> getAllSquads(int page, int pageSize) {
 		return squadRepository.getAllSquads(page, pageSize);
 	}
-	
+
 	public Squad getSquadById(long id) {
 		return squadRepository.getSquadById(id);
 	}
-	
+
 	public void addSquad(Squad squad) {
-		  squadRepository.addSquad(squad);
+		squadRepository.addSquad(squad);
 	}
-	
+
 	public void updateSquad(Squad squad) {
-		 squadRepository.updateSquad(squad);
+		squadRepository.updateSquad(squad);
 	}
-	
+
 	public void deleteSquad(long id) {
 		squadRepository.deleteSquad(id);
 	}
