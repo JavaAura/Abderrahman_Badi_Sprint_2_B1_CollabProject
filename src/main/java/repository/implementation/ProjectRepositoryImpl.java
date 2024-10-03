@@ -3,6 +3,7 @@ package repository.implementation;
 import config.DatabaseConnection;
 import repository.interfaces.ProjectRepository;
 import model.Project;
+import model.Squad;
 import model.enums.ProjectStatus;
 
 import java.sql.Connection;
@@ -37,11 +38,17 @@ public class ProjectRepositoryImpl implements ProjectRepository {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     project = new Project();
+
+                    Squad squad = new Squad();
+                    squad.setId(rs.getLong("squad_id"));
+
                     project.setId(rs.getInt("id"));
                     project.setName(rs.getString("name"));
                     project.setDescription(rs.getString("description"));
                     project.setStartDate(rs.getDate("start_date").toLocalDate());
                     project.setEndDate(rs.getDate("end_date").toLocalDate());
+
+                    project.setSquad(squad);
                     project.setStatus(ProjectStatus.valueOf(rs.getString("project_statut")));
                 }
             }
