@@ -44,7 +44,7 @@
              </div>
              <div style="width: 33%;" class="d-flex flex-column gap-3 p-2 border rounded shadow task-container">
                  <p class="ps-2 fs-4 fw-medium">Doing</p>
-                 <div class="d-flex flex-column gap-3 shadow-sm min-vh-100 drop-zone" ondrop="dropHandler(event)"
+                 <div class="d-flex flex-column shadow-sm min-vh-100 drop-zone" ondrop="dropHandler(event)"
                      ondragover="dragoverHandler(event)">
                      <div class="card cursor-pointer" id="card3" style="width: 18rem;">
                          <div class="card-body">
@@ -72,7 +72,7 @@
              </div>
              <div style="width: 33%;" class="d-flex flex-column gap-3 p-2 border rounded shadow task-container">
                  <p class="ps-2 fs-4 fw-medium">Done</p>
-                 <div class="d-flex flex-column gap-3 shadow-sm min-vh-100 drop-zone" ondrop="dropHandler(event)"
+                 <div class="d-flex flex-column shadow-sm min-vh-100 drop-zone" ondrop="dropHandler(event)"
                      ondragover="dragoverHandler(event)">
                      <div class="card cursor-pointer" id="card5" style="width: 18rem;">
                          <div class="card-body">

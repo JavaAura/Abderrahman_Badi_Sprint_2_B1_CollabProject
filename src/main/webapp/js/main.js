@@ -16,21 +16,29 @@ function dropHandler(ev) {
   ev.preventDefault();
 
   const id = ev.dataTransfer.getData("text/plain");
-  const draggedElement = document.getElementById(id)
+  const draggedElement = document.getElementById(id);
 
-  // Find the closest drop zone (the parent container)
-  let dropZone = ev.target;
+  const dropZone = ev.target.closest(".drop-zone");
+  
+  const targetCard = ev.target.closest(".card");
 
-  if (!dropZone.classList.contains("drop-zone")) {
-    console.log("not drop zone");
-    
-    const bounding = ev.target.getBoundingClientRect();
+  console.log("target Card:" + targetCard)
+
+  if (targetCard) {
+
+    const bounding = targetCard.getBoundingClientRect();
+
+    // Mouse Y position (px) - Top border to top view port distance (px)
     const offset = ev.clientY - bounding.top;
 
+    // If the offset is longer than half the height of the card the mouse was on the bottom half of the card
+
     if (offset < bounding.height / 2) {
-      dropZone.insertBefore(draggedElement, ev.target);
+      // Insert before the element
+      dropZone.insertBefore(draggedElement, targetCard);
     } else {
-      ev.target.insertAdjacentElement("afterend", draggedElement);
+      // Insert after the element
+      targetCard.insertAdjacentElement("afterend", draggedElement);
     }
   } else {
     dropZone.appendChild(draggedElement);
@@ -38,7 +46,7 @@ function dropHandler(ev) {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-  // Get the element by id
+
   const elements = document.getElementsByClassName("card");
 
   Array.from(elements).forEach((element) => {
