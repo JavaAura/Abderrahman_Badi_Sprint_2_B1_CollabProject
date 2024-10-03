@@ -100,11 +100,8 @@ public class ProjectRepositoryImpl implements ProjectRepository {
         List<Project> projects = new ArrayList<>();
         String query = "SELECT * FROM Projects WHERE name LIKE ?";
 
-
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(query)) {
-
-            ps.setString(1, "%" + name + "%");
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {

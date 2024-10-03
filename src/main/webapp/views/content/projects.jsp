@@ -13,7 +13,7 @@
         <div class="d-flex justify-content-end mb-3">
          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProjectModal">Add Project</button>
          </div>
-        <form class="d-flex" role="search" action="" method="get">
+        <form class="d-flex"  action="" method="get">
             <input class="form-control me-2" type="search" name="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
@@ -22,12 +22,13 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Nom</th>
-                        <th>Description</th>
-                        <th>Date de début</th>
-                        <th>Date de fin</th>
-                        <th>Statut</th>
-                        <th>Gestion</th>
+                     <th>Name</th>
+                     <th>Description</th>
+                     <th>Start Date</th>
+                     <th>End Date</th>
+                     <th>Status</th>
+                     <th>Management</th>
+
                     </tr>
                 </thead>
                 <tbody>

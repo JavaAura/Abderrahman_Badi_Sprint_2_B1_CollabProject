@@ -27,13 +27,11 @@ public class ProjectServlet extends HttpServlet {
             request.setAttribute("message", "Résultats de la recherche.");
             List<Project> projects = projectService.searchProjects(searchQuery);
 
-
             System.out.println("Résultats de la recherche pour : " + searchQuery);
             projects.forEach(project -> System.out.println(project.getNom()));
 
             request.setAttribute("projects", projects);
             request.getRequestDispatcher("views/projects.jsp").forward(request, response);
-            return;  
         }
 
         List<Project> projects = projectService.getAllProjects();
@@ -64,11 +62,11 @@ public class ProjectServlet extends HttpServlet {
 
             Project project = new Project();
             project.setId(id);
-            project.setNom(nom);
+            project.setName(nom);
             project.setDescription(description);
-            project.setDateDebut(dateDebut);
-            project.setDateFin(dateFin);
-            project.setStatut(ProjectStatus.valueOf(statut));
+            project.setStartDate(dateDebut);
+            project.setEndDate(dateFin);
+            project.setStatus(ProjectStatus.valueOf(statut));
 
             projectService.updateProject(project);
 
@@ -101,11 +99,11 @@ public class ProjectServlet extends HttpServlet {
             String statut = request.getParameter("statut");
 
             Project newProject = new Project();
-            newProject.setNom(nom);
+            newProject.setName(nom);
             newProject.setDescription(description);
-            newProject.setDateDebut(dateDebut);
-            newProject.setDateFin(dateFin);
-            newProject.setStatut(ProjectStatus.valueOf(statut));
+            newProject.setStartDate(dateDebut);
+            newProject.setEndDate(dateFin);
+            newProject.setStatus(ProjectStatus.valueOf(statut));
 
 
             projectService.addProject(newProject);
