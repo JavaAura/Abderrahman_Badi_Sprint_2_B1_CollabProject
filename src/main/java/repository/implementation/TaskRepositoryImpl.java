@@ -54,7 +54,6 @@ public class TaskRepositoryImpl implements TaskRepository {
                     member.setLastName(rs.getString("last_name"));
                     member.setEmail(rs.getString("email"));
                     member.setRole(Role.valueOf(rs.getString("role")));
-                    member.setSquadId(rs.getLong("squad_id"));
 
                     task.setMember(member);
                     task.setProject(project);
@@ -89,7 +88,6 @@ public class TaskRepositoryImpl implements TaskRepository {
                     member.setLastName(rs.getString("last_name"));
                     member.setEmail(rs.getString("email"));
                     member.setRole(Role.valueOf(rs.getString("role")));
-                    member.setSquadId(rs.getLong("squad_id"));
 
                     task = new Task(id, title, description, taskPriority, taskStatus, project);
 
