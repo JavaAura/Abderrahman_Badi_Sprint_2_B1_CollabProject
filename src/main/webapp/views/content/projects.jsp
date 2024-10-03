@@ -10,13 +10,21 @@
             </div>
         </c:if>
 
+        <c:if test="${not empty message}">
+                <div class="alert alert-danger" role="alert">
+                    ${ermessage}
+                </div>
+                </div>
+            </c:if>
+
         <div class="d-flex justify-content-end mb-3">
          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProjectModal">Add Project</button>
          </div>
-        <form class="d-flex"  action="" method="get">
-            <input class="form-control me-2" type="search" name="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
+     <form class="d-flex" action="." method="get">
+         <input class="form-control me-2" type="search" name="search" placeholder="Search" aria-label="Search">
+         <button class="btn btn-outline-success" type="submit">Search</button>
+     </form>
+
 
 
             <table class="table">
@@ -34,24 +42,25 @@
                 <tbody>
                     <c:forEach var="project" items="${projects}">
                         <tr>
-                            <td>${project.nom}</td>
-                            <td>${project.description}</td>
-                            <td>${project.dateDebut}</td>
-                            <td>${project.dateFin}</td>
-                            <td>${project.statut}</td>
+                           <td>${project.name}</td>
+                           <td>${project.description}</td>
+                           <td>${project.startDate}</td>
+                           <td>${project.endDate}</td>
+                           <td>${project.status}</td>
+
                             <td>
                                 <div class="btn-group" role="group" aria-label="Gestion des projets">
-                                    <button class="btn btn-primary me-2"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#updateModal"
-                                            data-id="${project.id}"
-                                            data-nom="${project.nom}"
-                                            data-description="${project.description}"
-                                            data-dateDebut="${project.dateDebut}"
-                                            data-dateFin="${project.dateFin}"
-                                            data-statut="${project.statut}">
-                                        Update
-                                    </button>
+                                 <button class="btn btn-primary me-2"
+                                         data-bs-toggle="modal"
+                                         data-bs-target="#updateModal"
+                                         data-id="${project.id}"
+                                         data-nom="${project.name}"
+                                         data-description="${project.description}"
+                                         data-dateDebut="${project.startDate}"
+                                         data-dateFin="${project.endDate}">
+                                     Update
+                                 </button>
+
                                     <form action="" method="POST" style="display:inline;">
                                         <input type="hidden" name="id" value="${project.id}">
                                         <input type="hidden" name="action" value="delete" />
@@ -98,7 +107,14 @@
                     </div>
                     <div class="mb-3">
                         <label for="projectStatut" class="form-label">Statut</label>
-                        <input type="text" class="form-control" id="projectStatut" name="statut" required />
+                         <select class="form-select" id="projectStatut" name="statut" required>
+                                                    <option value="" disabled selected>Select a status</option>
+                                                    <option value="PREPARATION">Preparation</option>
+                                                    <option value="IN_PROGRESS">In Progress</option>
+                                                    <option value="PAUSED">Paused</option>
+                                                    <option value="COMPLETED">Completed</option>
+                                                    <option value="CANCELED">Canceled</option>
+                                                </select>
                     </div>
                     <button type="submit" class="btn btn-primary">Update</button>
                 </form>

@@ -14,13 +14,18 @@ import java.util.List;
 
 public class ProjectRepositoryImpl implements ProjectRepository {
 
+    private static final String GET_ALL_PROJECTS = "SELECT * FROM Project";
+    private static final String UPDATE_PROJECT = "UPDATE Project SET name = ?, description = ?, start_date = ?, end_date = ?, project_statut = ? WHERE id = ?";
+    private static final String DELETE_PROJECT = "DELETE FROM Project WHERE id = ?";
+    private static final String ADD_PROJECT = "INSERT INTO Project (name, description, start_date, end_date, project_statut) VALUES (?, ?, ?, ?, ?)";
+    private static final String SEARCH_PROJECTS_BY_NAME = "SELECT * FROM Projects WHERE name LIKE ?";
+
     @Override
     public List<Project> getAllProjects() {
         List<Project> projects = new ArrayList<>();
-        String query = "SELECT * FROM Project";
 
         try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(query);
+             PreparedStatement ps = con.prepareStatement(GET_ALL_PROJECTS);
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
@@ -41,13 +46,10 @@ public class ProjectRepositoryImpl implements ProjectRepository {
         return projects;
     }
 
-
     @Override
     public void updateProject(Project project) {
-        String query = "UPDATE Project SET name = ?, description = ?, start_date = ?, end_date = ?, project_statut = ? WHERE id = ?";
-
         try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(query)) {
+             PreparedStatement ps = con.prepareStatement(UPDATE_PROJECT)) {
 
             ps.setString(1, project.getName());
             ps.setString(2, project.getDescription());
@@ -64,9 +66,8 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
     @Override
     public void deleteProject(int id) {
-        String query = "DELETE FROM Project WHERE id = ?";
         try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(query)) {
+             PreparedStatement ps = con.prepareStatement(DELETE_PROJECT)) {
             ps.setInt(1, id);
             ps.executeUpdate();
         } catch (Exception e) {
@@ -74,13 +75,10 @@ public class ProjectRepositoryImpl implements ProjectRepository {
         }
     }
 
-
     @Override
     public void addProject(Project project) {
-        String query = "INSERT INTO Project (name, description, start_date, end_date, project_statut) VALUES (?, ?, ?, ?, ?)";
-
         try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(query)) {
+             PreparedStatement ps = con.prepareStatement(ADD_PROJECT)) {
 
             ps.setString(1, project.getName());
             ps.setString(2, project.getDescription());
@@ -94,14 +92,14 @@ public class ProjectRepositoryImpl implements ProjectRepository {
         }
     }
 
-
     @Override
     public List<Project> searchProjectsByName(String name) {
         List<Project> projects = new ArrayList<>();
-        String query = "SELECT * FROM Projects WHERE name LIKE ?";
 
         try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(query)) {
+             PreparedStatement ps = con.prepareStatement(SEARCH_PROJECTS_BY_NAME)) {
+
+            ps.setString(1, "%" + name + "%");
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -119,10 +117,4 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
         return projects;
     }
-
-
-
-
-
-
 }
