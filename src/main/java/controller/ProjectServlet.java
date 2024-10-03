@@ -28,7 +28,7 @@ public class ProjectServlet extends HttpServlet {
             List<Project> projects = projectService.searchProjects(searchQuery);
 
             System.out.println("Résultats de la recherche pour : " + searchQuery);
-            projects.forEach(project -> System.out.println(project.getNom()));
+            projects.forEach(project -> System.out.println(project.getName()));
 
             request.setAttribute("projects", projects);
             request.getRequestDispatcher("views/projects.jsp").forward(request, response);
@@ -36,7 +36,7 @@ public class ProjectServlet extends HttpServlet {
 
         List<Project> projects = projectService.getAllProjects();
 
-        projects.forEach(project -> System.out.println(project.getNom()));
+        projects.forEach(project -> System.out.println(project.getName()));
         request.setAttribute("projects", projects);
 
         request.getRequestDispatcher("views/projects.jsp").forward(request, response);
