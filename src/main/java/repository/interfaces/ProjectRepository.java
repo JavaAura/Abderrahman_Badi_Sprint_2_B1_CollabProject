@@ -10,5 +10,6 @@ public interface ProjectRepository {
     void deleteProject(int id);
     void addProject(Project project);
     List<Project> searchProjectsByName(String name);
+    public List<Project> getAllProjectsPaginated(int limit, int offset);
 
 }

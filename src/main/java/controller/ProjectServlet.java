@@ -14,7 +14,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class ProjectServlet extends HttpServlet {
 
     private ProjectService projectService = new ProjectService();
@@ -44,8 +43,18 @@ public class ProjectServlet extends HttpServlet {
         }
 
 
-        List<Project> projects = projectService.getAllProjects();
+        int currentPage = 1;
+        int itemsPerPage = 6;
+
+        String pageParam = request.getParameter("page");
+        if (pageParam != null) {
+            currentPage = Integer.parseInt(pageParam);
+        }
+
+        List<Project> projects = projectService.getAllProjectsPaginated(currentPage, itemsPerPage);
         request.setAttribute("projects", projects);
+        request.setAttribute("currentPage", currentPage);
+
         request.getRequestDispatcher("views/projects.jsp").forward(request, response);
     }
 

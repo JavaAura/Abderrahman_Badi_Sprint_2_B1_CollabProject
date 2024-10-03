@@ -37,6 +37,12 @@ public class ProjectService {
         return projectRepository.searchProjectsByName(name);
     }
 
+    public List<Project> getAllProjectsPaginated(int page, int itemsPerPage) {
+        int offset = (page - 1) * itemsPerPage;
+        return projectRepository.getAllProjectsPaginated(itemsPerPage, offset);
+    }
+
+
 
 
 
