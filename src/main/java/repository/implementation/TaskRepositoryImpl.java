@@ -25,7 +25,7 @@ public class TaskRepositoryImpl implements TaskRepository {
     private static final Logger logger = LoggerFactory.getLogger(TaskRepositoryImpl.class);
 
     private static final String SQL_FIND_BY_ID = "SELECT task.id AS id_task, task.*, member.*, member_task.* FROM task JOIN member_task ON task.id = member_task.task_id JOIN member ON member_task.member_id = member.id WHERE task.id = ? ORDER BY member_task.assign_date DESC LIMIT 1";
-    private static final String SQL_LIST = "SELECT task.id AS id_task, task.*, member.*, member_task.* FROM task JOIN member_task ON task.id = member_task.task_id JOIN member ON member_task.member_id = member.id WHERE project_id = ?";
+    private static final String SQL_LIST = "SELECT task_with_members.id_task, task_with_members.title AS task_name, task_with_members.description, task_with_members.priority, task_with_members.task_statut, task_with_members.project_id, member.id AS member_id, member.first_name, member.last_name, member.email, member.role, task_with_members.assign_date FROM ( SELECT task.id AS id_task, task.*, member_task.* FROM task LEFT JOIN member_task ON task.id = member_task.task_id AND member_task.assign_date = ( SELECT MAX(assign_date) FROM member_task mt WHERE mt.task_id = task.id ) ) AS task_with_members LEFT JOIN member ON task_with_members.member_id = member.id WHERE task_with_members.project_id = ?";
     private static final String SQL_INSERT = "INSERT INTO task (`title`, `description`, `priority`, `task_statut`, `project_id`) VALUES (?, ?, ?, ?, ?)";
     private static final String SQL_UPDATE = "UPDATE task SET title = ?, description = ?, priority = ?, task_statut = ? WHERE id = ?";
     private static final String SQL_DELETE = "DELETE FROM task WHERE id = ?";

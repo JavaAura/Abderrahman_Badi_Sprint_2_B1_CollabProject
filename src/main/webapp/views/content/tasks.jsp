@@ -31,17 +31,14 @@
                                      </c:otherwise>
                                  </c:choose>
                                  <c:choose>
-                                     <c:when test="${task.}">
-                                         <!-- This is the 'if' block -->
-                                         <p>Condition 1 is true!</p>
+                                     <c:when test="${task.member != null}">
+                                         <p class="card-link">${task.member.firstName} ${task.member.lastName}</p>
+                                         <p class="card-link">Assigned at: ${task.assignDate}</p>
                                      </c:when>
                                      <c:otherwise>
-                                         <!-- This is the 'else' block -->
-                                         <p>Both conditions are false!</p>
+                                         <p>No member assigned</p>
                                      </c:otherwise>
                                  </c:choose>
-                                 <a href="#" class="card-link">Card link</a>
-                                 <a href="#" class="card-link">Another link</a>
                              </div>
                          </div>
                      </c:forEach>
@@ -71,8 +68,15 @@
                                          <p class="card-text">${task.description}</p>
                                      </c:otherwise>
                                  </c:choose>
-                                 <a href="#" class="card-link">Card link</a>
-                                 <a href="#" class="card-link">Another link</a>
+                                 <c:choose>
+                                     <c:when test="${task.member != null}">
+                                         <p class="card-link">${task.member.firstName} ${task.member.lastName}</p>
+                                         <p class="card-link">Assigned at: ${task.assignDate}</p>
+                                     </c:when>
+                                     <c:otherwise>
+                                         <p>No member assigned</p>
+                                     </c:otherwise>
+                                 </c:choose>
                              </div>
                          </div>
                      </c:forEach>
@@ -101,8 +105,15 @@
                                          <p class="card-text">${task.description}</p>
                                      </c:otherwise>
                                  </c:choose>
-                                 <a href="#" class="card-link">Card link</a>
-                                 <a href="#" class="card-link">Another link</a>
+                                 <c:choose>
+                                     <c:when test="${task.member != null}">
+                                         <p class="card-link">${task.member.firstName} ${task.member.lastName}</p>
+                                         <p class="card-link">Assigned at: ${task.assignDate}</p>
+                                     </c:when>
+                                     <c:otherwise>
+                                         <p>No member assigned</p>
+                                     </c:otherwise>
+                                 </c:choose>
                              </div>
                          </div>
                      </c:forEach>
