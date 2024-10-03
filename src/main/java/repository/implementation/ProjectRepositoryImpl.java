@@ -26,11 +26,11 @@ public class ProjectRepositoryImpl implements ProjectRepository {
             while (rs.next()) {
                 Project project = new Project();
                 project.setId(rs.getInt("id"));
-                project.setNom(rs.getString("name"));
+                project.setName(rs.getString("name"));
                 project.setDescription(rs.getString("description"));
-                project.setDateDebut(rs.getDate("start_date").toLocalDate());
-                project.setDateFin(rs.getDate("end_date").toLocalDate());
-                project.setStatut(ProjectStatus.valueOf(rs.getString("project_statut")));
+                project.setStartDate(rs.getDate("start_date").toLocalDate());
+                project.setEndDate(rs.getDate("end_date").toLocalDate());
+                project.setStatus(ProjectStatus.valueOf(rs.getString("project_statut")));
 
                 projects.add(project);
             }
@@ -49,11 +49,11 @@ public class ProjectRepositoryImpl implements ProjectRepository {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(query)) {
 
-            ps.setString(1, project.getNom());
+            ps.setString(1, project.getName());
             ps.setString(2, project.getDescription());
-            ps.setDate(3, java.sql.Date.valueOf(project.getDateDebut()));
-            ps.setDate(4, java.sql.Date.valueOf(project.getDateFin()));
-            ps.setString(5, project.getStatut().name());
+            ps.setDate(3, java.sql.Date.valueOf(project.getStartDate()));
+            ps.setDate(4, java.sql.Date.valueOf(project.getEndDate()));
+            ps.setString(5, project.getStatus().name());
             ps.setLong(6, project.getId());
 
             ps.executeUpdate();
@@ -82,11 +82,11 @@ public class ProjectRepositoryImpl implements ProjectRepository {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(query)) {
 
-            ps.setString(1, project.getNom());
+            ps.setString(1, project.getName());
             ps.setString(2, project.getDescription());
-            ps.setDate(3, java.sql.Date.valueOf(project.getDateDebut()));
-            ps.setDate(4, java.sql.Date.valueOf(project.getDateFin()));
-            ps.setString(5, project.getStatut().name());
+            ps.setDate(3, java.sql.Date.valueOf(project.getStartDate()));
+            ps.setDate(4, java.sql.Date.valueOf(project.getEndDate()));
+            ps.setString(5, project.getStatus().name());
 
             ps.executeUpdate();
         } catch (Exception e) {
@@ -106,11 +106,11 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
             while (rs.next()) {
                 Project project = new Project();
-                project.setNom(rs.getString("name"));
+                project.setName(rs.getString("name"));
                 project.setDescription(rs.getString("description"));
-                project.setDateDebut(rs.getDate("start_date").toLocalDate());
-                project.setDateFin(rs.getDate("end_date").toLocalDate());
-                project.setStatut(ProjectStatus.valueOf(rs.getString("project_statut")));
+                project.setStartDate(rs.getDate("start_date").toLocalDate());
+                project.setEndDate(rs.getDate("end_date").toLocalDate());
+                project.setStatus(ProjectStatus.valueOf(rs.getString("project_statut")));
                 projects.add(project);
             }
         } catch (Exception e) {
