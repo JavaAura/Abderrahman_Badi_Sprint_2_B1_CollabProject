@@ -15,7 +15,7 @@ import service.MemberService;
 
 public class MemberServlet extends HttpServlet {
 
-	private static final long serialVersionUID = 1L;
+	 
 	private final MemberService memberService;
 
 	public MemberServlet() {
@@ -82,7 +82,7 @@ public class MemberServlet extends HttpServlet {
 		String lastName = request.getParameter("last_name");
 		String email = request.getParameter("email");
 		String roleString = request.getParameter("role");
-		Long sqaudId = Long.parseLong(request.getParameter("squadId"));
+		Long squadId = request.getParameter("squadId") != null ? Long.valueOf(request.getParameter("squadId")) : null;
 
 		Role role = Role.valueOf(roleString.toUpperCase());
 
@@ -91,7 +91,7 @@ public class MemberServlet extends HttpServlet {
 		member.setLastName(lastName);
 		member.setEmail(email);
 		member.setRole(role);
-		member.setSquadId(sqaudId);
+		member.setSquadId(squadId);
 
 		memberService.addMember(member);
 
@@ -127,7 +127,7 @@ public class MemberServlet extends HttpServlet {
 		Long id = Long.parseLong(request.getParameter("id"));
 		memberService.deleteMember(id);
 
-		response.sendRedirect("member?action=list");
+		response.sendRedirect("members?action=list");
 
 	}
 

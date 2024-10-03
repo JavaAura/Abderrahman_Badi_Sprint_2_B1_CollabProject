@@ -10,6 +10,8 @@ public class Member {
 	private String email;
 	private Role role;
 	private Long squadId;
+	 
+
 
 	public Member() {
 
@@ -24,6 +26,9 @@ public class Member {
 		this.role = role;
 		this.squadId = squadId;
 	}
+	
+ 
+	
 
 	public Long getId() {
 		return id;
@@ -72,7 +77,5 @@ public class Member {
 	public void setSquadId(Long squadId) {
 		this.squadId = squadId;
 	}
-	
-	
 
 }
