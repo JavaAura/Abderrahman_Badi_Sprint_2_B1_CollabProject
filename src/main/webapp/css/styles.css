@@ -1,0 +1,12 @@
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.drop-zone {
+    padding-bottom: 5rem;
+}
+
+.drop-zone>.card {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
