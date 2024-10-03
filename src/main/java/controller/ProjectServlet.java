@@ -25,10 +25,9 @@ public class ProjectServlet extends HttpServlet {
 
         if (searchQuery != null && !searchQuery.trim().isEmpty()) {
             List<Project> projects = projectService.searchProjects(searchQuery);
-
-
+            System.out.println("eeee");
             if (projects.isEmpty()) {
-                request.setAttribute("ermessage", "Project does not exist!");
+                request.setAttribute("message", "Project does not exist!");
             } else {
                 request.setAttribute("message", "Search results for: " + searchQuery);
                 projects.forEach(project -> System.out.println(project.getName()));
@@ -36,7 +35,6 @@ public class ProjectServlet extends HttpServlet {
 
             request.setAttribute("projects", projects);
             request.getRequestDispatcher("views/projects.jsp").forward(request, response);
-            return;
         }
 
         List<Project> projects = projectService.getAllProjects();

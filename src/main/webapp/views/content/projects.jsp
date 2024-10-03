@@ -10,12 +10,7 @@
             </div>
         </c:if>
 
-        <c:if test="${not empty message}">
-                <div class="alert alert-danger" role="alert">
-                    ${ermessage}
-                </div>
-                </div>
-            </c:if>
+
 
         <div class="d-flex justify-content-end mb-3">
          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProjectModal">Add Project</button>
