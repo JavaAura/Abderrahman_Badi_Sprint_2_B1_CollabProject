@@ -9,7 +9,7 @@ import java.util.List;
 public class Validator {
 
 
-    public List<String> validateProject(Project project) {
+    public  List<String> validateProject(Project project) {
         List<String> errors = new ArrayList<>();
 
 

@@ -10,6 +10,15 @@
             </div>
         </c:if>
 
+        <c:if test="${not empty errors}">
+            <div class="alert alert-danger" role="alert">
+                <c:forEach var="error" items="${errors}">
+                    <p>${error}</p>
+                </c:forEach>
+            </div>
+        </c:if>
+
+
 
 
         <div class="d-flex justify-content-end mb-3">
