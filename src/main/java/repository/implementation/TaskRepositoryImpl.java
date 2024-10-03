@@ -24,8 +24,8 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     private static final Logger logger = LoggerFactory.getLogger(TaskRepositoryImpl.class);
 
-    private static final String SQL_FIND_BY_ID = "SELECT * FROM task JOIN member_task ON task.id = member_task.task_id JOIN member ON member_task.member_id = member.id WHERE id = ?ORDER BY member_task.assign_date DESC";
-    private static final String SQL_LIST = "SELECT * FROM task JOIN member_task ON task.id = member_task.task_id JOIN member ON member_task.member_id = member.id WHERE project_id = ?";
+    private static final String SQL_FIND_BY_ID = "SELECT task.id AS id_task, task.*, member.*, member_task.* FROM task JOIN member_task ON task.id = member_task.task_id JOIN member ON member_task.member_id = member.id WHERE task.id = ? ORDER BY member_task.assign_date DESC LIMIT 1";
+    private static final String SQL_LIST = "SELECT task.id AS id_task, task.*, member.*, member_task.* FROM task JOIN member_task ON task.id = member_task.task_id JOIN member ON member_task.member_id = member.id WHERE project_id = ?";
     private static final String SQL_INSERT = "INSERT INTO task (`title`, `description`, `priority`, `task_statut`, `project_id`) VALUES (?, ?, ?, ?, ?)";
     private static final String SQL_UPDATE = "UPDATE task SET title = ?, description = ?, priority = ?, task_statut = ? WHERE id = ?";
     private static final String SQL_DELETE = "DELETE FROM task WHERE id = ?";
@@ -41,7 +41,7 @@ public class TaskRepositoryImpl implements TaskRepository {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     Task task = new Task();
-                    task.setId(rs.getLong("id"));
+                    task.setId(rs.getLong("id_task"));
                     task.setTitle(rs.getString("title"));
                     task.setDescription(rs.getString("description"));
                     task.setTaskPriority(TaskPriority.valueOf(rs.getString("priority")));
@@ -49,7 +49,6 @@ public class TaskRepositoryImpl implements TaskRepository {
                     task.setAssignDate(rs.getDate("assign_date").toLocalDate());
 
                     Member member = new Member();
-                    member.setId(rs.getLong("id"));
                     member.setFirstName(rs.getString("first_name"));
                     member.setLastName(rs.getString("last_name"));
                     member.setEmail(rs.getString("email"));
@@ -84,8 +83,7 @@ public class TaskRepositoryImpl implements TaskRepository {
                     TaskPriority taskPriority = TaskPriority.valueOf(rs.getString("priority"));
                     TaskStatus taskStatus = TaskStatus.valueOf(rs.getString("task_statut"));
 
-                    Member member = new Member();
-                    member.setId(rs.getLong("id"));
+                    Member member = new Member();   
                     member.setFirstName(rs.getString("first_name"));
                     member.setLastName(rs.getString("last_name"));
                     member.setEmail(rs.getString("email"));
