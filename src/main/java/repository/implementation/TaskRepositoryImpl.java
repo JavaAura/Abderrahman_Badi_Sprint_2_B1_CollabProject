@@ -12,8 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import config.DatabaseConnection;
+import model.Member;
 import model.Project;
 import model.Task;
+import model.enums.Role;
 import model.enums.TaskPriority;
 import model.enums.TaskStatus;
 import repository.interfaces.TaskRepository;
@@ -22,8 +24,8 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     private static final Logger logger = LoggerFactory.getLogger(TaskRepositoryImpl.class);
 
-    private static final String SQL_FIND_BY_ID = "SELECT * FROM task WHERE id = ?";
-    private static final String SQL_LIST = "SELECT * FROM task WHERE project_id = ?";
+    private static final String SQL_FIND_BY_ID = "SELECT * FROM task JOIN member_task ON task.id = member_task.task_id JOIN member ON member_task.member_id = member.id WHERE id = ?ORDER BY member_task.assign_date DESC";
+    private static final String SQL_LIST = "SELECT * FROM task JOIN member_task ON task.id = member_task.task_id JOIN member ON member_task.member_id = member.id WHERE project_id = ?";
     private static final String SQL_INSERT = "INSERT INTO task (`title`, `description`, `priority`, `task_statut`, `project_id`) VALUES (?, ?, ?, ?, ?)";
     private static final String SQL_UPDATE = "UPDATE task SET title = ?, description = ?, priority = ?, task_statut = ? WHERE id = ?";
     private static final String SQL_DELETE = "DELETE FROM task WHERE id = ?";
@@ -44,8 +46,18 @@ public class TaskRepositoryImpl implements TaskRepository {
                     task.setDescription(rs.getString("description"));
                     task.setTaskPriority(TaskPriority.valueOf(rs.getString("priority")));
                     task.setTaskStatus(TaskStatus.valueOf(rs.getString("task_statut")));
-                    task.setProject(project);
+                    task.setAssignDate(rs.getDate("assign_date").toLocalDate());
 
+                    Member member = new Member();
+                    member.setId(rs.getLong("id"));
+                    member.setFirstName(rs.getString("first_name"));
+                    member.setLastName(rs.getString("last_name"));
+                    member.setEmail(rs.getString("email"));
+                    member.setRole(Role.valueOf(rs.getString("role")));
+                    member.setSquadId(rs.getLong("squad_id"));
+
+                    task.setMember(member);
+                    task.setProject(project);
                     tasks.add(task);
                 }
             }
@@ -71,9 +83,19 @@ public class TaskRepositoryImpl implements TaskRepository {
                     String description = rs.getString("description");
                     TaskPriority taskPriority = TaskPriority.valueOf(rs.getString("priority"));
                     TaskStatus taskStatus = TaskStatus.valueOf(rs.getString("task_statut"));
-                    // project.setId(rs.getLong("project_id"));
+
+                    Member member = new Member();
+                    member.setId(rs.getLong("id"));
+                    member.setFirstName(rs.getString("first_name"));
+                    member.setLastName(rs.getString("last_name"));
+                    member.setEmail(rs.getString("email"));
+                    member.setRole(Role.valueOf(rs.getString("role")));
+                    member.setSquadId(rs.getLong("squad_id"));
 
                     task = new Task(id, title, description, taskPriority, taskStatus, project);
+
+                    task.setAssignDate(rs.getDate("assign_date").toLocalDate());
+                    task.setMember(member);
 
                 }
             }

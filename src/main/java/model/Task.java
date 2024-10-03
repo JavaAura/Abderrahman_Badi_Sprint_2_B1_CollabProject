@@ -1,5 +1,7 @@
 package model;
 
+import java.time.LocalDate;
+
 import model.enums.TaskPriority;
 import model.enums.TaskStatus;
 
@@ -11,6 +13,8 @@ public class Task {
     private TaskPriority taskPriority;
     private TaskStatus taskStatus;
     private Project project;
+    private Member member;
+    private LocalDate assignDate;
 
     public Task() {
 
@@ -81,5 +85,19 @@ public class Task {
 
     public void setProject(Project value) {
         this.project = value;
+    }
+
+    public Member getMember() {
+      return this.member;
+    }
+    public void setMember(Member value) {
+      this.member = value;
+    }
+
+    public LocalDate getAssignDate() {
+      return this.assignDate;
+    }
+    public void setAssignDate(LocalDate value) {
+      this.assignDate = value;
     }
 }

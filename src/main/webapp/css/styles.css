@@ -12,3 +12,15 @@
     margin-top: 10px;
     margin-bottom: 10px;
 }
+
+
+
+@media (min-width: 1400px) {
+    .w-xxl-75 {
+        width: 75% !important;
+    }
+
+    .w-xxl-25 {
+        width: 25% !important;
+    }
+}

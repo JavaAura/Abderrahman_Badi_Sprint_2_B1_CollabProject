@@ -15,7 +15,7 @@
          <div class="d-flex w-100 gap-3">
              <div style="width: 33%;" class="d-flex flex-column gap-3 p-2 border rounded shadow task-container">
                  <p class="ps-2 fs-4 fw-medium">To Do</p>
-                 <div class="d-flex flex-column shadow-sm min-vh-100 drop-zone" ondrop="dropHandler(event)"
+                 <div class="d-flex flex-column min-vh-50 drop-zone" ondrop="dropHandler(event)"
                      ondragover="dragoverHandler(event)">
                      <c:forEach var="task" items="${todoTasks}">
                          <div class="card cursor-pointer shadow-sm" id="${task.id}" style="width: 18rem;">
@@ -30,17 +30,33 @@
                                          <p class="card-text">${task.description}</p>
                                      </c:otherwise>
                                  </c:choose>
+                                 <c:choose>
+                                     <c:when test="${task.}">
+                                         <!-- This is the 'if' block -->
+                                         <p>Condition 1 is true!</p>
+                                     </c:when>
+                                     <c:otherwise>
+                                         <!-- This is the 'else' block -->
+                                         <p>Both conditions are false!</p>
+                                     </c:otherwise>
+                                 </c:choose>
                                  <a href="#" class="card-link">Card link</a>
                                  <a href="#" class="card-link">Another link</a>
                              </div>
                          </div>
                      </c:forEach>
                  </div>
-
+                 <div class="d-flex flex-column w-100">
+                     <button type="button" class="btn w-50 align-self-end" data-bs-toggle="modal"
+                         data-bs-target="#exampleModal">
+                         + Create Task
+                     </button>
+                 </div>
              </div>
              <div style="width: 33%;" class="d-flex flex-column gap-3 p-2 border rounded shadow task-container">
                  <p class="ps-2 fs-4 fw-medium">Doing</p>
-                 <div class="d-flex flex-column shadow-sm min-vh-100 drop-zone" ondrop="dropHandler(event)"
+
+                 <div class="d-flex flex-column min-vh-50 drop-zone" ondrop="dropHandler(event)"
                      ondragover="dragoverHandler(event)">
                      <c:forEach var="task" items="${doingTasks}">
                          <div class="card cursor-pointer shadow-sm" id="${task.id}" style="width: 18rem;">
@@ -61,10 +77,16 @@
                          </div>
                      </c:forEach>
                  </div>
+                 <div class="d-flex flex-column w-100">
+                     <button type="button" class="btn w-50 align-self-end" data-bs-toggle="modal"
+                         data-bs-target="#exampleModal">
+                         + Create Task
+                     </button>
+                 </div>
              </div>
              <div style="width: 33%;" class="d-flex flex-column gap-3 p-2 border rounded shadow task-container">
                  <p class="ps-2 fs-4 fw-medium">Done</p>
-                 <div class="d-flex flex-column shadow-sm min-vh-100 drop-zone" ondrop="dropHandler(event)"
+                 <div class="d-flex flex-column min-vh-50 drop-zone" ondrop="dropHandler(event)"
                      ondragover="dragoverHandler(event)">
                      <c:forEach var="task" items="${doneTasks}">
                          <div class="card cursor-pointer shadow-sm" id="${task.id}" style="width: 18rem;">
@@ -84,6 +106,12 @@
                              </div>
                          </div>
                      </c:forEach>
+                 </div>
+                 <div class="d-flex flex-column w-100">
+                     <button type="button" class="btn w-50 align-self-end" data-bs-toggle="modal"
+                         data-bs-target="#exampleModal">
+                         + Create Task
+                     </button>
                  </div>
              </div>
          </div>
