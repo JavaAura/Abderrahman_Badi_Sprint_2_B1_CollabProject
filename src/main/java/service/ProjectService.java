@@ -18,4 +18,25 @@ public class ProjectService {
         return projectRepository.getAllProjects();
     }
 
+
+    public void updateProject(Project project) {
+        projectRepository.updateProject(project);
+    }
+
+
+    public void deleteProject(int id) {
+        projectRepository.deleteProject(id);
+    }
+
+    public void addProject(Project project) {
+      projectRepository.addProject(project);
+    }
+
+    public List<Project> searchProjects(String name) {
+        return projectRepository.searchProjectsByName(name);
+    }
+
+
+
+
 }

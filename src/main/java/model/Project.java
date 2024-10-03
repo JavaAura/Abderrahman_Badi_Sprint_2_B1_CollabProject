@@ -7,38 +7,38 @@ import java.util.*;
 
 
 public class Project {
-	private int id;
-    private String nom;
+    private long id;
+    private String name;
     private String description;
-    private LocalDate dateDebut;
-    private LocalDate dateFin;
-    private ProjectStatus statut;
-    private List<Task> taches;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private ProjectStatus status;
+    private List<Task> tasks;
 
-    public  Project(){
+    public Project() {
 
     }
 
-    public Project(String nom, String description, LocalDate dateDebut, LocalDate dateFin, ProjectStatus statut, List<Task> taches) {
-        this.nom = nom;
+    public Project(String name, String description, LocalDate startDate, LocalDate endDate, ProjectStatus status, List<Task> tasks) {
+        this.name = name;
         this.description = description;
-        this.dateDebut = dateDebut;
-        this.dateFin = dateFin;
-        this.statut = statut;
-        this.taches = taches;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.status = status;
+        this.tasks = tasks;
     }
 
-    public Project(int id, String nom, String description, LocalDate dateDebut, LocalDate dateFin, ProjectStatus statut, List<Task> taches) {
+    public Project(int id, String name, String description, LocalDate startDate, LocalDate endDate, ProjectStatus status, List<Task> tasks) {
         this.id = id;
-        this.nom = nom;
+        this.name = name;
         this.description = description;
-        this.dateDebut = dateDebut;
-        this.dateFin = dateFin;
-        this.statut = statut;
-        this.taches = taches;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.status = status;
+        this.tasks = tasks;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -46,12 +46,12 @@ public class Project {
         this.id = id;
     }
 
-    public String getNom() {
-        return nom;
+    public String getName() {
+        return name;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
@@ -62,35 +62,35 @@ public class Project {
         this.description = description;
     }
 
-    public LocalDate getDateDebut() {
-        return dateDebut;
+    public LocalDate getStartDate() {
+        return startDate;
     }
 
-    public void setDateDebut(LocalDate dateDebut) {
-        this.dateDebut = dateDebut;
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 
-    public LocalDate getDateFin() {
-        return dateFin;
+    public LocalDate getEndDate() {
+        return endDate;
     }
 
-    public void setDateFin(LocalDate dateFin) {
-        this.dateFin = dateFin;
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
     }
 
-    public ProjectStatus getStatut() {
-        return statut;
+    public ProjectStatus getStatus() {
+        return status;
     }
 
-    public void setStatut(ProjectStatus statut) {
-        this.statut = statut;
+    public void setStatus(ProjectStatus status) {
+        this.status = status;
     }
 
-    public List<Task> getTaches() {
-        return taches;
+    public List<Task> getTasks() {
+        return tasks;
     }
 
-    public void setTaches(List<Task> taches) {
-        this.taches = taches;
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
     }
 }
