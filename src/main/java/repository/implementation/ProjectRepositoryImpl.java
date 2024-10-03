@@ -8,6 +8,7 @@ import model.enums.ProjectStatus;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     private static final String DELETE_PROJECT = "DELETE FROM Project WHERE id = ?";
     private static final String ADD_PROJECT = "INSERT INTO Project (name, description, start_date, end_date, project_statut) VALUES (?, ?, ?, ?, ?)";
     private static final String SEARCH_PROJECTS_BY_NAME = "SELECT * FROM Project WHERE name LIKE ?";
+    private static final String COUNT_PROJECTS = "SELECT COUNT(*) FROM Project";
 
     @Override
     public List<Project> getAllProjects() {
@@ -149,4 +151,22 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
         return projects;
     }
+
+      @Override
+    public int getTotalProjectsCount() {
+        int count = 0;
+
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(COUNT_PROJECTS);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return count;
+    }
+
 }

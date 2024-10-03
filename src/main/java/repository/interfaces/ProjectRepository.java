@@ -11,5 +11,6 @@ public interface ProjectRepository {
     void addProject(Project project);
     List<Project> searchProjectsByName(String name);
     public List<Project> getAllProjectsPaginated(int limit, int offset);
+    public int getTotalProjectsCount();
 
 }

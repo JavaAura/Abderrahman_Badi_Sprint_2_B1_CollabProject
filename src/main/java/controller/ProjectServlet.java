@@ -23,6 +23,8 @@ public class ProjectServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        int currentPage = 1;
+        int itemsPerPage = 6;
 
         String searchQuery = request.getParameter("search");
         System.out.println("Search Query: " + searchQuery);
@@ -43,17 +45,19 @@ public class ProjectServlet extends HttpServlet {
         }
 
 
-        int currentPage = 1;
-        int itemsPerPage = 6;
 
         String pageParam = request.getParameter("page");
         if (pageParam != null) {
             currentPage = Integer.parseInt(pageParam);
         }
 
+        int totalProjects = projectService.getTotalProjectsCount();
+        int totalPages = (int) Math.ceil((double) totalProjects / itemsPerPage);
+
         List<Project> projects = projectService.getAllProjectsPaginated(currentPage, itemsPerPage);
         request.setAttribute("projects", projects);
         request.setAttribute("currentPage", currentPage);
+        request.setAttribute("totalPages", totalPages);
 
         request.getRequestDispatcher("views/projects.jsp").forward(request, response);
     }
