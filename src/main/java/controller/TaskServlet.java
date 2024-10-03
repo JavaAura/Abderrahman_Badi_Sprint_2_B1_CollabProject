@@ -1,14 +1,16 @@
 package controller;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.slf4j.LoggerFactory;
 
 import model.Project;
 import model.Task;
-import model.enums.ProjectStatus;
+import model.enums.TaskStatus;
+import service.ProjectService;
 import service.TaskService;
 
 import org.slf4j.Logger;
@@ -23,6 +25,7 @@ public class TaskServlet extends HttpServlet {
     private static final Logger logger = LoggerFactory.getLogger(TaskServlet.class);
 
     private TaskService taskService = new TaskService();
+    private ProjectService projectService = new ProjectService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -30,24 +33,30 @@ public class TaskServlet extends HttpServlet {
         String projectIdParam = req.getParameter("project_id");
         long projectId = -1;
 
-        // To be deleted
-        Project project = new Project("Project Test",
-                "Lorem ipsum dolor sit amet. Phasellus iaculis eros ipsum, ut facilisis lacus malesuada sit amet. Fusce luctus congue vehicula. ",
-                LocalDate.now(), LocalDate.of(2024, 12, 10), ProjectStatus.IN_PROGRESS, null);
-
         // Parse the String to long type if its not empty/null
         if (projectIdParam != null && !projectIdParam.trim().isEmpty())
             projectId = Long.parseLong(projectIdParam);
 
         if (projectId != -1) {
-            // Project project = projectService.get(projectId);
+            Optional<Project> optionalProject = projectService.get(projectId);
 
-            // To be deleted
-            project.setId(6);
+            if (optionalProject.isPresent()) {
+                Project project = optionalProject.get();
+                List<Task> tasks = taskService.getAllTasks(project);
+                
+                if(!tasks.isEmpty()){
+                    req.setAttribute("todoTasks", tasks.stream().filter(task -> task.getTaskStatus() == TaskStatus.TODO).collect(Collectors.toList()));
+                    req.setAttribute("doingTasks", tasks.stream().filter(task -> task.getTaskStatus() == TaskStatus.DOING).collect(Collectors.toList()));
+                    req.setAttribute("doneTasks", tasks.stream().filter(task -> task.getTaskStatus() == TaskStatus.DONE).collect(Collectors.toList()));
+                }
 
-            List<Task> tasks = taskService.getAllTasks(project);
-            req.setAttribute("project", project);
-            req.setAttribute("tasks", tasks);
+                req.setAttribute("project", project);
+               
+
+            } else {
+                req.setAttribute("errorMessage", "Project not found.");
+                logger.warn("No project found with id" + projectId);
+            }
         }
 
         RequestDispatcher dispatcher = req.getRequestDispatcher("../views/tasks.jsp");
