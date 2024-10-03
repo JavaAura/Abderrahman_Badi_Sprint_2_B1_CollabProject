@@ -18,7 +18,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     private static final String UPDATE_PROJECT = "UPDATE Project SET name = ?, description = ?, start_date = ?, end_date = ?, project_statut = ? WHERE id = ?";
     private static final String DELETE_PROJECT = "DELETE FROM Project WHERE id = ?";
     private static final String ADD_PROJECT = "INSERT INTO Project (name, description, start_date, end_date, project_statut) VALUES (?, ?, ?, ?, ?)";
-    private static final String SEARCH_PROJECTS_BY_NAME = "SELECT * FROM Projects WHERE name LIKE ?";
+    private static final String SEARCH_PROJECTS_BY_NAME = "SELECT * FROM Project WHERE name LIKE ?";
 
     @Override
     public List<Project> getAllProjects() {

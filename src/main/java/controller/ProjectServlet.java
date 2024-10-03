@@ -22,12 +22,13 @@ public class ProjectServlet extends HttpServlet {
             throws ServletException, IOException {
 
         String searchQuery = request.getParameter("search");
-
+        System.out.println("Search Query: " + searchQuery);
         if (searchQuery != null && !searchQuery.trim().isEmpty()) {
             List<Project> projects = projectService.searchProjects(searchQuery);
-            System.out.println("eeee");
+
             if (projects.isEmpty()) {
                 request.setAttribute("message", "Project does not exist!");
+                System.out.println("Aucun projet trouvé pour la requête: " + searchQuery);
             } else {
                 request.setAttribute("message", "Search results for: " + searchQuery);
                 projects.forEach(project -> System.out.println(project.getName()));
@@ -35,13 +36,15 @@ public class ProjectServlet extends HttpServlet {
 
             request.setAttribute("projects", projects);
             request.getRequestDispatcher("views/projects.jsp").forward(request, response);
+            return;
         }
+
 
         List<Project> projects = projectService.getAllProjects();
         request.setAttribute("projects", projects);
-
         request.getRequestDispatcher("views/projects.jsp").forward(request, response);
     }
+
 
 
 
