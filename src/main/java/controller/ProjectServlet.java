@@ -70,7 +70,7 @@ public class ProjectServlet extends HttpServlet {
             throws ServletException, IOException {
         String action = request.getParameter("action");
         String idParam = request.getParameter("id");
-        List<String> errors = new ArrayList<>(); // List to store validation errors
+        List<String> errors = new ArrayList<>();
 
         if (action != null && action.equals("update")) {
             int id = Integer.parseInt(idParam);
@@ -88,8 +88,8 @@ public class ProjectServlet extends HttpServlet {
             project.setEndDate(dateFin);
             project.setStatus(ProjectStatus.valueOf(statut));
 
-            // Validate the project
-            errors = validator.validateProject(project); // Use the Validator
+
+            errors = validator.validateProject(project);
 
             if (!errors.isEmpty()) {
                 request.setAttribute("errors", errors);
@@ -97,7 +97,7 @@ public class ProjectServlet extends HttpServlet {
                 List<Project> projects = projectService.getAllProjects();
                 request.setAttribute("projects", projects);
                 request.getRequestDispatcher("views/projects.jsp").forward(request, response);
-                return; // Stop further processing if there are errors
+                return;
             }
 
             projectService.updateProject(project);
@@ -124,8 +124,8 @@ public class ProjectServlet extends HttpServlet {
             newProject.setEndDate(dateFin);
             newProject.setStatus(ProjectStatus.valueOf(statut));
 
-            // Validate the new project
-            errors = validator.validateProject(newProject); // Use the Validator
+
+            errors = validator.validateProject(newProject);
 
             if (!errors.isEmpty()) {
                 request.setAttribute("errors", errors);
@@ -133,14 +133,14 @@ public class ProjectServlet extends HttpServlet {
                 List<Project> projects = projectService.getAllProjects();
                 request.setAttribute("projects", projects);
                 request.getRequestDispatcher("views/projects.jsp").forward(request, response);
-                return; // Stop further processing if there are errors
+                return;
             }
 
             projectService.addProject(newProject);
             request.setAttribute("message", "Projet ajouté avec succès !");
         }
 
-        // Always retrieve the list of projects at the end to display them
+
         List<Project> projects = projectService.getAllProjects();
         request.setAttribute("projects", projects);
         request.getRequestDispatcher("views/projects.jsp").forward(request, response);
