@@ -23,6 +23,7 @@ public class ProjectService {
     }
 
 
+
     public void updateProject(Project project) {
         projectRepository.updateProject(project);
     }
@@ -39,6 +40,17 @@ public class ProjectService {
     public List<Project> searchProjects(String name) {
         return projectRepository.searchProjectsByName(name);
     }
+
+    public List<Project> getAllProjectsPaginated(int page, int itemsPerPage) {
+        int offset = (page - 1) * itemsPerPage;
+        return projectRepository.getAllProjectsPaginated(itemsPerPage, offset);
+    }
+
+
+    public int getTotalProjectsCount() {
+        return projectRepository.getTotalProjectsCount();
+    }
+
 
 
 

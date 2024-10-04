@@ -10,6 +10,15 @@
             </div>
         </c:if>
 
+        <c:if test="${not empty errors}">
+            <div class="alert alert-danger" role="alert">
+                <c:forEach var="error" items="${errors}">
+                    <p>${error}</p>
+                </c:forEach>
+            </div>
+        </c:if>
+
+
 
 
         <div class="d-flex justify-content-end mb-3">
@@ -71,6 +80,35 @@
         </div>
     </div>
 </div>
+
+
+<c:if test="${not empty projects}">
+    <!-- Pagination Links -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+                <a class="page-link" href="?page=${currentPage - 1}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            <!-- Boucle pour afficher les numéros de page -->
+            <c:forEach var="i" begin="1" end="${totalPages}">
+                <li class="page-item ${currentPage == i ? 'active' : ''}">
+                    <a class="page-link" href="?page=${i}">${i}</a>
+                </li>
+            </c:forEach>
+
+            <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+                <a class="page-link" href="?page=${currentPage + 1}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</c:if>
+
+
 
 <!-- Bootstrap Modal for Update -->
 <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
