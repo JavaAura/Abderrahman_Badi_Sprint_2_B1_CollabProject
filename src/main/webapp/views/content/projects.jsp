@@ -37,7 +37,7 @@
                 <tbody>
                     <c:forEach var="project" items="${projects}">
                         <tr>
-                           <td>${project.name}</td>
+                           <td><a href="projects/tasks?project_id=${project.id}">${project.name}</a></td>
                            <td>${project.description}</td>
                            <td>${project.startDate}</td>
                            <td>${project.endDate}</td>

@@ -14,6 +14,10 @@ public class MemberService {
 		this.memberRepository = new MemberRepositoryImpl();
 	}
 
+	public List<Member> getMembersBySquad(long id) {
+		return memberRepository.getMembersBySquad(id);
+	}
+
 	public List<Member> getAllMembers(int page, int pageSize) {
 		return memberRepository.getAllMembers(page, pageSize);
 	}

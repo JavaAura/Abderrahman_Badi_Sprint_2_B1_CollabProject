@@ -13,6 +13,7 @@ public class Project {
     private LocalDate startDate;
     private LocalDate endDate;
     private ProjectStatus status;
+    private Squad squad;
     private List<Task> tasks;
 
     public Project() {
@@ -92,5 +93,12 @@ public class Project {
 
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
+    }
+
+    public Squad getSquad() {
+      return this.squad;
+    }
+    public void setSquad(Squad value) {
+      this.squad = value;
     }
 }
