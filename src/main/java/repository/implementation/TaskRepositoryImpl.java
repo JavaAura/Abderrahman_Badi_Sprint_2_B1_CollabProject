@@ -133,11 +133,7 @@ public class TaskRepositoryImpl implements TaskRepository {
             ps.setString(4, task.getTaskStatus().toString());
             ps.setLong(5, task.getProject().getId());
 
-            if (ps.executeUpdate() > 0) {
-                try (ResultSet rs = ps.getGeneratedKeys()) {
-                }
-            }
-
+            ps.executeUpdate();
         } catch (SQLException e) {
             logger.error("Error saving task: " + e.getMessage(), e);
         }
@@ -156,6 +152,9 @@ public class TaskRepositoryImpl implements TaskRepository {
 
             if (ps.executeUpdate() > 0) {
                 try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        assignMemberToTask(rs.getLong(1), member_id);
+                    }
                 }
             }
 
