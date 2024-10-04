@@ -13,7 +13,11 @@ public interface TaskRepository {
 
     public List<Task> getAllTasks(Project project);
 
+    public void assignMemberToTask(long task_id, long member_id);
+
     public void save(Task task);
+
+    public void save(Task task, long member_id);
 
     public void update(long id, Task task);
 

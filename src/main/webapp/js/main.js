@@ -56,9 +56,13 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 function openTaskModal(id, title, description, priority, assignDate) {
-  document.getElementById("taskId").value = id;
-  document.getElementById("taskTitle").value = title;
-  document.getElementById("taskDescription").value = description;
+  document.getElementById("updatedTaskId").value = id;
+  document.getElementById("updatedTaskTitle").value = title;
+  document.getElementById("updatedTaskDescription").value = description;
+  document.getElementById("updatedTaskPriority").value = priority;
+}
+
+
+function createTaskModal(priority) {
   document.getElementById("taskPriority").value = priority;
-  document.getElementById("taskAssignDate").value = assignDate;
 }

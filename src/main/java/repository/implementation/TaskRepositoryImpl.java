@@ -117,9 +117,15 @@ public class TaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
+    public void assignMemberToTask(long task_id, long member_id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'assignMemberToTask'");
+    }
+
+    @Override
     public void save(Task task) {
         try (Connection con = DatabaseConnection.getConnection();
-                PreparedStatement ps = con.prepareStatement(SQL_INSERT)) {
+                PreparedStatement ps = con.prepareStatement(SQL_INSERT, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, task.getTitle());
             ps.setString(2, task.getDescription());
@@ -127,7 +133,32 @@ public class TaskRepositoryImpl implements TaskRepository {
             ps.setString(4, task.getTaskStatus().toString());
             ps.setLong(5, task.getProject().getId());
 
-            ps.executeUpdate();
+            if (ps.executeUpdate() > 0) {
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                }
+            }
+
+        } catch (SQLException e) {
+            logger.error("Error saving task: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public void save(Task task, long member_id) {
+        try (Connection con = DatabaseConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(SQL_INSERT, PreparedStatement.RETURN_GENERATED_KEYS)) {
+
+            ps.setString(1, task.getTitle());
+            ps.setString(2, task.getDescription());
+            ps.setString(3, task.getTaskPriority().toString());
+            ps.setString(4, task.getTaskStatus().toString());
+            ps.setLong(5, task.getProject().getId());
+
+            if (ps.executeUpdate() > 0) {
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                }
+            }
+
         } catch (SQLException e) {
             logger.error("Error saving task: " + e.getMessage(), e);
         }

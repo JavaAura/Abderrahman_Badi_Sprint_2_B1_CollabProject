@@ -19,7 +19,7 @@
                      ondragover="dragoverHandler(event)">
                      <c:forEach var="task" items="${todoTasks}">
                          <div class="card cursor-pointer shadow-sm" id="${task.id}" style="width: 18rem;"
-                             data-bs-toggle="modal" data-bs-target="#taskModal"
+                             data-bs-toggle="modal" data-bs-target="#updateModal"
                              onclick="openTaskModal(${task.id}, '${task.title}', '${task.description}', '${task.taskPriority}', '${task.assignDate}')">
                              <div class="card-body">
                                  <h5 class="card-title">${task.title}</h5>
@@ -61,12 +61,11 @@
              </div>
              <div style="width: 33%;" class="d-flex flex-column gap-3 p-2 border rounded shadow task-container">
                  <p class="ps-2 fs-4 fw-medium">Doing</p>
-
                  <div class="d-flex flex-column min-vh-50 drop-zone" ondrop="dropHandler(event)"
                      ondragover="dragoverHandler(event)">
                      <c:forEach var="task" items="${doingTasks}">
                          <div class="card cursor-pointer shadow-sm" id="${task.id}" style="width: 18rem;"
-                             data-bs-toggle="modal" data-bs-target="#taskModal"
+                             data-bs-toggle="modal" data-bs-target="#updateModal"
                              onclick="openTaskModal(${task.id}, '${task.title}', '${task.description}', '${task.taskPriority}', '${task.assignDate}')">
                              <div class="card-body">
                                  <h5 class="card-title">${task.title}</h5>
@@ -112,7 +111,7 @@
                      ondragover="dragoverHandler(event)">
                      <c:forEach var="task" items="${doneTasks}">
                          <div class="card cursor-pointer shadow-sm" id="${task.id}" style="width: 18rem;"
-                             data-bs-target="#taskModal"
+                             data-bs-toggle="modal" data-bs-target="#updateModal"
                              onclick="openTaskModal(${task.id}, '${task.title}', '${task.description}', '${task.taskPriority}', '${task.assignDate}')">
                              <div class="card-body">
                                  <h5 class="card-title">${task.title}</h5>
@@ -174,43 +173,8 @@
          </c:if>
      </div>
 
+     <jsp:include page="../components/updateModal.jsp" />
+     <jsp:include page="../components/createModal.jsp" />
 
-     <!-- Modal -->
-     <div class="modal fade" id="taskModal" tabindex="-1" role="dialog" aria-labelledby="taskModalLabel"
-         aria-hidden="true">
-         <div class="modal-dialog" role="document">
-             <div class="modal-content">
-                 <div class="modal-header">
-                     <h5 class="modal-title" id="taskModalLabel">Update Task</h5>
-                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                         <span aria-hidden="true">&times;</span>
-                     </button>
-                 </div>
-                 <div class="modal-body">
-                     <form id="taskForm">
-                         <input type="hidden" id="taskId" name="taskId">
-                         <div class="form-group">
-                             <label for="taskTitle">Title</label>
-                             <input type="text" class="form-control" id="taskTitle" name="taskTitle" required>
-                         </div>
-                         <div class="form-group">
-                             <label for="taskDescription">Description</label>
-                             <textarea class="form-control" id="taskDescription" name="taskDescription" required></textarea>
-                         </div>
-                         <div class="form-group">
-                             <label for="taskPriority">Priority</label>
-                             <select class="form-control" id="taskPriority" name="taskPriority">
-                                 <option value="LOW">Low</option>
-                                 <option value="MEDIUM">Medium</option>
-                                 <option value="HIGH">High</option>
-                             </select>
-                         </div>
-
-                         <button type="submit" class="btn btn-primary">Update Task</button>
-                     </form>
-                 </div>
-             </div>
-         </div>
-     </div>
 
  </div>

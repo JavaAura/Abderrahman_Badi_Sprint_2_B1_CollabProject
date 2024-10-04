@@ -29,3 +29,13 @@
         width: 25% !important;
     }
 }
+
+@media (min-width: 768px) {
+    .w-lg-66 {
+        width: 66% !important;
+    }
+
+    .w-lg-33 {
+        width: 33% !important;
+    }
+}
