@@ -35,19 +35,15 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     private static final String SQL_GET_PROJECT_SUMMARIES =
             "SELECT p.name AS project_name, " +
                     "COUNT(DISTINCT m.id) AS member_count, " +
-                    "COUNT(DISTINCT t.id) AS task_count " +
+                    "COUNT(DISTINCT mt.task_id) AS task_count " +
                     "FROM Project p " +
                     "LEFT JOIN Squad s ON p.squad_id = s.id " +
                     "LEFT JOIN Member m ON s.id = m.squad_id " +
-                    "LEFT JOIN Task t ON p.id = t.project_id " +
+                    "LEFT JOIN member_task mt ON m.id = mt.member_id " +
                     "GROUP BY p.name " +
                     "LIMIT ? OFFSET ?";
 
-    private static final String SQL_COUNT_PROJECTS =
-            "SELECT COUNT(DISTINCT p.id) FROM Project p " +
-                    "LEFT JOIN Squad s ON p.squad_id = s.id " +
-                    "LEFT JOIN Member m ON s.id = m.squad_id " +
-                    "LEFT JOIN Task t ON p.id = t.project_id";
+
 
 
     private static final String COUNT_PROJECTS = "SELECT COUNT(*) FROM Project";
@@ -190,7 +186,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
     public List<Object[]> getProjectSummaries(int page, int pageSize) {
         List<Object[]> projectSummaries = new ArrayList<>();
-        int offset = (page - 1) * pageSize; // Calculate offset for the SQL query
+        int offset = (page - 1) * pageSize;
 
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(SQL_GET_PROJECT_SUMMARIES)) {

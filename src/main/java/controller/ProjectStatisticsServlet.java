@@ -26,12 +26,12 @@ public class ProjectStatisticsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        int page = 1; // Default to the first page
-        int pageSize = 8; // Change this to 8 for pagination
+        int page = 1;
+        int pageSize = 8;
 
         String pageParam = request.getParameter("page");
         if (pageParam != null && !pageParam.isEmpty()) {
-            page = Integer.parseInt(pageParam); // Parse the page number from the request
+            page = Integer.parseInt(pageParam);
         }
 
         List<Object[]> projectSummaries = projectService.getProjectSummaries(page, pageSize);
