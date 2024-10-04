@@ -21,10 +21,14 @@ public class TaskStatusServlet extends HttpServlet {
 
         try {
             taskService.updateTaskStatus(taskId, status);
+
+            resp.setStatus(HttpServletResponse.SC_OK);
+            resp.setContentType("application/json");
+            resp.getWriter().write("{\"message\": \"Task status updated successfully\"}");
         } catch (Exception e) {
-            
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            resp.setContentType("application/json");
+            resp.getWriter().write("{\"error\": \"error\"}");
         }
-
-
     }
 }
