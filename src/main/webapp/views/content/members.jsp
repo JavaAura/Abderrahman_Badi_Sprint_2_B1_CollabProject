@@ -46,7 +46,31 @@
 			</c:forEach>
 		</tbody>
 	</table>
+
+	<!-- Pagination Controls -->
+	<div class="d-flex justify-content-center">
+		<nav aria-label="Page navigation">
+			<ul class="pagination">
+				<c:if test="${currentPage > 1}">
+					<li class="page-item"><a class="page-link"
+						href="members?action=list&page=${currentPage - 1}">Previous</a></li>
+				</c:if>
+				<c:forEach begin="1" end="${totalPages}" var="i">
+					<li class="page-item ${currentPage == i ? 'active' : ''}"><a
+						class="page-link" href="members?action=list&page=${i}">${i}</a></li>
+				</c:forEach>
+				<c:if test="${currentPage < totalPages}">
+					<li class="page-item"><a class="page-link"
+						href="members?action=list&page=${currentPage + 1}">Next</a></li>
+				</c:if>
+			</ul>
+		</nav>
+	</div>
+
+
 </div>
+
+
 
 <!-- Form for adding -->
 <div class="modal fade" id="addMemberModal" tabindex="-1"

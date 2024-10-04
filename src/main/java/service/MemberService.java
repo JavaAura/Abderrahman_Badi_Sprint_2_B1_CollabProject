@@ -37,4 +37,12 @@ public class MemberService {
 	public void deleteMember(Long id) {
 		memberRepository.deleteMember(id);
 	}
+
+	 public int getTotalMembersCount() {
+	        return memberRepository.getTotalMembersCount();
+	    }
+ 
+ 
+ 
+
 }
