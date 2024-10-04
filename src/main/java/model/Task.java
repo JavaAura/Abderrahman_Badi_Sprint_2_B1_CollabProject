@@ -20,6 +20,12 @@ public class Task {
 
     }
 
+    public Task(String title, String description, TaskPriority taskPriority) {
+        this.title = title;
+        this.description = description;
+        this.taskPriority = taskPriority;
+    }
+
     public Task(String title, String description, TaskPriority taskPriority, TaskStatus taskStatus,
             Project project) {
         this.title = title;
@@ -88,16 +94,18 @@ public class Task {
     }
 
     public Member getMember() {
-      return this.member;
+        return this.member;
     }
+
     public void setMember(Member value) {
-      this.member = value;
+        this.member = value;
     }
 
     public LocalDateTime getAssignDate() {
-      return this.assignDate;
+        return this.assignDate;
     }
+
     public void setAssignDate(LocalDateTime value) {
-      this.assignDate = value;
+        this.assignDate = value;
     }
 }

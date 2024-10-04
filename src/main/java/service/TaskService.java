@@ -27,11 +27,19 @@ public class TaskService {
         taskRepository.save(task);
     }
 
+    public void addTask(Task task, long member_id) {
+        taskRepository.save(task, member_id);
+    }
+
     public void updateTask(long id, Task task) {
         taskRepository.update(id, task);
     }
 
-    public void deleteTask(Task task) {
-        taskRepository.delete(task);
+    public void assignMemberToTask(long task_id, long member_id){
+        taskRepository.assignMemberToTask(task_id, member_id);
+    }
+
+    public void deleteTask(long id) {
+        taskRepository.delete(id);
     }
 }

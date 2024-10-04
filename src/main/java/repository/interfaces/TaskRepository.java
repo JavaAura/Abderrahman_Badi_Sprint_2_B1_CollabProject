@@ -23,6 +23,6 @@ public interface TaskRepository {
 
     public void updateTaskStatus(long id, TaskStatus taskStatus);
 
-    public void delete(Task task);
+    public void delete(long id);
 
 }

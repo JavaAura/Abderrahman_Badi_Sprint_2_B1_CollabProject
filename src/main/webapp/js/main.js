@@ -63,6 +63,6 @@ function openTaskModal(id, title, description, priority, assignDate) {
 }
 
 
-function createTaskModal(priority) {
-  document.getElementById("taskPriority").value = priority;
+function createTaskModal(status) {
+  document.getElementById("taskStatus").value = status;
 }

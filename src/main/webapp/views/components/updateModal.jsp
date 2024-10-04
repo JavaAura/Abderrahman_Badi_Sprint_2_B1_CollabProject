@@ -11,7 +11,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="taskForm" class="d-flex flex-column gap-3">
+                <form id="taskForm" action="" method="post" class="d-flex flex-column gap-3">
+                    <input type="hidden" name="action" value="update" />
                     <input type="hidden" id="updatedTaskId" name="taskId">
                     <div class="form-group">
                         <label for="taskTitle">Title</label>
@@ -29,7 +30,6 @@
                             <option value="HIGH">High</option>
                         </select>
                     </div>
-
                     <button type="submit" class="btn btn-primary">Update Task</button>
                 </form>
             </div>

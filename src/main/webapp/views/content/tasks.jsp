@@ -13,45 +13,50 @@
              </c:if>
          </div>
          <div class="d-flex w-100 gap-3">
-             <div style="width: 33%;" class="d-flex flex-column gap-3 p-2 border rounded shadow task-container">
-                 <p class="ps-2 fs-4 fw-medium">To Do</p>
-                 <div class="d-flex flex-column min-vh-25 drop-zone" ondrop="dropHandler(event)"
-                     ondragover="dragoverHandler(event)">
-                     <c:forEach var="task" items="${todoTasks}">
-                         <div class="card cursor-pointer shadow-sm" id="${task.id}" style="width: 18rem;"
-                             data-bs-toggle="modal" data-bs-target="#updateModal"
-                             onclick="openTaskModal(${task.id}, '${task.title}', '${task.description}', '${task.taskPriority}', '${task.assignDate}')">
-                             <div class="card-body">
-                                 <h5 class="card-title">${task.title}</h5>
-                                 <h6 class="card-subtitle mb-2 text-body-secondary">Priority: ${task.taskPriority}</h6>
-                                 <c:choose>
-                                     <c:when test="${fn:length(task.description) > 99}">
-                                         <p class="card-text">${fn:substring(task.description, 0, 99)}...</p>
-                                     </c:when>
-                                     <c:otherwise>
-                                         <p class="card-text">${task.description}</p>
-                                     </c:otherwise>
-                                 </c:choose>
-                                 <c:choose>
-                                     <c:when test="${task.member != null}">
-                                         <div class="d-flex align-items-center gap-1">
-                                             <img src="${pageContext.request.contextPath}/assets/default_user.webp"
-                                                 alt="default user" class="default-image">
-                                             <p class="card-subtitle fs-5">${task.member.firstName}
-                                                 ${task.member.lastName}</p>
-                                         </div>
-                                         <p class="card-subtitle text-body-secondary pt-2">Assigned at:
-                                             ${task.assignDate}
-                                         </p>
-                                     </c:when>
-                                     <c:otherwise>
-                                         <p>No member assigned</p>
-                                     </c:otherwise>
-                                 </c:choose>
+             <div style="width: 33%;"
+                 class="d-flex flex-column justify-content-between gap-3 p-2 border rounded shadow task-container">
+                 <div class="d-flex flex-column gap-3">
+                     <p class="ps-2 fs-4 fw-medium">To Do</p>
+                     <div class="d-flex flex-column min-vh-55 pb-5 drop-zone" ondrop="dropHandler(event)"
+                         ondragover="dragoverHandler(event)">
+                         <c:forEach var="task" items="${todoTasks}">
+                             <div class="card cursor-pointer shadow-sm" id="${task.id}" style="width: 18rem;"
+                                 data-bs-toggle="modal" data-bs-target="#updateModal"
+                                 onclick="openTaskModal(${task.id}, '${task.title}', '${task.description}', '${task.taskPriority}', '${task.assignDate}')">
+                                 <div class="card-body">
+                                     <h5 class="card-title">${task.title}</h5>
+                                     <h6 class="card-subtitle mb-2 text-body-secondary">Priority: ${task.taskPriority}
+                                     </h6>
+                                     <c:choose>
+                                         <c:when test="${fn:length(task.description) > 99}">
+                                             <p class="card-text">${fn:substring(task.description, 0, 99)}...</p>
+                                         </c:when>
+                                         <c:otherwise>
+                                             <p class="card-text">${task.description}</p>
+                                         </c:otherwise>
+                                     </c:choose>
+                                     <c:choose>
+                                         <c:when test="${task.member != null}">
+                                             <div class="d-flex align-items-center gap-1">
+                                                 <img src="${pageContext.request.contextPath}/assets/default_user.webp"
+                                                     alt="default user" class="default-image">
+                                                 <p class="card-subtitle fs-5">${task.member.firstName}
+                                                     ${task.member.lastName}</p>
+                                             </div>
+                                             <p class="card-subtitle text-body-secondary pt-2">Assigned at:
+                                                 ${task.assignDate}
+                                             </p>
+                                         </c:when>
+                                         <c:otherwise>
+                                             <p>No member assigned</p>
+                                         </c:otherwise>
+                                     </c:choose>
+                                 </div>
                              </div>
-                         </div>
-                     </c:forEach>
+                         </c:forEach>
+                     </div>
                  </div>
+
                  <div class="d-flex flex-column w-100">
                      <button type="button" class="btn w-50 align-self-end" data-bs-toggle="modal"
                          data-bs-target="#createModal" onclick="createTaskModal('TODO')">
@@ -59,44 +64,49 @@
                      </button>
                  </div>
              </div>
-             <div style="width: 33%;" class="d-flex flex-column gap-3 p-2 border rounded shadow task-container">
-                 <p class="ps-2 fs-4 fw-medium">Doing</p>
-                 <div class="d-flex flex-column min-vh-25 drop-zone" ondrop="dropHandler(event)"
-                     ondragover="dragoverHandler(event)">
-                     <c:forEach var="task" items="${doingTasks}">
-                         <div class="card cursor-pointer shadow-sm" id="${task.id}" style="width: 18rem;"
-                             data-bs-toggle="modal" data-bs-target="#updateModal"
-                             onclick="openTaskModal(${task.id}, '${task.title}', '${task.description}', '${task.taskPriority}', '${task.assignDate}')">
-                             <div class="card-body">
-                                 <h5 class="card-title">${task.title}</h5>
-                                 <h6 class="card-subtitle mb-2 text-body-secondary">Priority: ${task.taskPriority}</h6>
-                                 <c:choose>
-                                     <c:when test="${fn:length(task.description) > 99}">
-                                         <p class="card-text">${fn:substring(task.description, 0, 99)}...</p>
-                                     </c:when>
-                                     <c:otherwise>
-                                         <p class="card-text">${task.description}</p>
-                                     </c:otherwise>
-                                 </c:choose>
-                                 <c:choose>
-                                     <c:when test="${task.member != null}">
-                                         <div class="d-flex align-items-center gap-1">
-                                             <img src="${pageContext.request.contextPath}/assets/default_user.webp"
-                                                 alt="default user" class="default-image">
-                                             <p class="card-subtitle fs-5">${task.member.firstName}
-                                                 ${task.member.lastName}</p>
-                                         </div>
-                                         <p class="card-subtitle text-body-secondary pt-2">Assigned at:
-                                             ${task.assignDate}
-                                         </p>
-                                     </c:when>
-                                     <c:otherwise>
-                                         <p>No member assigned</p>
-                                     </c:otherwise>
-                                 </c:choose>
+             <div style="width: 33%;"
+                 class="d-flex flex-column justify-content-between gap-3 p-2 border rounded shadow task-container">
+                 <div class="d-flex flex-column gap-3">
+
+                     <p class="ps-2 fs-4 fw-medium">Doing</p>
+                     <div class="d-flex flex-column min-vh-55 pb-5 drop-zone" ondrop="dropHandler(event)"
+                         ondragover="dragoverHandler(event)">
+                         <c:forEach var="task" items="${doingTasks}">
+                             <div class="card cursor-pointer shadow-sm" id="${task.id}" style="width: 18rem;"
+                                 data-bs-toggle="modal" data-bs-target="#updateModal"
+                                 onclick="openTaskModal(${task.id}, '${task.title}', '${task.description}', '${task.taskPriority}', '${task.assignDate}')">
+                                 <div class="card-body">
+                                     <h5 class="card-title">${task.title}</h5>
+                                     <h6 class="card-subtitle mb-2 text-body-secondary">Priority: ${task.taskPriority}
+                                     </h6>
+                                     <c:choose>
+                                         <c:when test="${fn:length(task.description) > 99}">
+                                             <p class="card-text">${fn:substring(task.description, 0, 99)}...</p>
+                                         </c:when>
+                                         <c:otherwise>
+                                             <p class="card-text">${task.description}</p>
+                                         </c:otherwise>
+                                     </c:choose>
+                                     <c:choose>
+                                         <c:when test="${task.member != null}">
+                                             <div class="d-flex align-items-center gap-1">
+                                                 <img src="${pageContext.request.contextPath}/assets/default_user.webp"
+                                                     alt="default user" class="default-image">
+                                                 <p class="card-subtitle fs-5">${task.member.firstName}
+                                                     ${task.member.lastName}</p>
+                                             </div>
+                                             <p class="card-subtitle text-body-secondary pt-2">Assigned at:
+                                                 ${task.assignDate}
+                                             </p>
+                                         </c:when>
+                                         <c:otherwise>
+                                             <p>No member assigned</p>
+                                         </c:otherwise>
+                                     </c:choose>
+                                 </div>
                              </div>
-                         </div>
-                     </c:forEach>
+                         </c:forEach>
+                     </div>
                  </div>
                  <div class="d-flex flex-column w-100">
                      <button type="button" class="btn w-50 align-self-end" data-bs-toggle="modal"
@@ -105,44 +115,49 @@
                      </button>
                  </div>
              </div>
-             <div style="width: 33%;" class="d-flex flex-column gap-3 p-2 border rounded shadow task-container">
-                 <p class="ps-2 fs-4 fw-medium">Done</p>
-                 <div class="d-flex flex-column min-vh-25 drop-zone" ondrop="dropHandler(event)"
-                     ondragover="dragoverHandler(event)">
-                     <c:forEach var="task" items="${doneTasks}">
-                         <div class="card cursor-pointer shadow-sm" id="${task.id}" style="width: 18rem;"
-                             data-bs-toggle="modal" data-bs-target="#updateModal"
-                             onclick="openTaskModal(${task.id}, '${task.title}', '${task.description}', '${task.taskPriority}', '${task.assignDate}')">
-                             <div class="card-body">
-                                 <h5 class="card-title">${task.title}</h5>
-                                 <h6 class="card-subtitle mb-2 text-body-secondary">Priority: ${task.taskPriority}</h6>
-                                 <c:choose>
-                                     <c:when test="${fn:length(task.description) > 99}">
-                                         <p class="card-text">${fn:substring(task.description, 0, 99)}...</p>
-                                     </c:when>
-                                     <c:otherwise>
-                                         <p class="card-text">${task.description}</p>
-                                     </c:otherwise>
-                                 </c:choose>
-                                 <c:choose>
-                                     <c:when test="${task.member != null}">
-                                         <div class="d-flex align-items-center gap-1">
-                                             <img src="${pageContext.request.contextPath}/assets/default_user.webp"
-                                                 alt="default user" class="default-image">
-                                             <p class="card-subtitle fs-5">${task.member.firstName}
-                                                 ${task.member.lastName}</p>
-                                         </div>
-                                         <p class="card-subtitle text-body-secondary pt-2">Assigned at:
-                                             ${task.assignDate}
-                                         </p>
-                                     </c:when>
-                                     <c:otherwise>
-                                         <p>No member assigned</p>
-                                     </c:otherwise>
-                                 </c:choose>
+             <div style="width: 33%;"
+                 class="d-flex flex-column justify-content-between gap-3 p-2 border rounded shadow task-container">
+                 <div class="d-flex flex-column gap-3">
+
+                     <p class="ps-2 fs-4 fw-medium">Done</p>
+                     <div class="d-flex flex-column min-vh-55 pb-5 drop-zone" ondrop="dropHandler(event)"
+                         ondragover="dragoverHandler(event)">
+                         <c:forEach var="task" items="${doneTasks}">
+                             <div class="card cursor-pointer shadow-sm" id="${task.id}" style="width: 18rem;"
+                                 data-bs-toggle="modal" data-bs-target="#updateModal"
+                                 onclick="openTaskModal(${task.id}, '${task.title}', '${task.description}', '${task.taskPriority}', '${task.assignDate}')">
+                                 <div class="card-body">
+                                     <h5 class="card-title">${task.title}</h5>
+                                     <h6 class="card-subtitle mb-2 text-body-secondary">Priority: ${task.taskPriority}
+                                     </h6>
+                                     <c:choose>
+                                         <c:when test="${fn:length(task.description) > 99}">
+                                             <p class="card-text">${fn:substring(task.description, 0, 99)}...</p>
+                                         </c:when>
+                                         <c:otherwise>
+                                             <p class="card-text">${task.description}</p>
+                                         </c:otherwise>
+                                     </c:choose>
+                                     <c:choose>
+                                         <c:when test="${task.member != null}">
+                                             <div class="d-flex align-items-center gap-1">
+                                                 <img src="${pageContext.request.contextPath}/assets/default_user.webp"
+                                                     alt="default user" class="default-image">
+                                                 <p class="card-subtitle fs-5">${task.member.firstName}
+                                                     ${task.member.lastName}</p>
+                                             </div>
+                                             <p class="card-subtitle text-body-secondary pt-2">Assigned at:
+                                                 ${task.assignDate}
+                                             </p>
+                                         </c:when>
+                                         <c:otherwise>
+                                             <p>No member assigned</p>
+                                         </c:otherwise>
+                                     </c:choose>
+                                 </div>
                              </div>
-                         </div>
-                     </c:forEach>
+                         </c:forEach>
+                     </div>
                  </div>
                  <div class="d-flex flex-column w-100">
                      <button type="button" class="btn w-50 align-self-end" data-bs-toggle="modal"

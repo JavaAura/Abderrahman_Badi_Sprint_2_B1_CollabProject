@@ -4,7 +4,6 @@
 
 .drop-zone {
     z-index: 10;
-    padding-bottom: 5rem;
 }
 
 .drop-zone>.card {
@@ -19,6 +18,19 @@
     border-radius: 50%;
 }
 
+.min-vh-55 {
+    min-height: 55vh;
+}
+
+.items-center{
+    align-items: start !important;
+}
+
+@media (max-width: 992px) {
+    .items-center {
+        align-items: center !important;
+    }
+}
 
 @media (min-width: 1400px) {
     .w-xxl-75 {
@@ -27,6 +39,17 @@
 
     .w-xxl-25 {
         width: 25% !important;
+    }
+    
+}
+
+@media ((min-width: 992px)) {
+    .w-lg-66 {
+        width: 66% !important;
+    }
+
+    .w-lg-33 {
+        width: 33% !important;
     }
 }
 

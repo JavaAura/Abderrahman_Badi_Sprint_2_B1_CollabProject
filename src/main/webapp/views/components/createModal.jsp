@@ -11,10 +11,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="taskForm" class="d-flex flex-column flex-lg-row gap-5 align-items-center">
+                <form id="taskForm" action="" method="post"
+                    class="d-flex flex-column flex-lg-row gap-5 items-center">
                     <div class="d-flex flex-column gap-3 w-100 w-lg-66">
-                        <input type="hidden" id="taskId" name="taskId">
-                        <input type="hidden" id="taskPriority" name="taskPriority">
+                        <input type="hidden" name="action" value="add" />
+                        <input type="hidden" id="taskStatus" name="taskStatus">
                         <div class="form-group">
                             <label for="taskTitle">Title</label>
                             <input type="text" class="form-control" id="taskTitle" name="taskTitle" required>
@@ -23,10 +24,18 @@
                             <label for="taskDescription">Description</label>
                             <textarea class="form-control" id="taskDescription" name="taskDescription" required></textarea>
                         </div>
+                        <div class="form-group">
+                            <label for="taskPriority">Priority</label>
+                            <select class="form-control" id="updatedTaskPriority" name="taskPriority">
+                                <option value="LOW">Low</option>
+                                <option value="MEDIUM">Medium</option>
+                                <option value="HIGH">High</option>
+                            </select>
+                        </div>
 
                         <button type="submit" class="btn btn-primary">Create Task</button>
                     </div>
-                    <div class="w-100 w-lg-33">
+                    <div class="w-100 w-lg-33 pt-2">
                         <div class="form-group">
                             <label for="squadMember">Assigned to</label>
                             <select class="form-control" id="squadMember" name="squadMember">

@@ -47,7 +47,7 @@ public class TaskServiceTest {
 
 		Optional<Task> retrievedTask = taskService.getTaskById(savedTask.getId());
 
-		taskService.deleteTask(savedTask);
+		taskService.deleteTask(savedTask.getId());
 
 		assertTrue(retrievedTask.isPresent());
 		assertEquals("Sample Task", retrievedTask.get().getTitle());
@@ -80,8 +80,8 @@ public class TaskServiceTest {
 		Task savedTask1 = tasks.stream().filter(t -> t.getTitle().equals("Test Task 1")).findFirst().get();
 		Task savedTask2 = tasks.stream().filter(t -> t.getTitle().equals("Test Task 2")).findFirst().get();
 
-		taskService.deleteTask(savedTask1);
-		taskService.deleteTask(savedTask2);
+		taskService.deleteTask(savedTask1.getId());
+		taskService.deleteTask(savedTask2.getId());
 
 		assertTrue(tasks.stream().anyMatch(t -> t.getTitle().equals("Test Task 1")));
 
@@ -99,7 +99,7 @@ public class TaskServiceTest {
 		taskService.addTask(task);
 		List<Task> tasks = taskService.getAllTasks(project);
 
-		taskService.deleteTask(tasks.stream().filter(t -> t.getTitle().equals("Test Task")).findFirst().get());
+		taskService.deleteTask(tasks.stream().filter(t -> t.getTitle().equals("Test Task")).findFirst().get().getId());
 
 		assertFalse(tasks.isEmpty());
 		assertTrue(tasks.stream().anyMatch(t -> t.getTitle().equals("Test Task")));
@@ -129,7 +129,7 @@ public class TaskServiceTest {
 
 		Optional<Task> retrievedTask = taskService.getTaskById(savedTask.getId());
 
-		taskService.deleteTask(retrievedTask.get());
+		taskService.deleteTask(retrievedTask.get().getId());
 
 		assertTrue(retrievedTask.isPresent());
 		assertEquals("Test Updated Task", retrievedTask.get().getTitle());
@@ -150,7 +150,7 @@ public class TaskServiceTest {
 		List<Task> tasks = taskService.getAllTasks(project);
 		Task savedTask = tasks.stream().filter(t -> t.getTitle().equals("Task to Delete")).findFirst().get();
 
-		taskService.deleteTask(savedTask);
+		taskService.deleteTask(savedTask.getId());
 
 		Optional<Task> retrievedTask = taskService.getTaskById(savedTask.getId());
 
