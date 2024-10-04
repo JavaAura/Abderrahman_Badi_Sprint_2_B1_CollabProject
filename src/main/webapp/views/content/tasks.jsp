@@ -4,8 +4,22 @@
  <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" %>
 
+ <c:if test="${not empty error_message}">
+     <div class="alert alert-success" role="alert">
+         ${error_message}
+     </div>
+ </c:if>
+
+ <c:if test="${not empty errors}">
+     <div class="alert alert-danger" role="alert">
+         <c:forEach var="error" items="${errors}">
+             <p>${error}</p>
+         </c:forEach>
+     </div>
+ </c:if>
 
  <div class="mx-auto pt-5 d-flex flex-column flex-xxl-row gap-1" style="width: 80%;">
+
      <div class="w-100 w-xxl-75 p-1 d-flex flex-column gap-5">
          <div>
              <c:if test="${project != null}">
@@ -13,16 +27,15 @@
              </c:if>
          </div>
          <div class="d-flex w-100 gap-3">
-             <div style="width: 33%;"
-                 class="d-flex flex-column justify-content-between gap-3 p-2 border rounded shadow task-container">
+             <div style="width: 33%;" class="d-flex flex-column gap-3 p-2 border rounded shadow task-container">
                  <div class="d-flex flex-column gap-3">
                      <p class="ps-2 fs-4 fw-medium">To Do</p>
-                     <div class="d-flex flex-column min-vh-55 pb-5 drop-zone" ondrop="dropHandler(event)"
+                     <div class="d-flex flex-column pb-5 drop-zone" ondrop="dropHandler(event)"
                          ondragover="dragoverHandler(event)">
                          <c:forEach var="task" items="${todoTasks}">
                              <div class="card cursor-pointer shadow-sm" id="${task.id}" style="width: 18rem;"
                                  data-bs-toggle="modal" data-bs-target="#updateModal"
-                                 onclick="openTaskModal(${task.id}, '${task.title}', '${task.description}', '${task.taskPriority}', '${task.assignDate}')">
+                                 onclick="openTaskModal(${task.id}, '${task.title}', '${task.description}', '${task.taskPriority}', ${task.member != null ? task.member.id : 0}, '${task.assignDate}')">
                                  <div class="card-body">
                                      <h5 class="card-title">${task.title}</h5>
                                      <h6 class="card-subtitle mb-2 text-body-secondary">Priority: ${task.taskPriority}
@@ -64,17 +77,16 @@
                      </button>
                  </div>
              </div>
-             <div style="width: 33%;"
-                 class="d-flex flex-column justify-content-between gap-3 p-2 border rounded shadow task-container">
+             <div style="width: 33%;" class="d-flex flex-column gap-3 p-2 border rounded shadow task-container">
                  <div class="d-flex flex-column gap-3">
 
                      <p class="ps-2 fs-4 fw-medium">Doing</p>
-                     <div class="d-flex flex-column min-vh-55 pb-5 drop-zone" ondrop="dropHandler(event)"
+                     <div class="d-flex flex-column pb-5 drop-zone" ondrop="dropHandler(event)"
                          ondragover="dragoverHandler(event)">
                          <c:forEach var="task" items="${doingTasks}">
                              <div class="card cursor-pointer shadow-sm" id="${task.id}" style="width: 18rem;"
                                  data-bs-toggle="modal" data-bs-target="#updateModal"
-                                 onclick="openTaskModal(${task.id}, '${task.title}', '${task.description}', '${task.taskPriority}', '${task.assignDate}')">
+                                 onclick="openTaskModal(${task.id}, '${task.title}', '${task.description}', '${task.taskPriority}', ${task.member != null ? task.member.id : 0}, '${task.assignDate}')">
                                  <div class="card-body">
                                      <h5 class="card-title">${task.title}</h5>
                                      <h6 class="card-subtitle mb-2 text-body-secondary">Priority: ${task.taskPriority}
@@ -115,17 +127,16 @@
                      </button>
                  </div>
              </div>
-             <div style="width: 33%;"
-                 class="d-flex flex-column justify-content-between gap-3 p-2 border rounded shadow task-container">
+             <div style="width: 33%;" class="d-flex flex-column gap-3 p-2 border rounded shadow task-container">
                  <div class="d-flex flex-column gap-3">
 
                      <p class="ps-2 fs-4 fw-medium">Done</p>
-                     <div class="d-flex flex-column min-vh-55 pb-5 drop-zone" ondrop="dropHandler(event)"
+                     <div class="d-flex flex-column pb-5 drop-zone" ondrop="dropHandler(event)"
                          ondragover="dragoverHandler(event)">
                          <c:forEach var="task" items="${doneTasks}">
                              <div class="card cursor-pointer shadow-sm" id="${task.id}" style="width: 18rem;"
                                  data-bs-toggle="modal" data-bs-target="#updateModal"
-                                 onclick="openTaskModal(${task.id}, '${task.title}', '${task.description}', '${task.taskPriority}', '${task.assignDate}')">
+                                 onclick="openTaskModal(${task.id}, '${task.title}', '${task.description}', '${task.taskPriority}', ${task.member != null ? task.member.id : 0}, '${task.assignDate}')">
                                  <div class="card-body">
                                      <h5 class="card-title">${task.title}</h5>
                                      <h6 class="card-subtitle mb-2 text-body-secondary">Priority: ${task.taskPriority}

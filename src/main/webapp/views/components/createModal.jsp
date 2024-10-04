@@ -32,7 +32,7 @@
                                 <option value="HIGH">High</option>
                             </select>
                         </div>
-
+    
                         <button type="submit" class="btn btn-primary">Create Task</button>
                     </div>
                     <div class="w-100 w-lg-33 pt-2">

@@ -41,6 +41,21 @@ public class TaskServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String projectIdParam = req.getParameter("project_id");
+        long projectId = -1;
+
+        if (projectIdParam != null && !projectIdParam.trim().isEmpty())
+            projectId = Long.parseLong(projectIdParam);
+
+        if (projectId == -1) {
+            req.setAttribute("error_message", "No project id was provided");
+            index(req, resp);
+            return;
+        }
+
+        Project project = new Project();
+        project.setId(projectId);
+
         String action = req.getParameter("action");
         String idParam = req.getParameter("taskId");
         List<String> errors = new ArrayList<>();
@@ -83,7 +98,7 @@ public class TaskServlet extends HttpServlet {
             TaskPriority taskPriority = TaskPriority.valueOf(req.getParameter("taskPriority"));
             TaskStatus taskStatus = TaskStatus.valueOf(req.getParameter("taskStatus"));
 
-            Task task = new Task(title, description, taskPriority, taskStatus, null);
+            Task task = new Task(title, description, taskPriority, taskStatus, project);
 
             errors = validator.validateTask(task);
 
@@ -101,7 +116,7 @@ public class TaskServlet extends HttpServlet {
                 taskService.addTask(task);
         }
 
-        index(req, resp);
+        resp.sendRedirect("tasks?project_id=" + projectId);
 
     }
 
