@@ -4,6 +4,9 @@
         <div class="col-md-8">
             <div class="card-header">${title}</div>
             <div class="card-body">
+                <!-- Title for the statistics -->
+                <h3 class="text-center mb-4">Statistics Project</h3> <!-- Added title here -->
+
                 <table class="table table-striped table-bordered text-white">
                     <thead>
                         <tr>

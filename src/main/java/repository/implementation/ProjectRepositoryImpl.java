@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +24,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
     private static final String SQL_FIND_BY_ID = "SELECT project.id as project_id, project.name as project_name, project.*, squad.* FROM Project JOIN squad ON project.squad_id = squad.id WHERE project.id = ?";
     private static final String GET_ALL_PROJECTS = "SELECT * FROM Project";
+    private static final String GET_ALL_PROJECTS_PAGINATED = "SELECT * FROM Project LIMIT ? OFFSET ?";
     private static final String UPDATE_PROJECT = "UPDATE Project SET name = ?, description = ?, start_date = ?, end_date = ?, project_statut = ? WHERE id = ?";
     private static final String DELETE_PROJECT = "DELETE FROM Project WHERE id = ?";
     private static final String ADD_PROJECT = "INSERT INTO Project (name, description, start_date, end_date, project_statut) VALUES (?, ?, ?, ?, ?)";
@@ -48,6 +50,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                     "LEFT JOIN Task t ON p.id = t.project_id";
 
 
+    private static final String COUNT_PROJECTS = "SELECT COUNT(*) FROM Project";
 
     @Override
     public Optional<Project> get(long id) {
@@ -183,9 +186,6 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
 
-
-
-
 @Override
 
     public List<Object[]> getProjectSummaries(int page, int pageSize) {
@@ -216,22 +216,50 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
 
-    public int getTotalProjectCount() {
-        int totalCount = 0;
+
+    @Override
+    public List<Project> getAllProjectsPaginated(int limit, int offset) {
+        List<Project> projects = new ArrayList<>();
 
         try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(SQL_COUNT_PROJECTS);
-             ResultSet rs = ps.executeQuery()) {
+             PreparedStatement ps = con.prepareStatement(GET_ALL_PROJECTS_PAGINATED)) {
 
+            ps.setInt(1, limit);
+            ps.setInt(2, offset);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Project project = new Project();
+                project.setId(rs.getInt("id"));
+                project.setName(rs.getString("name"));
+                project.setDescription(rs.getString("description"));
+                project.setStartDate(rs.getDate("start_date").toLocalDate());
+                project.setEndDate(rs.getDate("end_date").toLocalDate());
+                project.setStatus(ProjectStatus.valueOf(rs.getString("project_statut")));
+                projects.add(project);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return projects;
+    }
+
+    @Override
+    public int getTotalProjectCount() {
+        int count = 0;
+
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(COUNT_PROJECTS);
+             ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
-                totalCount = rs.getInt(1);
+                count = rs.getInt(1);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return totalCount;
+        return count;
     }
-
 
 }

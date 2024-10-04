@@ -23,6 +23,7 @@ public class ProjectService {
     }
 
 
+
     public void updateProject(Project project) {
         projectRepository.updateProject(project);
     }
@@ -40,11 +41,14 @@ public class ProjectService {
         return projectRepository.searchProjectsByName(name);
     }
 
-    public List<Object[]> getProjectSummaries(int page, int pageSize) {
-        return projectRepository.getProjectSummaries(page,pageSize);
+    public List<Project> getAllProjectsPaginated(int page, int itemsPerPage) {
+        int offset = (page - 1) * itemsPerPage;
+        return projectRepository.getAllProjectsPaginated(itemsPerPage, offset);
     }
-    public  int getTotalProjectCount(){
-        return  projectRepository.getTotalProjectCount();
+
+
+    public int getTotalProjectCount() {
+        return projectRepository.getTotalProjectCount();
     }
 
 
