@@ -12,7 +12,6 @@ import java.util.List;
 
 public class SquadServlet extends HttpServlet {
 
-  
     private final SquadService squadService;
 
     public SquadServlet() {
@@ -35,9 +34,9 @@ public class SquadServlet extends HttpServlet {
 
         if ("add".equals(action)) {
             addSquad(request, response);
-        } else if ("update".equals(action)) {  
+        } else if ("update".equals(action)) {
             updateSquad(request, response);
-        } else if ("delete".equals(action)) { 
+        } else if ("delete".equals(action)) {
             deleteSquad(request, response);
         } else {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid action");
@@ -49,6 +48,8 @@ public class SquadServlet extends HttpServlet {
         int pageSize = 10;
         List<Squad> squads = squadService.getAllSquads(page, pageSize);
         request.setAttribute("squads", squads);
+        request.setAttribute("message", request.getAttribute("message"));  
+        request.setAttribute("errors", request.getAttribute("errors"));  
         request.getRequestDispatcher("views/squads.jsp").forward(request, response);
     }
 
@@ -68,8 +69,13 @@ public class SquadServlet extends HttpServlet {
         String name = request.getParameter("name");
         Squad squad = new Squad();
         squad.setName(name);
-        squadService.addSquad(squad);
-        response.sendRedirect("squads?action=squad");
+        try {
+            squadService.addSquad(squad);
+            request.setAttribute("message", "Squad added successfully!"); 
+        } catch (Exception e) {
+            request.setAttribute("errors", "Failed to add squad: " + e.getMessage());  
+        }
+        response.sendRedirect("squads?action=list");  
     }
 
     private void updateSquad(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -78,8 +84,13 @@ public class SquadServlet extends HttpServlet {
         Squad squad = new Squad();
         squad.setId(id);
         squad.setName(name);
-        squadService.updateSquad(squad);
-        response.sendRedirect("squads?action=squad");
+        try {
+            squadService.updateSquad(squad);
+            request.setAttribute("message", "Squad updated successfully!");  
+        } catch (Exception e) {
+            request.setAttribute("errors", "Failed to update squad: " + e.getMessage());  
+        }
+        response.sendRedirect("squads?action=list");  
     }
 
     private void deleteSquad(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -89,9 +100,8 @@ public class SquadServlet extends HttpServlet {
             request.setAttribute("message", "Squad deleted successfully!");  
         } catch (Exception e) {
             e.printStackTrace();  
-            request.setAttribute("errorMessage", "Failed to delete squad: " + e.getMessage());  
+            request.setAttribute("errors", "Failed to delete squad: " + e.getMessage());  
         }
-        response.sendRedirect("squads?action=squad");  
+        response.sendRedirect("squads?action=list");  
     }
-
 }

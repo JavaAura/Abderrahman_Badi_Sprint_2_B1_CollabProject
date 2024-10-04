@@ -13,7 +13,16 @@
     <welcome-file>default.htm</welcome-file>
   </welcome-file-list>
 
-
+  <!-- SquadServlet -->
+  <servlet>
+    <servlet-name>SquadMemberServlet</servlet-name>
+    <servlet-class>controller.MemberServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SquadMemberServlet</servlet-name>
+    <url-pattern>/squadMembers</url-pattern>
+  </servlet-mapping>
+  
   <!-- ProjectServlet -->
   <servlet>
     <servlet-name>ProjectServlet</servlet-name>

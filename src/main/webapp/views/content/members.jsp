@@ -6,6 +6,19 @@
 	<button type="button" class="btn btn-primary mb-4"
 		data-bs-toggle="modal" data-bs-target="#addMemberModal">Add
 		New Member</button>
+<c:if test="${not empty message}">
+    <div class="alert alert-success" role="alert">
+        ${message}
+    </div>
+</c:if>
+
+<c:if test="${not empty errors}">
+    <div class="alert alert-danger" role="alert">
+        <c:forEach var="error" items="${errors}">
+            <p>${error}</p>
+        </c:forEach>
+    </div>
+</c:if>
 
 	<table class="table table-striped table-hover">
 		<thead>
