@@ -28,6 +28,20 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     private static final String ADD_PROJECT = "INSERT INTO Project (name, description, start_date, end_date, project_statut) VALUES (?, ?, ?, ?, ?)";
     private static final String SEARCH_PROJECTS_BY_NAME = "SELECT * FROM Project WHERE name LIKE ?";
 
+
+
+    private static final String SQL_GET_PROJECT_SUMMARIES =
+            "SELECT p.name AS project_name, " +
+                    "COUNT(DISTINCT m.id) AS member_count, " +
+                    "COUNT(DISTINCT t.id) AS task_count " +
+                    "FROM Project p " +
+                    "LEFT JOIN Squad s ON p.squad_id = s.id " +
+                    "LEFT JOIN Member m ON s.id = m.squad_id " +
+                    "LEFT JOIN Task t ON p.id = t.project_id " +
+                    "GROUP BY p.name";
+
+
+
     @Override
     public Optional<Project> get(long id) {
         Project project = null;
@@ -160,5 +174,34 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
         return projects;
     }
+
+
+
+
+
+
+    public List<Object[]> getProjectSummaries() {
+        List<Object[]> projectSummaries = new ArrayList<>();
+
+
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(SQL_GET_PROJECT_SUMMARIES);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Object[] summary = new Object[3]; 
+                summary[0] = rs.getString("project_name");
+                summary[1] = rs.getInt("member_count");
+                summary[2] = rs.getInt("task_count");
+
+                projectSummaries.add(summary);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return projectSummaries;
+    }
+
 
 }

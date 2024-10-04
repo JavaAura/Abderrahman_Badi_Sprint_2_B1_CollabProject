@@ -27,16 +27,13 @@
   <!-- projectsStatistics -->
 
   <servlet>
-    <servlet-name>projectsStatisticsServlet</servlet-name>
-    <servlet-class>controller.projectsStatisticstServlet</servlet-class>
+    <servlet-name>ProjectStatisticsServlet</servlet-name>
+    <servlet-class>controller.ProjectStatisticsServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>projectsStatistics</servlet-name>
-    <url-pattern>/projects/statistics</url-pattern>
+    <servlet-name>ProjectStatisticsServlet</servlet-name>
+    <url-pattern>/ProjectStatistics</url-pattern>
   </servlet-mapping>
-
-  
-
 
 
 
