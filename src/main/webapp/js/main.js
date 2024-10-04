@@ -12,17 +12,17 @@ function dragoverHandler(ev) {
   ev.dataTransfer.dropEffect = "move";
 }
 
-function dropHandler(ev) {
+async function dropHandler(ev) {
   ev.preventDefault();
 
-  const id = ev.dataTransfer.getData("text/plain");
-  const draggedElement = document.getElementById(id);
+  const task_id = ev.dataTransfer.getData("text/plain");
+  const draggedElement = document.getElementById(task_id);  
 
   const dropZone = ev.target.closest(".drop-zone");
 
+  const status = dropZone.getAttribute("drop-zone-status");
+  
   const targetCard = ev.target.closest(".card");
-
-  console.log("target Card:" + targetCard);
 
   if (targetCard) {
     const bounding = targetCard.getBoundingClientRect();
@@ -30,8 +30,14 @@ function dropHandler(ev) {
     // Mouse Y position (px) - Top border to top view port distance (px)
     const offset = ev.clientY - bounding.top;
 
-    // If the offset is longer than half the height of the card the mouse was on the bottom half of the card
+    const data = await changeTaskStatus(task_id, status);
 
+    if(data.error == "error"){
+      alert('Unexpected error occured');
+      return;
+    }
+
+    // If the offset is longer than half the height of the card the mouse was on the bottom half of the card
     if (offset < bounding.height / 2) {
       // Insert before the element
       dropZone.insertBefore(draggedElement, targetCard);
@@ -42,6 +48,8 @@ function dropHandler(ev) {
   } else {
     dropZone.appendChild(draggedElement);
   }
+
+
 }
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -70,4 +78,20 @@ function openTaskModal(id, title, description, priority, member_id, assignDate) 
 
 function createTaskModal(status) {
   document.getElementById("taskStatus").value = status;
+}
+
+async function changeTaskStatus(task_id, status){
+  const url = "http://localhost:9080/CollabProject/projects/tasks?taskId=${task_id}&status=${status}&action=status";
+
+  const response = await fetch(url, {
+    method: "POST"
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const data = await response.json();
+
+  return data;
 }
