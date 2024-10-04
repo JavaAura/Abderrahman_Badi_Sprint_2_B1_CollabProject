@@ -81,7 +81,7 @@ function createTaskModal(status) {
 }
 
 async function changeTaskStatus(task_id, status){
-  const url = "http://localhost:9080/CollabProject/projects/tasks?taskId=${task_id}&status=${status}&action=status";
+  const url = "http://localhost:9080/CollabProject/projects/tasks/status?taskId=${task_id}&status=${status}";
 
   const response = await fetch(url, {
     method: "POST"
