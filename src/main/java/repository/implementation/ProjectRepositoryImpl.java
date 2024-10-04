@@ -21,7 +21,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
     private static final Logger logger = LoggerFactory.getLogger(ProjectRepositoryImpl.class);
 
-    private static final String SQL_FIND_BY_ID = "SELECT project.id as project_id, project.name as project_name, project.*, squad.* FROM Project JOIN squad ON project.squad_id = squad.id WHERE project.id = ?";
+    private static final String SQL_FIND_BY_ID = "SELECT project.id as project_id, project.name as project_name, project.*, squad.* FROM Project LEFT JOIN squad ON project.squad_id = squad.id WHERE project.id = ?";
     private static final String GET_ALL_PROJECTS = "SELECT * FROM Project";
     private static final String UPDATE_PROJECT = "UPDATE Project SET name = ?, description = ?, start_date = ?, end_date = ?, project_statut = ? WHERE id = ?";
     private static final String DELETE_PROJECT = "DELETE FROM Project WHERE id = ?";
@@ -38,7 +38,6 @@ public class ProjectRepositoryImpl implements ProjectRepository {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     project = new Project();
-                    Squad squad = new Squad();
 
                     project.setId(rs.getInt("id"));
                     project.setName(rs.getString("project_name"));
@@ -46,10 +45,15 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                     project.setStartDate(rs.getDate("start_date").toLocalDate());
                     project.setEndDate(rs.getDate("end_date").toLocalDate());
 
-                    squad.setId(rs.getLong("squad_id"));
-                    squad.setName(rs.getString("name"));
+                    Long squadId = rs.getLong("squad_id");
+                    if (!rs.wasNull()) {
+                        Squad squad = new Squad();
+                        squad.setId(squadId);
+                        squad.setName(rs.getString("name"));
+                        project.setSquad(squad);
 
-                    project.setSquad(squad);
+                    }                    
+
                     project.setStatus(ProjectStatus.valueOf(rs.getString("project_statut")));
                 }
             }

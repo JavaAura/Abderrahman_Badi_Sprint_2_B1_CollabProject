@@ -18,7 +18,9 @@
                  <div class="d-flex flex-column min-vh-50 drop-zone" ondrop="dropHandler(event)"
                      ondragover="dragoverHandler(event)">
                      <c:forEach var="task" items="${todoTasks}">
-                         <div class="card cursor-pointer shadow-sm" id="${task.id}" style="width: 18rem;" data-bs-toggle="modal" data-bs-target="#taskModal" onclick="openTaskModal(${task.id}, '${task.title}', '${task.description}', '${task.taskPriority}', '${task.assignDate}')">
+                         <div class="card cursor-pointer shadow-sm" id="${task.id}" style="width: 18rem;"
+                             data-bs-toggle="modal" data-bs-target="#taskModal"
+                             onclick="openTaskModal(${task.id}, '${task.title}', '${task.description}', '${task.taskPriority}', '${task.assignDate}')">
                              <div class="card-body">
                                  <h5 class="card-title">${task.title}</h5>
                                  <h6 class="card-subtitle mb-2 text-body-secondary">Priority: ${task.taskPriority}</h6>
@@ -32,8 +34,14 @@
                                  </c:choose>
                                  <c:choose>
                                      <c:when test="${task.member != null}">
-                                         <p class="card-link">${task.member.firstName} ${task.member.lastName}</p>
-                                         <p class="card-link">Assigned at: ${task.assignDate}</p>
+                                         <div class="d-flex align-items-center gap-1">
+                                             <img src="${pageContext.request.contextPath}/assets/default_user.webp"
+                                                 alt="default user" class="default-image">
+                                             <p class="card-subtitle fs-5">${task.member.firstName}
+                                                 ${task.member.lastName}</p>
+                                         </div>
+                                         <p class="card-subtitle text-body-secondary">Assigned at: ${task.assignDate}
+                                         </p>
                                      </c:when>
                                      <c:otherwise>
                                          <p>No member assigned</p>
@@ -70,8 +78,14 @@
                                  </c:choose>
                                  <c:choose>
                                      <c:when test="${task.member != null}">
-                                         <p class="card-link">${task.member.firstName} ${task.member.lastName}</p>
-                                         <p class="card-link">Assigned at: ${task.assignDate}</p>
+                                         <div class="d-flex align-items-center gap-1">
+                                             <img src="${pageContext.request.contextPath}/assets/default_user.webp"
+                                                 alt="default user" class="default-image">
+                                             <p class="card-subtitle fs-5">${task.member.firstName}
+                                                 ${task.member.lastName}</p>
+                                         </div>
+                                         <p class="card-subtitle text-body-secondary">Assigned at: ${task.assignDate}
+                                         </p>
                                      </c:when>
                                      <c:otherwise>
                                          <p>No member assigned</p>
@@ -107,8 +121,14 @@
                                  </c:choose>
                                  <c:choose>
                                      <c:when test="${task.member != null}">
-                                         <p class="card-link">${task.member.firstName} ${task.member.lastName}</p>
-                                         <p class="card-link">Assigned at: ${task.assignDate}</p>
+                                         <div class="d-flex align-items-center gap-1">
+                                             <img src="${pageContext.request.contextPath}/assets/default_user.webp"
+                                                 alt="default user" class="default-image">
+                                             <p class="card-subtitle fs-5">${task.member.firstName}
+                                                 ${task.member.lastName}</p>
+                                         </div>
+                                         <p class="card-subtitle text-body-secondary">Assigned at: ${task.assignDate}
+                                         </p>
                                      </c:when>
                                      <c:otherwise>
                                          <p>No member assigned</p>
@@ -178,7 +198,7 @@
                                  <option value="HIGH">High</option>
                              </select>
                          </div>
-                            
+
                          <button type="submit" class="btn btn-primary">Update Task</button>
                      </form>
                  </div>

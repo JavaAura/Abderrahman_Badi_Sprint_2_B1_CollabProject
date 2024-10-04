@@ -13,6 +13,11 @@
     margin-bottom: 10px;
 }
 
+.default-image {
+    width: 34px;
+    height: 30px;
+    border-radius: 50%;
+}
 
 
 @media (min-width: 1400px) {
