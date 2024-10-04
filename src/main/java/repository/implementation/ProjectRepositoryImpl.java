@@ -27,7 +27,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     private static final String DELETE_PROJECT = "DELETE FROM Project WHERE id = ?";
     private static final String ADD_PROJECT = "INSERT INTO Project (name, description, start_date, end_date, project_statut) VALUES (?, ?, ?, ?, ?)";
     private static final String SEARCH_PROJECTS_BY_NAME = "SELECT * FROM Project WHERE name LIKE ?";
-
+   // private static final String SQL_GET_PROJECT_SUMMARIES = "SELECT project_name, member_count, task_count FROM projects LIMIT ? OFFSET ?";
 
 
     private static final String SQL_GET_PROJECT_SUMMARIES =
@@ -38,7 +38,14 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                     "LEFT JOIN Squad s ON p.squad_id = s.id " +
                     "LEFT JOIN Member m ON s.id = m.squad_id " +
                     "LEFT JOIN Task t ON p.id = t.project_id " +
-                    "GROUP BY p.name";
+                    "GROUP BY p.name " +
+                    "LIMIT ? OFFSET ?";
+
+    private static final String SQL_COUNT_PROJECTS =
+            "SELECT COUNT(DISTINCT p.id) FROM Project p " +
+                    "LEFT JOIN Squad s ON p.squad_id = s.id " +
+                    "LEFT JOIN Member m ON s.id = m.squad_id " +
+                    "LEFT JOIN Task t ON p.id = t.project_id";
 
 
 
@@ -179,28 +186,51 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
 
 
+@Override
 
-    public List<Object[]> getProjectSummaries() {
+    public List<Object[]> getProjectSummaries(int page, int pageSize) {
         List<Object[]> projectSummaries = new ArrayList<>();
-
+        int offset = (page - 1) * pageSize; // Calculate offset for the SQL query
 
         try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(SQL_GET_PROJECT_SUMMARIES);
-             ResultSet rs = ps.executeQuery()) {
+             PreparedStatement ps = con.prepareStatement(SQL_GET_PROJECT_SUMMARIES)) {
 
-            while (rs.next()) {
-                Object[] summary = new Object[3]; 
-                summary[0] = rs.getString("project_name");
-                summary[1] = rs.getInt("member_count");
-                summary[2] = rs.getInt("task_count");
+            ps.setInt(1, pageSize);
+            ps.setInt(2, offset);
 
-                projectSummaries.add(summary);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Object[] summary = new Object[3];
+                    summary[0] = rs.getString("project_name");
+                    summary[1] = rs.getInt("member_count");
+                    summary[2] = rs.getInt("task_count");
+
+                    projectSummaries.add(summary);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         return projectSummaries;
+    }
+
+
+    public int getTotalProjectCount() {
+        int totalCount = 0;
+
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(SQL_COUNT_PROJECTS);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                totalCount = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return totalCount;
     }
 
 

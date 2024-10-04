@@ -18,5 +18,7 @@ public interface ProjectRepository {
     public void addProject(Project project);
 
     public List<Project> searchProjectsByName(String name);
+    public List<Object[]> getProjectSummaries(int page, int pageSize);
+    public int getTotalProjectCount();
 
 }

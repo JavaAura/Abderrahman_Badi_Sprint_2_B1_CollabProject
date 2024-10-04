@@ -14,20 +14,39 @@ public class ProjectStatisticsServlet extends HttpServlet {
 
     private ProjectService projectService;
 
-
     @Override
     public void init() throws ServletException {
-        super.init();
+
         projectService = new ProjectService();
     }
+
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        int page = 1; // Default to the first page
+        int pageSize = 8; // Change this to 8 for pagination
 
-        request.getRequestDispatcher("views/projectStatistics.jsp").forward(request, response);
+        String pageParam = request.getParameter("page");
+        if (pageParam != null && !pageParam.isEmpty()) {
+            page = Integer.parseInt(pageParam); // Parse the page number from the request
+        }
+
+        List<Object[]> projectSummaries = projectService.getProjectSummaries(page, pageSize);
+        request.setAttribute("projectSummaries", projectSummaries);
+
+        int totalProjects = projectService.getTotalProjectCount();
+        int totalPages = (int) Math.ceil((double) totalProjects / pageSize);
+
+        request.setAttribute("totalPages", totalPages);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("title", "Project Summary");
+
+        request.getRequestDispatcher("/views/projectStatistics.jsp").forward(request, response);
     }
+
 
 
 }

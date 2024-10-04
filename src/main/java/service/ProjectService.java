@@ -40,6 +40,14 @@ public class ProjectService {
         return projectRepository.searchProjectsByName(name);
     }
 
+    public List<Object[]> getProjectSummaries(int page, int pageSize) {
+        return projectRepository.getProjectSummaries(page,pageSize);
+    }
+    public  int getTotalProjectCount(){
+        return  projectRepository.getTotalProjectCount();
+    }
+
+
 
 
 

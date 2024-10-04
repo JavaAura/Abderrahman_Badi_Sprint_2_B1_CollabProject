@@ -32,7 +32,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>ProjectStatisticsServlet</servlet-name>
-    <url-pattern>/ProjectStatistics</url-pattern>
+    <url-pattern>/projects/statistics</url-pattern>
   </servlet-mapping>
 
 
