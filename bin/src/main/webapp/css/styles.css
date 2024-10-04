@@ -1,0 +1,41 @@
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.drop-zone {
+    z-index: 10;
+    padding-bottom: 5rem;
+}
+
+.drop-zone>.card {
+    z-index: 20;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.default-image {
+    width: 34px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+
+@media (min-width: 1400px) {
+    .w-xxl-75 {
+        width: 75% !important;
+    }
+
+    .w-xxl-25 {
+        width: 25% !important;
+    }
+}
+
+@media (min-width: 768px) {
+    .w-lg-66 {
+        width: 66% !important;
+    }
+
+    .w-lg-33 {
+        width: 33% !important;
+    }
+}
