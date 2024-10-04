@@ -24,6 +24,22 @@
     <url-pattern>/projects</url-pattern>
   </servlet-mapping>
 
+  <!-- projectsStatistics -->
+
+  <servlet>
+    <servlet-name>projectsStatisticsServlet</servlet-name>
+    <servlet-class>controller.projectsStatisticstServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>projectsStatistics</servlet-name>
+    <url-pattern>/projects/statistics</url-pattern>
+  </servlet-mapping>
+
+  
+
+
+
+
   <!-- SquadServlet -->
   <servlet>
     <servlet-name>SquadServlet</servlet-name>
@@ -54,3 +70,8 @@
     <url-pattern>/projects/tasks</url-pattern>
   </servlet-mapping>
 </web-app>
+
+
+
+
+
