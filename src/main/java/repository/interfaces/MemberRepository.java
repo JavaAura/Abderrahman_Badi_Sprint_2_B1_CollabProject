@@ -13,5 +13,5 @@ public interface MemberRepository {
 	public void addMember(Member member);
 	public void updateMember(Member member);
 	public void deleteMember(Long id);
-
+	int getTotalMembersCount(); 
 }
