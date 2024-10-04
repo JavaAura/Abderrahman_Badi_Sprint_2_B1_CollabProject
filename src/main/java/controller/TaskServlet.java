@@ -45,9 +45,13 @@ public class TaskServlet extends HttpServlet {
 
             if (optionalProject.isPresent()) {
                 Project project = optionalProject.get();
-                List<Task> tasks = taskService.getAllTasks(project);
-                List<Member> members = memberService.getMembersBySquad(project.getSquad().getId());
 
+                if (project.getSquad() != null) {
+                    List<Member> members = memberService.getMembersBySquad(project.getSquad().getId());
+                    req.setAttribute("members", members);
+                }
+
+                List<Task> tasks = taskService.getAllTasks(project);
                 if (!tasks.isEmpty()) {
                     req.setAttribute("todoTasks", tasks.stream().filter(task -> task.getTaskStatus() == TaskStatus.TODO)
                             .collect(Collectors.toList()));
@@ -58,7 +62,6 @@ public class TaskServlet extends HttpServlet {
                 }
 
                 req.setAttribute("project", project);
-                req.setAttribute("members", members);
 
             } else {
                 req.setAttribute("errorMessage", "Project not found.");
