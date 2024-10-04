@@ -16,12 +16,12 @@ async function dropHandler(ev) {
   ev.preventDefault();
 
   const task_id = ev.dataTransfer.getData("text/plain");
-  const draggedElement = document.getElementById(task_id);  
+  const draggedElement = document.getElementById(task_id);
 
   const dropZone = ev.target.closest(".drop-zone");
 
   const status = dropZone.getAttribute("drop-zone-status");
-  
+
   const targetCard = ev.target.closest(".card");
 
   if (targetCard) {
@@ -30,10 +30,11 @@ async function dropHandler(ev) {
     // Mouse Y position (px) - Top border to top view port distance (px)
     const offset = ev.clientY - bounding.top;
 
+    // Change the task status before moving the card, in the case of an error the card won't be moved
     const data = await changeTaskStatus(task_id, status);
 
-    if(data.error == "error"){
-      alert('Unexpected error occured');
+    if (data.error == "error") {
+      alert("Unexpected error occured");
       return;
     }
 
@@ -46,10 +47,16 @@ async function dropHandler(ev) {
       targetCard.insertAdjacentElement("afterend", draggedElement);
     }
   } else {
+    // Change the task status before moving the card, in the case of an error the card won't be moved
+    const data = await changeTaskStatus(task_id, status);
+
+    if (data.error == "error") {
+      alert("Unexpected error occured");
+      return;
+    }
+
     dropZone.appendChild(draggedElement);
   }
-
-
 }
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -63,7 +70,14 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-function openTaskModal(id, title, description, priority, member_id, assignDate) {
+function openTaskModal(
+  id,
+  title,
+  description,
+  priority,
+  member_id,
+  assignDate
+) {
   console.log(member_id);
 
   document.getElementById("updatedTaskId").value = id;
@@ -75,16 +89,15 @@ function openTaskModal(id, title, description, priority, member_id, assignDate) 
   document.getElementById("assignDate").innerHTML = assignDate;
 }
 
-
 function createTaskModal(status) {
   document.getElementById("taskStatus").value = status;
 }
 
-async function changeTaskStatus(task_id, status){
-  const url = "http://localhost:9080/CollabProject/projects/tasks/status?taskId=${task_id}&status=${status}";
+async function changeTaskStatus(task_id, status) {
+  const url = `http://localhost:9080/CollabProject/projects/tasks/status?taskId=${task_id}&status=${status}`;
 
   const response = await fetch(url, {
-    method: "POST"
+    method: "POST",
   });
 
   if (!response.ok) {
