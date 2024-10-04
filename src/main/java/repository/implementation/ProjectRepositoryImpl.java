@@ -29,8 +29,6 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     private static final String DELETE_PROJECT = "DELETE FROM Project WHERE id = ?";
     private static final String ADD_PROJECT = "INSERT INTO Project (name, description, start_date, end_date, project_statut) VALUES (?, ?, ?, ?, ?)";
     private static final String SEARCH_PROJECTS_BY_NAME = "SELECT * FROM Project WHERE name LIKE ?";
-   // private static final String SQL_GET_PROJECT_SUMMARIES = "SELECT project_name, member_count, task_count FROM projects LIMIT ? OFFSET ?";
-
 
     private static final String SQL_GET_PROJECT_SUMMARIES =
             "SELECT p.name AS project_name, " +
