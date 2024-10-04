@@ -47,6 +47,6 @@ CREATE TABLE IF NOT EXISTS member_task (
     task_id bigint(20),
     member_id bigint(20),
     assign_date DATETIME NOT NULL,
-    CONSTRAINT fk_pivot_task FOREIGN KEY (task_id) REFERENCES task(id),
+    CONSTRAINT fk_pivot_task FOREIGN KEY (task_id) REFERENCES task(id) ON DELETE CASCADE,
     CONSTRAINT fk_pivot_member FOREIGN KEY (member_id) REFERENCES member(id)
 );
