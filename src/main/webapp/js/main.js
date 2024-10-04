@@ -55,10 +55,19 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-function openTaskModal(id, title, description, priority, assignDate) {
-  document.getElementById("taskId").value = id;
-  document.getElementById("taskTitle").value = title;
-  document.getElementById("taskDescription").value = description;
-  document.getElementById("taskPriority").value = priority;
-  document.getElementById("taskAssignDate").value = assignDate;
+function openTaskModal(id, title, description, priority, member_id, assignDate) {
+  console.log(member_id);
+
+  document.getElementById("updatedTaskId").value = id;
+  document.getElementById("deletedTaskId").value = id;
+  document.getElementById("updatedTaskTitle").value = title;
+  document.getElementById("updatedTaskDescription").value = description;
+  document.getElementById("updatedTaskPriority").value = priority;
+  document.getElementById("updatedSquadMember").value = member_id;
+  document.getElementById("assignDate").innerHTML = assignDate;
+}
+
+
+function createTaskModal(status) {
+  document.getElementById("taskStatus").value = status;
 }

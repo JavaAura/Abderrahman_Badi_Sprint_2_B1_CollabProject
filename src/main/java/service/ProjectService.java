@@ -50,9 +50,4 @@ public class ProjectService {
     public int getTotalProjectsCount() {
         return projectRepository.getTotalProjectsCount();
     }
-
-
-
-
-
 }
