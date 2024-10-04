@@ -3,18 +3,26 @@ package repository.implementation;
 import config.DatabaseConnection;
 import repository.interfaces.ProjectRepository;
 import model.Project;
+import model.Squad;
 import model.enums.ProjectStatus;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ProjectRepositoryImpl implements ProjectRepository {
 
+    private static final Logger logger = LoggerFactory.getLogger(ProjectRepositoryImpl.class);
+
+    private static final String SQL_FIND_BY_ID = "SELECT project.id as project_id, project.name as project_name, project.*, squad.* FROM Project JOIN squad ON project.squad_id = squad.id WHERE project.id = ?";
     private static final String GET_ALL_PROJECTS = "SELECT * FROM Project";
     private static final String GET_ALL_PROJECTS_PAGINATED = "SELECT * FROM Project LIMIT ? OFFSET ?";
     private static final String UPDATE_PROJECT = "UPDATE Project SET name = ?, description = ?, start_date = ?, end_date = ?, project_statut = ? WHERE id = ?";
@@ -24,12 +32,47 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     private static final String COUNT_PROJECTS = "SELECT COUNT(*) FROM Project";
 
     @Override
+    public Optional<Project> get(long id) {
+        Project project = null;
+
+        try (Connection con = DatabaseConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(SQL_FIND_BY_ID);) {
+            ps.setLong(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    project = new Project();
+                    Squad squad = new Squad();
+
+                    project.setId(rs.getInt("id"));
+                    project.setName(rs.getString("project_name"));
+                    project.setDescription(rs.getString("description"));
+                    project.setStartDate(rs.getDate("start_date").toLocalDate());
+                    project.setEndDate(rs.getDate("end_date").toLocalDate());
+
+                    squad.setId(rs.getLong("squad_id"));
+                    squad.setName(rs.getString("name"));
+
+                    project.setSquad(squad);
+                    project.setStatus(ProjectStatus.valueOf(rs.getString("project_statut")));
+                }
+            }
+
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+            e.printStackTrace();
+        }
+
+        return Optional.ofNullable(project);
+
+    }
+
+    @Override
     public List<Project> getAllProjects() {
         List<Project> projects = new ArrayList<>();
 
         try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(GET_ALL_PROJECTS);
-             ResultSet rs = ps.executeQuery()) {
+                PreparedStatement ps = con.prepareStatement(GET_ALL_PROJECTS);
+                ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 Project project = new Project();
@@ -52,7 +95,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     @Override
     public void updateProject(Project project) {
         try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(UPDATE_PROJECT)) {
+                PreparedStatement ps = con.prepareStatement(UPDATE_PROJECT)) {
 
             ps.setString(1, project.getName());
             ps.setString(2, project.getDescription());
@@ -70,7 +113,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     @Override
     public void deleteProject(int id) {
         try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(DELETE_PROJECT)) {
+                PreparedStatement ps = con.prepareStatement(DELETE_PROJECT)) {
             ps.setInt(1, id);
             ps.executeUpdate();
         } catch (Exception e) {
@@ -81,7 +124,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     @Override
     public void addProject(Project project) {
         try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(ADD_PROJECT)) {
+                PreparedStatement ps = con.prepareStatement(ADD_PROJECT)) {
 
             ps.setString(1, project.getName());
             ps.setString(2, project.getDescription());
@@ -100,7 +143,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
         List<Project> projects = new ArrayList<>();
 
         try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(SEARCH_PROJECTS_BY_NAME)) {
+                PreparedStatement ps = con.prepareStatement(SEARCH_PROJECTS_BY_NAME)) {
 
             ps.setString(1, "%" + name + "%");
             ResultSet rs = ps.executeQuery();
@@ -120,6 +163,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
         return projects;
     }
+
 
 
 
@@ -168,5 +212,4 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
         return count;
     }
-
 }

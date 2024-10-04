@@ -4,7 +4,14 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import repository.implementation.TaskRepositoryImpl;
+
 public class DatabaseConnection {
+    private static final Logger logger = LoggerFactory.getLogger(TaskRepositoryImpl.class);
+
     private static DatabaseConnection instance;
     private Connection connection;
 
@@ -16,11 +23,11 @@ public class DatabaseConnection {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             this.connection = DriverManager.getConnection(url, user, password.equals("\"\"") ? "" : password);
-            System.out.println("Connection istablished");
         } catch (ClassNotFoundException e) {
-            System.out.println("MySQL JDBC Driver not found: " + e.getMessage());
+            logger.error("MySQL JDBC Driver not found: " + e.getMessage());
+
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 
@@ -31,7 +38,7 @@ public class DatabaseConnection {
             }
 
         } catch (SQLException e) {
-            System.out.println("MySQL JDBC Driver not found.");
+            logger.error("MySQL JDBC Driver not found.");
         }
 
         return instance;

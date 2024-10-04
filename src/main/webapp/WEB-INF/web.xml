@@ -41,7 +41,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>MemberServlet</servlet-name>
-    <url-pattern>/squads/members</url-pattern>
+    <url-pattern>/members</url-pattern>
   </servlet-mapping>
 
   <!-- TaskServlet -->
@@ -51,6 +51,6 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>TaskServlet</servlet-name>
-    <url-pattern>/tasks</url-pattern>
+    <url-pattern>/projects/tasks</url-pattern>
   </servlet-mapping>
 </web-app>

@@ -1,6 +1,6 @@
 package model.enums;
 
-public enum Priority {
+public enum TaskPriority {
     LOW,
     MEDIUM,
     HIGH
