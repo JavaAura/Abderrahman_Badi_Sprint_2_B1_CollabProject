@@ -40,7 +40,8 @@
                                              <p class="card-subtitle fs-5">${task.member.firstName}
                                                  ${task.member.lastName}</p>
                                          </div>
-                                         <p class="card-subtitle text-body-secondary">Assigned at: ${task.assignDate}
+                                         <p class="card-subtitle text-body-secondary pt-2">Assigned at:
+                                             ${task.assignDate}
                                          </p>
                                      </c:when>
                                      <c:otherwise>
@@ -53,7 +54,7 @@
                  </div>
                  <div class="d-flex flex-column w-100">
                      <button type="button" class="btn w-50 align-self-end" data-bs-toggle="modal"
-                         data-bs-target="#exampleModal">
+                         data-bs-target="#createModal" onclick="createTaskModal('TODO')">
                          + Create Task
                      </button>
                  </div>
@@ -64,7 +65,9 @@
                  <div class="d-flex flex-column min-vh-50 drop-zone" ondrop="dropHandler(event)"
                      ondragover="dragoverHandler(event)">
                      <c:forEach var="task" items="${doingTasks}">
-                         <div class="card cursor-pointer shadow-sm" id="${task.id}" style="width: 18rem;">
+                         <div class="card cursor-pointer shadow-sm" id="${task.id}" style="width: 18rem;"
+                             data-bs-toggle="modal" data-bs-target="#taskModal"
+                             onclick="openTaskModal(${task.id}, '${task.title}', '${task.description}', '${task.taskPriority}', '${task.assignDate}')">
                              <div class="card-body">
                                  <h5 class="card-title">${task.title}</h5>
                                  <h6 class="card-subtitle mb-2 text-body-secondary">Priority: ${task.taskPriority}</h6>
@@ -84,7 +87,8 @@
                                              <p class="card-subtitle fs-5">${task.member.firstName}
                                                  ${task.member.lastName}</p>
                                          </div>
-                                         <p class="card-subtitle text-body-secondary">Assigned at: ${task.assignDate}
+                                         <p class="card-subtitle text-body-secondary pt-2">Assigned at:
+                                             ${task.assignDate}
                                          </p>
                                      </c:when>
                                      <c:otherwise>
@@ -97,7 +101,7 @@
                  </div>
                  <div class="d-flex flex-column w-100">
                      <button type="button" class="btn w-50 align-self-end" data-bs-toggle="modal"
-                         data-bs-target="#exampleModal">
+                         data-bs-target="#createModal" onclick="createTaskModal('DOING')">
                          + Create Task
                      </button>
                  </div>
@@ -107,7 +111,9 @@
                  <div class="d-flex flex-column min-vh-50 drop-zone" ondrop="dropHandler(event)"
                      ondragover="dragoverHandler(event)">
                      <c:forEach var="task" items="${doneTasks}">
-                         <div class="card cursor-pointer shadow-sm" id="${task.id}" style="width: 18rem;">
+                         <div class="card cursor-pointer shadow-sm" id="${task.id}" style="width: 18rem;"
+                             data-bs-target="#taskModal"
+                             onclick="openTaskModal(${task.id}, '${task.title}', '${task.description}', '${task.taskPriority}', '${task.assignDate}')">
                              <div class="card-body">
                                  <h5 class="card-title">${task.title}</h5>
                                  <h6 class="card-subtitle mb-2 text-body-secondary">Priority: ${task.taskPriority}</h6>
@@ -127,7 +133,8 @@
                                              <p class="card-subtitle fs-5">${task.member.firstName}
                                                  ${task.member.lastName}</p>
                                          </div>
-                                         <p class="card-subtitle text-body-secondary">Assigned at: ${task.assignDate}
+                                         <p class="card-subtitle text-body-secondary pt-2">Assigned at:
+                                             ${task.assignDate}
                                          </p>
                                      </c:when>
                                      <c:otherwise>
@@ -140,7 +147,7 @@
                  </div>
                  <div class="d-flex flex-column w-100">
                      <button type="button" class="btn w-50 align-self-end" data-bs-toggle="modal"
-                         data-bs-target="#exampleModal">
+                         data-bs-target="#createModal" onclick="createTaskModal('DONE')">
                          + Create Task
                      </button>
                  </div>

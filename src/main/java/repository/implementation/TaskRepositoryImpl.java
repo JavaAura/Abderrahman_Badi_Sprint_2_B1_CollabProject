@@ -1,10 +1,10 @@
 package repository.implementation;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -49,9 +49,9 @@ public class TaskRepositoryImpl implements TaskRepository {
                     task.setTaskStatus(TaskStatus.valueOf(rs.getString("task_statut")));
 
                     // Handle possible null values for assign_date
-                    Date assignDate = rs.getDate("assign_date");
+                    Timestamp assignDate = rs.getTimestamp("assign_date");
                     if (assignDate != null) {
-                        task.setAssignDate(assignDate.toLocalDate());
+                        task.setAssignDate(assignDate.toLocalDateTime());
                     }
 
                     Long memberId = rs.getLong("member_id");
@@ -101,7 +101,7 @@ public class TaskRepositoryImpl implements TaskRepository {
 
                     task = new Task(id, title, description, taskPriority, taskStatus, project);
 
-                    task.setAssignDate(rs.getDate("assign_date").toLocalDate());
+                    task.setAssignDate(rs.getTimestamp("assign_date").toLocalDateTime());
                     task.setMember(member);
 
                 }
