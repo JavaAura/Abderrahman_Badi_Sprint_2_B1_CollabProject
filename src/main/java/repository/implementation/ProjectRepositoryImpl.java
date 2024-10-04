@@ -43,9 +43,6 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                     "GROUP BY p.name " +
                     "LIMIT ? OFFSET ?";
 
-
-
-
     private static final String COUNT_PROJECTS = "SELECT COUNT(*) FROM Project";
 
     @Override
