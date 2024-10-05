@@ -1,8 +1,10 @@
 package controller;
 
+import model.Squad;
 import model.enums.ProjectStatus;
 import service.ProjectService;
 import model.Project;
+import service.SquadService;
 import util.Validator;
 
 import javax.servlet.ServletException;
@@ -18,6 +20,7 @@ public class ProjectServlet extends HttpServlet {
 
     private ProjectService projectService = new ProjectService();
     private Validator validator = new Validator();
+
 
 
     @Override
@@ -51,13 +54,21 @@ public class ProjectServlet extends HttpServlet {
             currentPage = Integer.parseInt(pageParam);
         }
 
-        int totalProjects = projectService.getTotalProjectsCount();
+        int totalProjects = projectService.getTotalProjectCount();
         int totalPages = (int) Math.ceil((double) totalProjects / itemsPerPage);
 
         List<Project> projects = projectService.getAllProjectsPaginated(currentPage, itemsPerPage);
+
+        SquadService squadService = new SquadService();
+        List<Squad> squads = squadService.getAllSquads();
         request.setAttribute("projects", projects);
         request.setAttribute("currentPage", currentPage);
         request.setAttribute("totalPages", totalPages);
+        request.setAttribute("squads", squads);
+        for (Squad squad : squads) {
+            System.out.println("Squad ID: " + squad.getId() + ", Name: " + squad.getName());
+        }
+
 
         request.getRequestDispatcher("views/projects.jsp").forward(request, response);
     }
@@ -73,12 +84,13 @@ public class ProjectServlet extends HttpServlet {
         List<String> errors = new ArrayList<>();
 
         if (action != null && action.equals("update")) {
-            int id = Integer.parseInt(idParam);
+            int id = Integer.parseInt(request.getParameter("id"));
             String nom = request.getParameter("nom");
             String description = request.getParameter("description");
             LocalDate dateDebut = LocalDate.parse(request.getParameter("dateDebut"));
             LocalDate dateFin = LocalDate.parse(request.getParameter("dateFin"));
             String statut = request.getParameter("statut");
+            String squadId = request.getParameter("squadId");
 
             Project project = new Project();
             project.setId(id);
@@ -88,6 +100,10 @@ public class ProjectServlet extends HttpServlet {
             project.setEndDate(dateFin);
             project.setStatus(ProjectStatus.valueOf(statut));
 
+
+            Squad squad = new Squad();
+            squad.setId(Long.parseLong(squadId));
+            project.setSquad(squad);
 
             errors = validator.validateProject(project);
 
@@ -117,12 +133,18 @@ public class ProjectServlet extends HttpServlet {
             LocalDate dateFin = LocalDate.parse(request.getParameter("dateFin"));
             String statut = request.getParameter("statut");
 
+            String squadId = request.getParameter("squadId");
+
             Project newProject = new Project();
             newProject.setName(nom);
             newProject.setDescription(description);
             newProject.setStartDate(dateDebut);
             newProject.setEndDate(dateFin);
             newProject.setStatus(ProjectStatus.valueOf(statut));
+
+            Squad squad = new Squad();
+            squad.setId(Long.parseLong(squadId));
+            newProject.setSquad(squad);
 
 
             errors = validator.validateProject(newProject);

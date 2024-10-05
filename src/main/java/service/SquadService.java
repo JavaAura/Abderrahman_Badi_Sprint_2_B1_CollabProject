@@ -32,4 +32,6 @@ public class SquadService {
 	public void deleteSquad(long id) {
 		squadRepository.deleteSquad(id);
 	}
+	public List<Squad> getAllSquads(){ return  squadRepository.getAllSquads();}
+
 }

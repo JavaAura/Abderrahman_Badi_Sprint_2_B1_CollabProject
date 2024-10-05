@@ -47,7 +47,13 @@ public class ProjectService {
     }
 
 
-    public int getTotalProjectsCount() {
-        return projectRepository.getTotalProjectsCount();
+    public int getTotalProjectCount() {
+        return projectRepository.getTotalProjectCount();
     }
+
+
+    public List<Object[]> getProjectSummaries(int page, int pageSize) {
+        return projectRepository.getProjectSummaries(page, pageSize);
+    }
+
 }

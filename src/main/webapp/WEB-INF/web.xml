@@ -43,6 +43,19 @@
     <url-pattern>/projects</url-pattern>
   </servlet-mapping>
 
+  <!-- projectsStatistics -->
+
+  <servlet>
+    <servlet-name>ProjectStatisticsServlet</servlet-name>
+    <servlet-class>controller.ProjectStatisticsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ProjectStatisticsServlet</servlet-name>
+    <url-pattern>/projects/statistics</url-pattern>
+  </servlet-mapping>
+
+
+
   <!-- SquadServlet -->
   <servlet>
     <servlet-name>SquadServlet</servlet-name>
@@ -73,7 +86,9 @@
     <url-pattern>/projects/tasks</url-pattern>
   </servlet-mapping>
 
-    <!-- TaskStatusServlet -->
+  
+  
+     <!-- TaskStatusServlet -->
   <servlet>
     <servlet-name>TaskStatusServlet</servlet-name>
     <servlet-class>controller.TaskStatusServlet</servlet-class>
@@ -83,3 +98,12 @@
     <url-pattern>/projects/tasks/status</url-pattern>
   </servlet-mapping>
 </web-app>
+
+
+
+
+
+
+
+ 
+
