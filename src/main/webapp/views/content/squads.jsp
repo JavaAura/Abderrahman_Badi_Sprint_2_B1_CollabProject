@@ -16,33 +16,37 @@
         </div>
     </c:if>
 
-    <table class="table table-striped table-hover">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Squad Name</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <c:forEach var="squad" items="${squads}">
+    
+        <div class="table-responsive d-flex justify-content-center">
+        <table class="table w-75 text-center">  
+            <thead class="table-dark">
                 <tr>
-                    <td>${squad.id}</td>
-                    <td>${squad.name}</td>
-                    <td>
-                       
-                        <a href="squadMembers?action=listBySquad&id=${squad.id}" class="btn btn-success btn-sm">View Members</a>
-                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#updateSquadModal" data-id="${squad.id}" data-name="${squad.name}">Edit</button>
-                        <form action="squads" method="post" style="display: inline;">
-                            <input type="hidden" name="action" value="delete">
-                            <input type="hidden" name="id" value="${squad.id}">
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this squad?');">Delete</button>
-                        </form>
-                    </td>
+                     
+                    <th class="col">ID</th>
+                    <th class="col">Squad Name</th>
+                    <th class="col">Actions</th>
                 </tr>
-            </c:forEach>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <c:forEach var="squad" items="${squads}">
+                    <tr>
+                        
+                        <td class="col">${squad.id}</td>
+                        <td class="col">${squad.name}</td>
+                        <td class="col">
+                            <a href="squadMembers?action=listBySquad&id=${squad.id}" class="btn btn-success btn-sm">View Members</a>
+                            <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#updateSquadModal" data-id="${squad.id}" data-name="${squad.name}">Edit</button>
+                            <form action="squads" method="post" style="display: inline;">
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="id" value="${squad.id}">
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this squad?');">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
+  
 </div>
 
 <!-- Form for adding -->
