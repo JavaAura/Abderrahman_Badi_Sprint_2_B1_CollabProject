@@ -44,8 +44,6 @@ public class Validator {
             errors.add(fieldName + " ne peut pas être vide.");
         } else if (value.length() < 3) {
             errors.add(fieldName + " doit contenir au moins 3 caractères.");
-        } else if (value.length() < 20) {
-            errors.add(fieldName + " ne peut pas dépasser 50 caractères.");
         }
     }
 
