@@ -4,7 +4,7 @@
 
 <%
     request.setAttribute("title", "Projects");
-    request.setAttribute("contentPage", "../content/projects.jsp"); 
+    request.setAttribute("contentPage", "/views/content/projects.jsp"); 
 %>
 
 <jsp:include page="/views/layout/layout.jsp" />

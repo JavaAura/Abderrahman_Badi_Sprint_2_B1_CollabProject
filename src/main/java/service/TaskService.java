@@ -24,8 +24,8 @@ public class TaskService {
         return taskRepository.getAllTasks(project);
     }
 
-    public void addTask(Task task) {
-        taskRepository.save(task);
+    public long addTask(Task task) {
+        return taskRepository.save(task);
     }
 
     public void addTask(Task task, long member_id) {
@@ -40,12 +40,12 @@ public class TaskService {
         taskRepository.updateTaskStatus(id, taskStatus);
     }
 
-    public void assignMemberToTask(long task_id, long member_id){
+    public void assignMemberToTask(long task_id, long member_id) {
         taskRepository.assignMemberToTask(task_id, member_id);
     }
-    
+
     public List<Task> getTaskByMemberId(Long memberId) {
-    	return taskRepository.getTaskByMemberId(memberId);
+        return taskRepository.getTaskByMemberId(memberId);
     }
 
     public void deleteTask(long id) {

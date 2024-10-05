@@ -15,7 +15,7 @@ public interface TaskRepository {
 
     public void assignMemberToTask(long task_id, long member_id);
 
-    public void save(Task task);
+    public long save(Task task);
 
     public void save(Task task, long member_id);
 

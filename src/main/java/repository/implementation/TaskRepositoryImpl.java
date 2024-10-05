@@ -25,16 +25,15 @@ import repository.interfaces.TaskRepository;
 public class TaskRepositoryImpl implements TaskRepository {
 
     private static final Logger logger = LoggerFactory.getLogger(TaskRepositoryImpl.class);
-    
 
-    private static final String SQL_FIND_BY_ID = "SELECT task.id AS id_task, task.*, member.*, member_task.* FROM task JOIN member_task ON task.id = member_task.task_id JOIN member ON member_task.member_id = member.id WHERE task.id = ? ORDER BY member_task.assign_date DESC LIMIT 1";
+    private static final String SQL_FIND_BY_ID = "SELECT * FROM task WHERE id = ? ";
     private static final String SQL_LIST = "SELECT task_with_members.id_task, task_with_members.title AS title, task_with_members.description, task_with_members.priority, task_with_members.task_statut, task_with_members.project_id, member.id AS member_id, member.first_name, member.last_name, member.email, member.role, task_with_members.assign_date FROM ( SELECT task.id AS id_task, task.*, member_task.* FROM task LEFT JOIN member_task ON task.id = member_task.task_id AND member_task.assign_date = ( SELECT MAX(assign_date) FROM member_task mt WHERE mt.task_id = task.id ) ) AS task_with_members LEFT JOIN member ON task_with_members.member_id = member.id WHERE task_with_members.project_id = ?";
     private static final String SQL_INSERT = "INSERT INTO task (`title`, `description`, `priority`, `task_statut`, `project_id`) VALUES (?, ?, ?, ?, ?)";
     private static final String SQL_UPDATE = "UPDATE task SET title = ?, description = ?, priority = ? WHERE id = ?";
     private static final String SQL_DELETE = "DELETE FROM task WHERE id = ?";
     private static final String SQL_UPDATE_STATUS = "UPDATE task SET task_statut = ? WHERE id = ?";
     private static final String SQL_ASSIGN_TASK = "INSERT INTO member_task (`task_id`, `member_id`, `assign_date`) VALUES (?, ?, ?)";
-    private static final String SQL_GET_MEMBER_TASKS ="SELECT task.id AS id_task, task.title, task.description, task.priority, task.task_statut, task.project_id, member.id AS member_id, member.first_name, member.last_name, member.email, member.role, member_task.assign_date FROM task JOIN member_task ON task.id = member_task.task_id JOIN member ON member_task.member_id = member.id WHERE member.id = ?";
+    private static final String SQL_GET_MEMBER_TASKS = "SELECT task.id AS id_task, task.title, task.description, task.priority, task.task_statut, task.project_id, member.id AS member_id, member.first_name, member.last_name, member.email, member.role, member_task.assign_date FROM task JOIN member_task ON task.id = member_task.task_id JOIN member ON member_task.member_id = member.id WHERE member.id = ?";
 
     @Override
     public List<Task> getAllTasks(Project project) {
@@ -97,26 +96,15 @@ public class TaskRepositoryImpl implements TaskRepository {
                     TaskPriority taskPriority = TaskPriority.valueOf(rs.getString("priority"));
                     TaskStatus taskStatus = TaskStatus.valueOf(rs.getString("task_statut"));
 
-                    Member member = new Member();
-                    member.setFirstName(rs.getString("first_name"));
-                    member.setLastName(rs.getString("last_name"));
-                    member.setEmail(rs.getString("email"));
-                    member.setRole(Role.valueOf(rs.getString("role")));
-
                     task = new Task(id, title, description, taskPriority, taskStatus, project);
-
-                    task.setAssignDate(rs.getTimestamp("assign_date").toLocalDateTime());
-                    task.setMember(member);
-
                 }
             }
 
         } catch (SQLException e) {
-            logger.error(e.getMessage());
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
 
-        return task != null ? Optional.of(task) : Optional.empty();
+        return Optional.ofNullable(task);
 
     }
 
@@ -137,9 +125,10 @@ public class TaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
-    public void save(Task task) {
+    public long save(Task task) {
+        long id;
         try (Connection con = DatabaseConnection.getConnection();
-                PreparedStatement ps = con.prepareStatement(SQL_INSERT)) {
+                PreparedStatement ps = con.prepareStatement(SQL_INSERT, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, task.getTitle());
             ps.setString(2, task.getDescription());
@@ -147,10 +136,20 @@ public class TaskRepositoryImpl implements TaskRepository {
             ps.setString(4, task.getTaskStatus().toString());
             ps.setLong(5, task.getProject().getId());
 
-            ps.executeUpdate();
+            if (ps.executeUpdate() > 0) {
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        id = rs.getLong(1);
+                        logger.info("Task with id " + id + " added successfully");
+                        return id;
+                    }
+                }
+            }
         } catch (SQLException e) {
             logger.error("Error saving task: " + e.getMessage(), e);
         }
+
+        return 0;
     }
 
     @Override
@@ -231,14 +230,14 @@ public class TaskRepositoryImpl implements TaskRepository {
             logger.error("Error deleting task: " + e.getMessage(), e);
         }
     }
-    
+
     @Override
-    public List<Task> getTaskByMemberId(Long memberId){
-    	List<Task> tasks = new ArrayList<>();
-    	
-    	try(Connection connection = DatabaseConnection.getConnection();
-    			PreparedStatement stmt = connection.prepareStatement(SQL_GET_MEMBER_TASKS)){
-    		stmt.setLong(1, memberId);
+    public List<Task> getTaskByMemberId(Long memberId) {
+        List<Task> tasks = new ArrayList<>();
+
+        try (Connection connection = DatabaseConnection.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(SQL_GET_MEMBER_TASKS)) {
+            stmt.setLong(1, memberId);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
@@ -249,7 +248,6 @@ public class TaskRepositoryImpl implements TaskRepository {
                     task.setTaskPriority(TaskPriority.valueOf(rs.getString("priority")));
                     task.setTaskStatus(TaskStatus.valueOf(rs.getString("task_statut")));
 
-                   
                     Member member = new Member();
                     member.setId(rs.getLong("member_id"));
                     member.setFirstName(rs.getString("first_name"));
@@ -274,7 +272,5 @@ public class TaskRepositoryImpl implements TaskRepository {
 
         return tasks;
     }
-    		
-    	
-    
+
 }

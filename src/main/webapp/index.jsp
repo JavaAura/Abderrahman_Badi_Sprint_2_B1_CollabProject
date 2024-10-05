@@ -2,7 +2,7 @@
     pageEncoding="UTF-8" %>
 
 <%
-    request.setAttribute("contentPage", "../content/index.jsp"); 
+    request.setAttribute("contentPage", "/views/content/index.jsp"); 
 %>
 
 <jsp:include page="./views/layout/layout.jsp" />

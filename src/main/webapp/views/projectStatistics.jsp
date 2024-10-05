@@ -3,7 +3,7 @@
 
 <%
     request.setAttribute("title", "Members");
-    request.setAttribute("contentPage", "../content/projectStatistics.jsp");
+    request.setAttribute("contentPage", "/views/content/projectStatistics.jsp");
 %>
 
 <jsp:include page="/views/layout/layout.jsp" />

@@ -3,7 +3,7 @@
 
 <%
     request.setAttribute("title", "Project Tasks");
-    request.setAttribute("contentPage", "../content/tasks.jsp");
+    request.setAttribute("contentPage", "/views/content/tasks.jsp");
     request.setAttribute("mainJS", "main.js");
 %>
 

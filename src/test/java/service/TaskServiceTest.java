@@ -17,7 +17,7 @@ import model.enums.TaskStatus;
 
 public class TaskServiceTest {
 
-    private static final Logger logger = LoggerFactory.getLogger(TaskServiceTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(TaskServiceTest.class);
 
 	private TaskService taskService;
 	private Project project;
@@ -32,7 +32,6 @@ public class TaskServiceTest {
 
 	@Test
 	public void testGetTaskById() {
-		logger.info("test begins");
 		Task task = new Task();
 		task.setTitle("Sample Task");
 		task.setDescription("Sample Task Description");
@@ -40,14 +39,11 @@ public class TaskServiceTest {
 		task.setTaskStatus(TaskStatus.DONE);
 		task.setProject(project);
 
-		taskService.addTask(task);
+		long taskId = taskService.addTask(task);
 
-		List<Task> tasks = taskService.getAllTasks(project);
-		Task savedTask = tasks.stream().filter(t -> t.getTitle().equals("Sample Task")).findFirst().get();
+		Optional<Task> retrievedTask = taskService.getTaskById(taskId);
 
-		Optional<Task> retrievedTask = taskService.getTaskById(savedTask.getId());
-
-		taskService.deleteTask(savedTask.getId());
+		taskService.deleteTask(taskId);
 
 		assertTrue(retrievedTask.isPresent());
 		assertEquals("Sample Task", retrievedTask.get().getTitle());
@@ -70,18 +66,15 @@ public class TaskServiceTest {
 		task2.setTaskStatus(TaskStatus.TODO);
 		task2.setProject(project);
 
-		taskService.addTask(task1);
-		taskService.addTask(task2);
+		long taskId1 = taskService.addTask(task1);
+		long taskId2 = taskService.addTask(task2);
 
 		List<Task> tasks = taskService.getAllTasks(project);
 
 		assertNotNull(tasks);
 
-		Task savedTask1 = tasks.stream().filter(t -> t.getTitle().equals("Test Task 1")).findFirst().get();
-		Task savedTask2 = tasks.stream().filter(t -> t.getTitle().equals("Test Task 2")).findFirst().get();
-
-		taskService.deleteTask(savedTask1.getId());
-		taskService.deleteTask(savedTask2.getId());
+		taskService.deleteTask(taskId1);
+		taskService.deleteTask(taskId2);
 
 		assertTrue(tasks.stream().anyMatch(t -> t.getTitle().equals("Test Task 1")));
 
@@ -115,9 +108,7 @@ public class TaskServiceTest {
 		task.setTaskStatus(TaskStatus.DOING);
 		task.setProject(project);
 
-		taskService.addTask(task);
-		List<Task> tasks = taskService.getAllTasks(project);
-		Task savedTask = tasks.stream().filter(t -> t.getTitle().equals("Test Initial Task")).findFirst().get();
+		long taskId = taskService.addTask(task);
 
 		Task updatedTask = new Task();
 		updatedTask.setTitle("Test Updated Task");
@@ -125,11 +116,11 @@ public class TaskServiceTest {
 		updatedTask.setTaskPriority(TaskPriority.HIGH);
 		updatedTask.setTaskStatus(TaskStatus.DONE);
 
-		taskService.updateTask(savedTask.getId(), updatedTask);
+		taskService.updateTask(taskId, updatedTask);
 
-		Optional<Task> retrievedTask = taskService.getTaskById(savedTask.getId());
+		Optional<Task> retrievedTask = taskService.getTaskById(taskId);
 
-		taskService.deleteTask(retrievedTask.get().getId());
+		taskService.deleteTask(taskId);
 
 		assertTrue(retrievedTask.isPresent());
 		assertEquals("Test Updated Task", retrievedTask.get().getTitle());
