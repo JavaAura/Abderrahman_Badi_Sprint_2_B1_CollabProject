@@ -52,15 +52,15 @@ public class MemberRepositoryImpl implements MemberRepository {
 	    public List<Member> getAllMembers(int page, int pageSize) {
 	        List<Member> members = new ArrayList<>();
 	        if (page <= 0) {
-	            page = 1; // Default to the first page if the page number is invalid
+	            page = 1;  
 	        }
 	        int pagination = (page - 1) * pageSize;
 
 	        try (Connection connection = DatabaseConnection.getConnection();
 	             PreparedStatement stmt = connection.prepareStatement(GET_ALL_MEMBERS_QUERY)) {
 
-	            stmt.setInt(1, pageSize);     // Set LIMIT
-	            stmt.setInt(2, pagination);   // Set OFFSET
+	            stmt.setInt(1, pageSize);      
+	            stmt.setInt(2, pagination);    
 
 	            ResultSet rs = stmt.executeQuery();
 	            while (rs.next()) {
@@ -80,7 +80,7 @@ public class MemberRepositoryImpl implements MemberRepository {
 	        return members;
 	    }
 
-	    // Method to get total members count
+	     
 	    @Override
 	    public int getTotalMembersCount() {
 	        int count = 0;
