@@ -1,10 +1,11 @@
 package repository.implementation;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,9 +29,10 @@ public class TaskRepositoryImpl implements TaskRepository {
     private static final String SQL_FIND_BY_ID = "SELECT task.id AS id_task, task.*, member.*, member_task.* FROM task JOIN member_task ON task.id = member_task.task_id JOIN member ON member_task.member_id = member.id WHERE task.id = ? ORDER BY member_task.assign_date DESC LIMIT 1";
     private static final String SQL_LIST = "SELECT task_with_members.id_task, task_with_members.title AS title, task_with_members.description, task_with_members.priority, task_with_members.task_statut, task_with_members.project_id, member.id AS member_id, member.first_name, member.last_name, member.email, member.role, task_with_members.assign_date FROM ( SELECT task.id AS id_task, task.*, member_task.* FROM task LEFT JOIN member_task ON task.id = member_task.task_id AND member_task.assign_date = ( SELECT MAX(assign_date) FROM member_task mt WHERE mt.task_id = task.id ) ) AS task_with_members LEFT JOIN member ON task_with_members.member_id = member.id WHERE task_with_members.project_id = ?";
     private static final String SQL_INSERT = "INSERT INTO task (`title`, `description`, `priority`, `task_statut`, `project_id`) VALUES (?, ?, ?, ?, ?)";
-    private static final String SQL_UPDATE = "UPDATE task SET title = ?, description = ?, priority = ?, task_statut = ? WHERE id = ?";
+    private static final String SQL_UPDATE = "UPDATE task SET title = ?, description = ?, priority = ? WHERE id = ?";
     private static final String SQL_DELETE = "DELETE FROM task WHERE id = ?";
     private static final String SQL_UPDATE_STATUS = "UPDATE task SET task_statut = ? WHERE id = ?";
+    private static final String SQL_ASSIGN_TASK = "INSERT INTO member_task (`task_id`, `member_id`, `assign_date`) VALUES (?, ?, ?)";
 
     @Override
     public List<Task> getAllTasks(Project project) {
@@ -49,9 +51,9 @@ public class TaskRepositoryImpl implements TaskRepository {
                     task.setTaskStatus(TaskStatus.valueOf(rs.getString("task_statut")));
 
                     // Handle possible null values for assign_date
-                    Date assignDate = rs.getDate("assign_date");
+                    Timestamp assignDate = rs.getTimestamp("assign_date");
                     if (assignDate != null) {
-                        task.setAssignDate(assignDate.toLocalDate());
+                        task.setAssignDate(assignDate.toLocalDateTime());
                     }
 
                     Long memberId = rs.getLong("member_id");
@@ -101,7 +103,7 @@ public class TaskRepositoryImpl implements TaskRepository {
 
                     task = new Task(id, title, description, taskPriority, taskStatus, project);
 
-                    task.setAssignDate(rs.getDate("assign_date").toLocalDate());
+                    task.setAssignDate(rs.getTimestamp("assign_date").toLocalDateTime());
                     task.setMember(member);
 
                 }
@@ -114,6 +116,22 @@ public class TaskRepositoryImpl implements TaskRepository {
 
         return task != null ? Optional.of(task) : Optional.empty();
 
+    }
+
+    @Override
+    public void assignMemberToTask(long task_id, long member_id) {
+        try (Connection con = DatabaseConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(SQL_ASSIGN_TASK)) {
+
+            ps.setLong(1, task_id);
+            ps.setLong(2, member_id);
+            ps.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
+
+            ps.executeUpdate();
+            logger.info("Assigned task of id : " + task_id + " to member : " + member_id);
+        } catch (SQLException e) {
+            logger.error("Error saving task: " + e.getMessage(), e);
+        }
     }
 
     @Override
@@ -134,6 +152,30 @@ public class TaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
+    public void save(Task task, long member_id) {
+        try (Connection con = DatabaseConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(SQL_INSERT, PreparedStatement.RETURN_GENERATED_KEYS)) {
+
+            ps.setString(1, task.getTitle());
+            ps.setString(2, task.getDescription());
+            ps.setString(3, task.getTaskPriority().toString());
+            ps.setString(4, task.getTaskStatus().toString());
+            ps.setLong(5, task.getProject().getId());
+
+            if (ps.executeUpdate() > 0) {
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        assignMemberToTask(rs.getLong(1), member_id);
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            logger.error("Error saving task: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
     public void update(long id, Task updatedTask) {
         try (Connection con = DatabaseConnection.getConnection();
                 PreparedStatement ps = con.prepareStatement(SQL_UPDATE)) {
@@ -141,8 +183,7 @@ public class TaskRepositoryImpl implements TaskRepository {
             ps.setString(1, updatedTask.getTitle());
             ps.setString(2, updatedTask.getDescription());
             ps.setString(3, updatedTask.getTaskPriority().toString());
-            ps.setString(4, updatedTask.getTaskStatus().toString());
-            ps.setLong(5, id);
+            ps.setLong(4, id);
 
             int affectedRows = ps.executeUpdate();
             if (affectedRows > 0) {
@@ -152,8 +193,7 @@ public class TaskRepositoryImpl implements TaskRepository {
             }
 
         } catch (SQLException e) {
-            logger.error("Error updating task: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("Error updating task: " + e.getMessage(), e);
         }
     }
 
@@ -173,23 +213,20 @@ public class TaskRepositoryImpl implements TaskRepository {
             }
 
         } catch (SQLException e) {
-            logger.error("Error updating task: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("Error updating task: " + e.getMessage(), e);
         }
     }
 
     @Override
-    public void delete(Task task) {
+    public void delete(long id) {
         try (Connection con = DatabaseConnection.getConnection();
                 PreparedStatement ps = con.prepareStatement(SQL_DELETE)) {
 
-            ps.setLong(1, task.getId());
+            ps.setLong(1, id);
 
             ps.executeUpdate();
         } catch (SQLException e) {
             logger.error("Error deleting task: " + e.getMessage(), e);
         }
-
     }
-
 }
