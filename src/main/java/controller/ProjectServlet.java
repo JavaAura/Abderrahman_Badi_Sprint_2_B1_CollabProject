@@ -21,7 +21,7 @@ public class ProjectServlet extends HttpServlet {
     private ProjectService projectService = new ProjectService();
     private Validator validator = new Validator();
 
-    
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -84,12 +84,13 @@ public class ProjectServlet extends HttpServlet {
         List<String> errors = new ArrayList<>();
 
         if (action != null && action.equals("update")) {
-            int id = Integer.parseInt(idParam);
+            int id = Integer.parseInt(request.getParameter("id"));
             String nom = request.getParameter("nom");
             String description = request.getParameter("description");
             LocalDate dateDebut = LocalDate.parse(request.getParameter("dateDebut"));
             LocalDate dateFin = LocalDate.parse(request.getParameter("dateFin"));
             String statut = request.getParameter("statut");
+            String squadId = request.getParameter("squadId");
 
             Project project = new Project();
             project.setId(id);
@@ -99,6 +100,10 @@ public class ProjectServlet extends HttpServlet {
             project.setEndDate(dateFin);
             project.setStatus(ProjectStatus.valueOf(statut));
 
+
+            Squad squad = new Squad();
+            squad.setId(Long.parseLong(squadId));
+            project.setSquad(squad);
 
             errors = validator.validateProject(project);
 

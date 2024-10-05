@@ -25,7 +25,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     private static final String SQL_FIND_BY_ID = "SELECT project.id as project_id, project.name as project_name, project.*, squad.* FROM Project JOIN squad ON project.squad_id = squad.id WHERE project.id = ?";
     private static final String GET_ALL_PROJECTS = "SELECT * FROM Project";
     private static final String GET_ALL_PROJECTS_PAGINATED = "SELECT * FROM Project LIMIT ? OFFSET ?";
-    private static final String UPDATE_PROJECT = "UPDATE Project SET name = ?, description = ?, start_date = ?, end_date = ?, project_statut = ? WHERE id = ?";
+    private static final String UPDATE_PROJECT = "UPDATE Project SET name = ?, description = ?, start_date = ?, end_date = ?, project_statut = ?, squad_id = ? WHERE id = ?";
     private static final String DELETE_PROJECT = "DELETE FROM Project WHERE id = ?";
     private static final String ADD_PROJECT = "INSERT INTO Project (name, description, start_date, end_date, project_statut, squad_id) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String SEARCH_PROJECTS_BY_NAME = "SELECT * FROM Project WHERE name LIKE ?";
@@ -104,17 +104,20 @@ public class ProjectRepositoryImpl implements ProjectRepository {
         return projects;
     }
 
+
+
     @Override
     public void updateProject(Project project) {
         try (Connection con = DatabaseConnection.getConnection();
-                PreparedStatement ps = con.prepareStatement(UPDATE_PROJECT)) {
+             PreparedStatement ps = con.prepareStatement(UPDATE_PROJECT)) {
 
             ps.setString(1, project.getName());
             ps.setString(2, project.getDescription());
             ps.setDate(3, java.sql.Date.valueOf(project.getStartDate()));
             ps.setDate(4, java.sql.Date.valueOf(project.getEndDate()));
             ps.setString(5, project.getStatus().name());
-            ps.setLong(6, project.getId());
+            ps.setLong(6, project.getSquad().getId());
+            ps.setLong(7, project.getId());
 
             ps.executeUpdate();
         } catch (Exception e) {

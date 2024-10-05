@@ -150,6 +150,19 @@
                                                 </select>
                     </div>
 
+                    <div class="mb-3">
+                        <label for="squadId" class="form-label">Squad</label>
+                        <select name="squadId" class="form-select" id="squadId" required>
+                            <option value="" disabled>Select a Squad</option>
+                            <c:forEach var="squad" items="${squads}">
+                                <option value="${squad.id}" ${project.squad.id == squad.id ? 'selected' : ''}>
+                                    ${squad.name}
+                                </option>
+                            </c:forEach>
+                        </select>
+                    </div>
+
+
                     <button type="submit" class="btn btn-primary">Update</button>
                 </form>
             </div>
