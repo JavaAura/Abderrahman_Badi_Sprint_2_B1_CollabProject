@@ -30,7 +30,7 @@
              <div style="width: 33%;" class="d-flex flex-column gap-3 p-2 border rounded shadow task-container">
                  <div class="d-flex flex-column gap-3">
                      <p class="ps-2 fs-4 fw-medium">To Do</p>
-                     <div class="d-flex flex-column pb-5 drop-zone" ondrop="dropHandler(event)"
+                     <div class="d-flex flex-column pb-5 drop-zone" drop-zone-status="TODO" ondrop="dropHandler(event)"
                          ondragover="dragoverHandler(event)">
                          <c:forEach var="task" items="${todoTasks}">
                              <div class="card cursor-pointer shadow-sm" id="${task.id}" style="width: 18rem;"
@@ -81,7 +81,7 @@
                  <div class="d-flex flex-column gap-3">
 
                      <p class="ps-2 fs-4 fw-medium">Doing</p>
-                     <div class="d-flex flex-column pb-5 drop-zone" ondrop="dropHandler(event)"
+                     <div class="d-flex flex-column pb-5 drop-zone" drop-zone-status="DOING" ondrop="dropHandler(event)"
                          ondragover="dragoverHandler(event)">
                          <c:forEach var="task" items="${doingTasks}">
                              <div class="card cursor-pointer shadow-sm" id="${task.id}" style="width: 18rem;"
@@ -131,7 +131,7 @@
                  <div class="d-flex flex-column gap-3">
 
                      <p class="ps-2 fs-4 fw-medium">Done</p>
-                     <div class="d-flex flex-column pb-5 drop-zone" ondrop="dropHandler(event)"
+                     <div class="d-flex flex-column pb-5 drop-zone" drop-zone-status="DONE" ondrop="dropHandler(event)"
                          ondragover="dragoverHandler(event)">
                          <c:forEach var="task" items="${doneTasks}">
                              <div class="card cursor-pointer shadow-sm" id="${task.id}" style="width: 18rem;"

@@ -12,17 +12,17 @@ function dragoverHandler(ev) {
   ev.dataTransfer.dropEffect = "move";
 }
 
-function dropHandler(ev) {
+async function dropHandler(ev) {
   ev.preventDefault();
 
-  const id = ev.dataTransfer.getData("text/plain");
-  const draggedElement = document.getElementById(id);
+  const task_id = ev.dataTransfer.getData("text/plain");
+  const draggedElement = document.getElementById(task_id);
 
   const dropZone = ev.target.closest(".drop-zone");
 
-  const targetCard = ev.target.closest(".card");
+  const status = dropZone.getAttribute("drop-zone-status");
 
-  console.log("target Card:" + targetCard);
+  const targetCard = ev.target.closest(".card");
 
   if (targetCard) {
     const bounding = targetCard.getBoundingClientRect();
@@ -30,8 +30,15 @@ function dropHandler(ev) {
     // Mouse Y position (px) - Top border to top view port distance (px)
     const offset = ev.clientY - bounding.top;
 
-    // If the offset is longer than half the height of the card the mouse was on the bottom half of the card
+    // Change the task status before moving the card, in the case of an error the card won't be moved
+    const data = await changeTaskStatus(task_id, status);
 
+    if (data.error == "error") {
+      alert("Unexpected error occured");
+      return;
+    }
+
+    // If the offset is longer than half the height of the card the mouse was on the bottom half of the card
     if (offset < bounding.height / 2) {
       // Insert before the element
       dropZone.insertBefore(draggedElement, targetCard);
@@ -40,6 +47,14 @@ function dropHandler(ev) {
       targetCard.insertAdjacentElement("afterend", draggedElement);
     }
   } else {
+    // Change the task status before moving the card, in the case of an error the card won't be moved
+    const data = await changeTaskStatus(task_id, status);
+
+    if (data.error == "error") {
+      alert("Unexpected error occured");
+      return;
+    }
+
     dropZone.appendChild(draggedElement);
   }
 }
@@ -55,7 +70,14 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-function openTaskModal(id, title, description, priority, member_id, assignDate) {
+function openTaskModal(
+  id,
+  title,
+  description,
+  priority,
+  member_id,
+  assignDate
+) {
   console.log(member_id);
 
   document.getElementById("updatedTaskId").value = id;
@@ -67,7 +89,22 @@ function openTaskModal(id, title, description, priority, member_id, assignDate) 
   document.getElementById("assignDate").innerHTML = assignDate;
 }
 
-
 function createTaskModal(status) {
   document.getElementById("taskStatus").value = status;
+}
+
+async function changeTaskStatus(task_id, status) {
+  const url = `http://localhost:9080/CollabProject/projects/tasks/status?taskId=${task_id}&status=${status}`;
+
+  const response = await fetch(url, {
+    method: "POST",
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const data = await response.json();
+
+  return data;
 }

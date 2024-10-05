@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import model.Project;
 import model.Task;
+import model.enums.TaskStatus;
 import repository.implementation.TaskRepositoryImpl;
 import repository.interfaces.TaskRepository;
 
@@ -33,6 +34,10 @@ public class TaskService {
 
     public void updateTask(long id, Task task) {
         taskRepository.update(id, task);
+    }
+
+    public void updateTaskStatus(long id, TaskStatus taskStatus) {
+        taskRepository.updateTaskStatus(id, taskStatus);
     }
 
     public void assignMemberToTask(long task_id, long member_id){
