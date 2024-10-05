@@ -13,6 +13,11 @@
     <title>Planify | ${title != null ? title : 'Home'}</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/bootstrap-dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css" />
+    <link rel="apple-touch-icon" sizes="180x180" href="${pageContext.request.contextPath}/assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="${pageContext.request.contextPath}/assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="${pageContext.request.contextPath}/assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="${pageContext.request.contextPath}/assets/favicon/site.webmanifest">
+
 </head>
 
 <body>
@@ -32,7 +37,7 @@
 
     <script src="${pageContext.request.contextPath}/bootstrap-dist/js/bootstrap.bundle.js"></script>
     <c:if test="${not empty mainJS}">
-            <script src="${pageContext.request.contextPath}/js/${mainJS}"></script>
+        <script src="${pageContext.request.contextPath}/js/${mainJS}"></script>
     </c:if>
 
 </body>

@@ -66,9 +66,25 @@
     <servlet-name>TaskServlet</servlet-name>
     <url-pattern>/projects/tasks</url-pattern>
   </servlet-mapping>
+
+  
+  
+     <!-- TaskStatusServlet -->
+  <servlet>
+    <servlet-name>TaskStatusServlet</servlet-name>
+    <servlet-class>controller.TaskStatusServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>TaskStatusServlet</servlet-name>
+    <url-pattern>/projects/tasks/status</url-pattern>
+  </servlet-mapping>
 </web-app>
 
 
 
 
+
+
+
+ 
 

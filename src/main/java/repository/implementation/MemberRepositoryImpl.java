@@ -15,6 +15,7 @@ import repository.interfaces.MemberRepository;
 
 public class MemberRepositoryImpl implements MemberRepository {
 
+	private static final String COUNT_MEMBERS_QUERY = "SELECT COUNT(*) FROM member";
 	private static final String GET_MEMBERS_BY_SQUAD_ID = "SELECT * FROM member WHERE squad_id = ?";
 	private static final String GET_ALL_MEMBERS_QUERY = "SELECT * FROM member LIMIT ? OFFSET ?";
 	private static final String GET_MEMBER_BY_ID_QUERY = "SELECT * FROM member WHERE id = ?";
@@ -47,34 +48,53 @@ public class MemberRepositoryImpl implements MemberRepository {
 		return members;
 	}
 
-	@Override
-	public List<Member> getAllMembers(int page, int pageSize) {
-		List<Member> members = new ArrayList<>();
-		int pagination = (page - 1) * pageSize;
+	 @Override
+	    public List<Member> getAllMembers(int page, int pageSize) {
+	        List<Member> members = new ArrayList<>();
+	        if (page <= 0) {
+	            page = 1; // Default to the first page if the page number is invalid
+	        }
+	        int pagination = (page - 1) * pageSize;
 
-		try (Connection connection = DatabaseConnection.getConnection();
-				PreparedStatement stmt = connection.prepareStatement(GET_ALL_MEMBERS_QUERY)) {
+	        try (Connection connection = DatabaseConnection.getConnection();
+	             PreparedStatement stmt = connection.prepareStatement(GET_ALL_MEMBERS_QUERY)) {
 
-			stmt.setInt(1, pageSize);
-			stmt.setInt(2, pagination);
+	            stmt.setInt(1, pageSize);     // Set LIMIT
+	            stmt.setInt(2, pagination);   // Set OFFSET
 
-			ResultSet rs = stmt.executeQuery();
-			while (rs.next()) {
-				Member member = new Member();
-				member.setId(rs.getLong("id"));
-				member.setFirstName(rs.getString("first_name"));
-				member.setLastName(rs.getString("last_name"));
-				member.setEmail(rs.getString("email"));
-				member.setRole(Role.valueOf(rs.getString("role")));
-				member.setSquadId(rs.getLong("squad_id"));
-				members.add(member);
-			}
+	            ResultSet rs = stmt.executeQuery();
+	            while (rs.next()) {
+	                Member member = new Member();
+	                member.setId(rs.getLong("id"));
+	                member.setFirstName(rs.getString("first_name"));
+	                member.setLastName(rs.getString("last_name"));
+	                member.setEmail(rs.getString("email"));
+	                member.setRole(Role.valueOf(rs.getString("role")));
+	                member.setSquadId(rs.getLong("squad_id"));
+	                members.add(member);
+	            }
 
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return members;
-	}
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	        return members;
+	    }
+
+	    // Method to get total members count
+	    @Override
+	    public int getTotalMembersCount() {
+	        int count = 0;
+	        try (Connection connection = DatabaseConnection.getConnection();
+	             PreparedStatement stmt = connection.prepareStatement(COUNT_MEMBERS_QUERY);
+	             ResultSet rs = stmt.executeQuery()) {
+	            if (rs.next()) {
+	                count = rs.getInt(1);
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	        return count;
+	    }
 
 	@Override
 	public Member getMemberById(Long id) {
@@ -84,18 +104,19 @@ public class MemberRepositoryImpl implements MemberRepository {
 				PreparedStatement stmt = connection.prepareStatement(GET_MEMBER_BY_ID_QUERY)) {
 
 			stmt.setLong(1, id);
-			ResultSet rs = stmt.executeQuery();
+			try(ResultSet rs = stmt.executeQuery()){
+				if (rs.next()) {
+					member = new Member();
+					member.setId(rs.getLong("id"));
+					member.setFirstName(rs.getString("first_name"));
+					member.setLastName(rs.getString("last_name"));
+					member.setEmail(rs.getString("email"));
+					member.setRole(Role.valueOf(rs.getString("role")));
+					member.setSquadId(rs.getLong("squad_id"));
+				}
 
-			if (rs.next()) {
-				member = new Member();
-				member.setId(rs.getLong("id"));
-				member.setFirstName(rs.getString("first_name"));
-				member.setLastName(rs.getString("last_name"));
-				member.setEmail(rs.getString("email"));
-				member.setRole(Role.valueOf(rs.getString("role")));
-				member.setSquadId(rs.getLong("squad_id"));
 			}
-
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

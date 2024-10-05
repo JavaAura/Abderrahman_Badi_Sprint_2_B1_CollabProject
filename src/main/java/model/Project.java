@@ -29,7 +29,7 @@ public class Project {
         this.tasks = tasks;
     }
 
-    public Project(int id, String name, String description, LocalDate startDate, LocalDate endDate, ProjectStatus status, List<Task> tasks) {
+    public Project(long id, String name, String description, LocalDate startDate, LocalDate endDate, ProjectStatus status, List<Task> tasks) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -43,7 +43,7 @@ public class Project {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
