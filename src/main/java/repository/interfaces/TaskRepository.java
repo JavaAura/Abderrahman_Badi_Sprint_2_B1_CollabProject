@@ -24,5 +24,9 @@ public interface TaskRepository {
     public void updateTaskStatus(long id, TaskStatus taskStatus);
 
     public void delete(long id);
+    
+     List<Task> getTaskByMemberId(Long memberId);
+
+	
 
 }

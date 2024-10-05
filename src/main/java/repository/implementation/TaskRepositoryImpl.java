@@ -25,6 +25,7 @@ import repository.interfaces.TaskRepository;
 public class TaskRepositoryImpl implements TaskRepository {
 
     private static final Logger logger = LoggerFactory.getLogger(TaskRepositoryImpl.class);
+    
 
     private static final String SQL_FIND_BY_ID = "SELECT task.id AS id_task, task.*, member.*, member_task.* FROM task JOIN member_task ON task.id = member_task.task_id JOIN member ON member_task.member_id = member.id WHERE task.id = ? ORDER BY member_task.assign_date DESC LIMIT 1";
     private static final String SQL_LIST = "SELECT task_with_members.id_task, task_with_members.title AS title, task_with_members.description, task_with_members.priority, task_with_members.task_statut, task_with_members.project_id, member.id AS member_id, member.first_name, member.last_name, member.email, member.role, task_with_members.assign_date FROM ( SELECT task.id AS id_task, task.*, member_task.* FROM task LEFT JOIN member_task ON task.id = member_task.task_id AND member_task.assign_date = ( SELECT MAX(assign_date) FROM member_task mt WHERE mt.task_id = task.id ) ) AS task_with_members LEFT JOIN member ON task_with_members.member_id = member.id WHERE task_with_members.project_id = ?";
@@ -33,6 +34,7 @@ public class TaskRepositoryImpl implements TaskRepository {
     private static final String SQL_DELETE = "DELETE FROM task WHERE id = ?";
     private static final String SQL_UPDATE_STATUS = "UPDATE task SET task_statut = ? WHERE id = ?";
     private static final String SQL_ASSIGN_TASK = "INSERT INTO member_task (`task_id`, `member_id`, `assign_date`) VALUES (?, ?, ?)";
+    private static final String SQL_GET_MEMBER_TASKS ="SELECT task.id AS id_task, task.title, task.description, task.priority, task.task_statut, task.project_id, member.id AS member_id, member.first_name, member.last_name, member.email, member.role, member_task.assign_date FROM task JOIN member_task ON task.id = member_task.task_id JOIN member ON member_task.member_id = member.id WHERE member.id = ?";
 
     @Override
     public List<Task> getAllTasks(Project project) {
@@ -229,4 +231,50 @@ public class TaskRepositoryImpl implements TaskRepository {
             logger.error("Error deleting task: " + e.getMessage(), e);
         }
     }
+    
+    @Override
+    public List<Task> getTaskByMemberId(Long memberId){
+    	List<Task> tasks = new ArrayList<>();
+    	
+    	try(Connection connection = DatabaseConnection.getConnection();
+    			PreparedStatement stmt = connection.prepareStatement(SQL_GET_MEMBER_TASKS)){
+    		stmt.setLong(1, memberId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Task task = new Task();
+                    task.setId(rs.getLong("id_task"));
+                    task.setTitle(rs.getString("title"));
+                    task.setDescription(rs.getString("description"));
+                    task.setTaskPriority(TaskPriority.valueOf(rs.getString("priority")));
+                    task.setTaskStatus(TaskStatus.valueOf(rs.getString("task_statut")));
+
+                   
+                    Member member = new Member();
+                    member.setId(rs.getLong("member_id"));
+                    member.setFirstName(rs.getString("first_name"));
+                    member.setLastName(rs.getString("last_name"));
+                    member.setEmail(rs.getString("email"));
+                    member.setRole(Role.valueOf(rs.getString("role")));
+
+                    // Set assign date if available
+                    Timestamp assignDate = rs.getTimestamp("assign_date");
+                    if (assignDate != null) {
+                        task.setAssignDate(assignDate.toLocalDateTime());
+                    }
+
+                    // Link the member and the task
+                    task.setMember(member);
+                    tasks.add(task);
+                }
+            }
+        } catch (SQLException e) {
+            logger.error("Error retrieving tasks for member: " + e.getMessage(), e);
+        }
+
+        return tasks;
+    }
+    		
+    	
+    
 }
