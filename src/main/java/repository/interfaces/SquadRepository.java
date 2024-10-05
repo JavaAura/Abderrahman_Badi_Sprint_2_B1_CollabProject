@@ -10,6 +10,7 @@ public interface SquadRepository {
 	void addSquad(Squad squad);
 	void updateSquad(Squad sqaud);
 	void deleteSquad(long id);
+	public List<Squad> getAllSquads();
 	 
 
 }

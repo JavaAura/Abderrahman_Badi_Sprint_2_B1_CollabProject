@@ -27,7 +27,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     private static final String GET_ALL_PROJECTS_PAGINATED = "SELECT * FROM Project LIMIT ? OFFSET ?";
     private static final String UPDATE_PROJECT = "UPDATE Project SET name = ?, description = ?, start_date = ?, end_date = ?, project_statut = ? WHERE id = ?";
     private static final String DELETE_PROJECT = "DELETE FROM Project WHERE id = ?";
-    private static final String ADD_PROJECT = "INSERT INTO Project (name, description, start_date, end_date, project_statut) VALUES (?, ?, ?, ?, ?)";
+    private static final String ADD_PROJECT = "INSERT INTO Project (name, description, start_date, end_date, project_statut, squad_id) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String SEARCH_PROJECTS_BY_NAME = "SELECT * FROM Project WHERE name LIKE ?";
 
     private static final String SQL_GET_PROJECT_SUMMARIES =
@@ -136,13 +136,19 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     @Override
     public void addProject(Project project) {
         try (Connection con = DatabaseConnection.getConnection();
-                PreparedStatement ps = con.prepareStatement(ADD_PROJECT)) {
+             PreparedStatement ps = con.prepareStatement(ADD_PROJECT)) {
 
             ps.setString(1, project.getName());
             ps.setString(2, project.getDescription());
             ps.setDate(3, java.sql.Date.valueOf(project.getStartDate()));
             ps.setDate(4, java.sql.Date.valueOf(project.getEndDate()));
             ps.setString(5, project.getStatus().name());
+
+            if (project.getSquad() != null && project.getSquad().getId() != 0) {
+                ps.setLong(6, project.getSquad().getId());
+            } else {
+                ps.setNull(6, java.sql.Types.BIGINT);
+            }
 
             ps.executeUpdate();
         } catch (Exception e) {

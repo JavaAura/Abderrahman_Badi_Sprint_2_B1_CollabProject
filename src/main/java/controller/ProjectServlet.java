@@ -1,8 +1,10 @@
 package controller;
 
+import model.Squad;
 import model.enums.ProjectStatus;
 import service.ProjectService;
 import model.Project;
+import service.SquadService;
 import util.Validator;
 
 import javax.servlet.ServletException;
@@ -55,9 +57,17 @@ public class ProjectServlet extends HttpServlet {
         int totalPages = (int) Math.ceil((double) totalProjects / itemsPerPage);
 
         List<Project> projects = projectService.getAllProjectsPaginated(currentPage, itemsPerPage);
+
+        SquadService squadService = new SquadService();
+        List<Squad> squads = squadService.getAllSquads();
         request.setAttribute("projects", projects);
         request.setAttribute("currentPage", currentPage);
         request.setAttribute("totalPages", totalPages);
+        request.setAttribute("squads", squads);
+        for (Squad squad : squads) {
+            System.out.println("Squad ID: " + squad.getId() + ", Name: " + squad.getName());
+        }
+
 
         request.getRequestDispatcher("views/projects.jsp").forward(request, response);
     }
@@ -117,12 +127,18 @@ public class ProjectServlet extends HttpServlet {
             LocalDate dateFin = LocalDate.parse(request.getParameter("dateFin"));
             String statut = request.getParameter("statut");
 
+            String squadId = request.getParameter("squadId");
+
             Project newProject = new Project();
             newProject.setName(nom);
             newProject.setDescription(description);
             newProject.setStartDate(dateDebut);
             newProject.setEndDate(dateFin);
             newProject.setStatus(ProjectStatus.valueOf(statut));
+
+            Squad squad = new Squad();
+            squad.setId(Long.parseLong(squadId));
+            newProject.setSquad(squad);
 
 
             errors = validator.validateProject(newProject);

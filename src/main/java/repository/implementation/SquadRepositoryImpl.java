@@ -19,6 +19,7 @@ public class SquadRepositoryImpl implements SquadRepository {
 	private static final String UPDATE_SQUAD_QUERY = "UPDATE  squad SET name = ? WHERE id = ?";
 	private static final String DELETE_SQUAD_QUERY = "DELETE FROM squad WHERE id = ?";
 	private static final String UPDATE_SQUAD_ID_QUERY = "UPDATE member SET squad_id = NULL WHERE squad_id = ?";
+	private static final String GET_ALL_SQUADS_NO_PAGINATION_QUERY = "SELECT * FROM squad";
 	
 	@Override
 	public List<Squad> getAllSquads(int page , int pageSize){
@@ -119,6 +120,26 @@ public class SquadRepositoryImpl implements SquadRepository {
 	    } catch (SQLException e) {
 	        e.printStackTrace();  
 	    }
+	}
+
+
+	@Override
+	public List<Squad> getAllSquads() {
+		List<Squad> squads = new ArrayList<>();
+		try (Connection connection = DatabaseConnection.getConnection();
+			 PreparedStatement stmt = connection.prepareStatement(GET_ALL_SQUADS_NO_PAGINATION_QUERY)) {
+
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				Squad squad = new Squad();
+				squad.setId(rs.getLong("id"));
+				squad.setName(rs.getString("name"));
+				squads.add(squad);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return squads;
 	}
 
 }
