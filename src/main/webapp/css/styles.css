@@ -34,6 +34,8 @@
     right: 3%;
 }
 
+
+
 @media (max-width: 992px) {
     .items-center {
         align-items: center !important;
@@ -50,7 +52,6 @@
     }
 
 }
-
 
 @media ((min-width: 576px)) {
     .bottom {
@@ -77,6 +78,10 @@
     
     .end {
         right: 2%;
+    }
+
+    .nav-items-margin{
+        margin-left: 35% !important;
     }
     
 }
