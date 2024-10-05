@@ -13,7 +13,7 @@
     <welcome-file>default.htm</welcome-file>
   </welcome-file-list>
 
-  <!-- SquadServlet -->
+  <!-- Squad MemberServlet -->
   <servlet>
     <servlet-name>SquadMemberServlet</servlet-name>
     <servlet-class>controller.MemberServlet</servlet-class>
@@ -21,6 +21,16 @@
   <servlet-mapping>
     <servlet-name>SquadMemberServlet</servlet-name>
     <url-pattern>/squadMembers</url-pattern>
+  </servlet-mapping>
+  
+   <!-- Member TaskServlet -->
+  <servlet>
+    <servlet-name>MemberTaskServlet</servlet-name>
+    <servlet-class>controller.TaskServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MemberTaskServlet</servlet-name>
+    <url-pattern>/memberTasks</url-pattern>
   </servlet-mapping>
   
   <!-- ProjectServlet -->

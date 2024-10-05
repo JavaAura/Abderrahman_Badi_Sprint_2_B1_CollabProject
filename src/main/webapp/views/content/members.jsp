@@ -1,27 +1,25 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" %>
-	
+	pageEncoding="UTF-8"%>
+
 <div class="container mt-5">
 	<h1 class="mb-4">Member List</h1>
 
 	<button type="button" class="btn btn-primary mb-4"
 		data-bs-toggle="modal" data-bs-target="#addMemberModal">Add
 		New Member</button>
-<c:if test="${not empty message}">
-    <div class="alert alert-success" role="alert">
-        ${message}
-    </div>
-</c:if>
+	<c:if test="${not empty message}">
+		<div class="alert alert-success" role="alert">${message}</div>
+	</c:if>
 
-<c:if test="${not empty errors}">
-    <div class="alert alert-danger" role="alert">
-        <c:forEach var="error" items="${errors}">
-            <p>${error}</p>
-        </c:forEach>
-    </div>
-</c:if>
+	<c:if test="${not empty errors}">
+		<div class="alert alert-danger" role="alert">
+			<c:forEach var="error" items="${errors}">
+				<p>${error}</p>
+			</c:forEach>
+		</div>
+	</c:if>
 
 	<table class="table table-striped table-hover">
 		<thead>
@@ -44,8 +42,8 @@
 					<td>${member.email}</td>
 					<td>${member.role}</td>
 					<td>${member.squad.name}</td>
-					<td><a href="members?action=get&id=${member.id}"
-						class="btn btn-info btn-sm">View</a>
+					<td><a href="memberTasks?action=list&memberId=${member.id}"
+						class="btn btn-info btn-sm">View Tasks</a>
 						<button type="button" class="btn btn-warning btn-sm"
 							data-bs-toggle="modal" data-bs-target="#updateMemberModal"
 							data-id="${member.id}" data-firstname="${member.firstName}"

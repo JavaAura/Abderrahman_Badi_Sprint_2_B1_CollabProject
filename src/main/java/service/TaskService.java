@@ -43,6 +43,10 @@ public class TaskService {
     public void assignMemberToTask(long task_id, long member_id){
         taskRepository.assignMemberToTask(task_id, member_id);
     }
+    
+    public List<Task> getTaskByMemberId(Long memberId) {
+    	return taskRepository.getTaskByMemberId(memberId);
+    }
 
     public void deleteTask(long id) {
         taskRepository.delete(id);

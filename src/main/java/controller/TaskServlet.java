@@ -36,7 +36,13 @@ public class TaskServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        index(req, resp);
+        String action = req.getParameter("action");
+
+        if ("viewMemberTasks".equals(action)) {
+            viewMemberTasks(req, resp);
+        } else {
+            index(req, resp);
+        }
     }
 
     @Override
@@ -112,21 +118,21 @@ public class TaskServlet extends HttpServlet {
                 int memberId = Integer.parseInt(req.getParameter("squadMember"));
 
                 taskService.addTask(task, memberId);
-            } else
+            } else {
                 taskService.addTask(task);
+            }
         }
 
         resp.sendRedirect("tasks?project_id=" + projectId);
-
     }
 
     public void index(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String projectIdParam = req.getParameter("project_id");
         long projectId = -1;
 
-        // Cast the String to long type if its not empty/null
-        if (projectIdParam != null && !projectIdParam.trim().isEmpty())
+        if (projectIdParam != null && !projectIdParam.trim().isEmpty()) {
             projectId = Long.parseLong(projectIdParam);
+        }
 
         if (projectId != -1) {
             Optional<Project> optionalProject = projectService.get(projectId);
@@ -150,15 +156,33 @@ public class TaskServlet extends HttpServlet {
                 }
 
                 req.setAttribute("project", project);
-
             } else {
                 req.setAttribute("errorMessage", "Project not found.");
-                logger.warn("No project found with id" + projectId);
+                logger.warn("No project found with id " + projectId);
             }
         }
 
-        RequestDispatcher dispatcher = req.getRequestDispatcher("../views/tasks.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/views/tasks.jsp");
         dispatcher.forward(req, resp);
     }
+
+    public void viewMemberTasks(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Long memberId = (Long) req.getSession().getAttribute("memberId");
+
+        if (memberId != null) {
+            List<Task> memberTasks = taskService.getTaskByMemberId(memberId);
+            req.setAttribute("memberTasks", memberTasks);
+            if (memberTasks == null || memberTasks.isEmpty()) {
+                req.setAttribute("errorMessage", "This member has no tasks.");
+            }
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/views/memberTasks.jsp");
+            dispatcher.forward(req, resp);
+        } else {
+            req.setAttribute("errorMessage", "Member not found.");
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/views/error.jsp");
+            dispatcher.forward(req, resp);
+        }
+    }
+
 
 }
